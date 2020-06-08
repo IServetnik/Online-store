@@ -6,17 +6,21 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'MainController@index')->name('main');
 
 
+//Cayegories
 Route::namespace('Category')->group(function () {
     Route::group(['prefix' => 'men', 'as' => 'men.'], function () {
-        Route::get('/', 'MenController@index')->name('index');
+        Route::get('/', 'MenController@getAll')->name('all');
+        Route::get('/{type}', 'MenController@getByType')->name('type');
     });
 
     Route::group(['prefix' => 'women', 'as' => 'women.'], function () {
-        Route::get('/', 'WomenController@index')->name('index');
+        Route::get('/', 'WomenController@getAll')->name('all');
+        Route::get('/{type}', 'WomenController@getByType')->name('type');
     });
 
     Route::group(['prefix' => 'kids', 'as' => 'kids.'], function () {
-        Route::get('/', 'KidsController@index')->name('index');
+        Route::get('/', 'KidsController@getAll')->name('all');
+        Route::get('/{type}', 'KidsController@getByType')->name('type');
     });
 });
 

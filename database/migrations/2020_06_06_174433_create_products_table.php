@@ -23,6 +23,7 @@ class CreateProductsTable extends Migration
             $table->string('brand');
             $table->string('color');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
