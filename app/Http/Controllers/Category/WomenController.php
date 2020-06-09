@@ -21,7 +21,7 @@ class WomenController extends Controller
      */
     public function getAll()
     {
-        $products = $this->service->getByCategory('women');
+        $products = $this->service->getByCategoryName('women');
         return view('category.women.women', compact('products'));
     }
 
@@ -33,7 +33,7 @@ class WomenController extends Controller
      */
     public function getByType($type)
     {
-        $products = $this->service->getByCategoryAndType('women', $type);
+        $products = $this->service->getByCategoryNameAndType('women', $type);
         return view('category.women.women', compact('products'));
     }
 }

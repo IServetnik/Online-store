@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\ProductRepository as Repository;
+use App\Repositories\CategoryRepository;
 
 class ProductService
 {        
@@ -35,9 +36,9 @@ class ProductService
      * @param  mixed $category
      * @return void
      */
-    public function getByCategory(string $category)
+    public function getByCategoryName(string $category_name)
     {
-        $products = $this->repository->getByCategory($category);
+        $products = $this->repository->getByCategoryName($category_name);
         return $products;
     }
 
@@ -59,9 +60,12 @@ class ProductService
      * @param  mixed $type
      * @return void
      */
-    public function getByCategoryAndType(string $category, string $type)
+    public function getByCategoryNameAndType(string $category_name, string $type)
     {
-        $products = $this->repository->getByCategoryAndType($category, $type);
+        //check if this type of clothing exists in this category
+        if (!$this->checkType($category_name, $type)) abort(404);
+
+        $products = $this->repository->getByCategoryNameAndType($category_name, $type);
         return $products;
     }
 
@@ -87,5 +91,26 @@ class ProductService
     {
         $products = $this->repository->getWhere($where);
         return $products;
+    }
+
+
+    
+    /**
+     * checkType
+     *
+     * @param  mixed $category_name
+     * @param  mixed $type
+     * @return void
+     */
+    public function checkType(string $category_name, string $type)
+    {
+        $categoryRepository = app(CategoryRepository::class);
+
+        $category = $categoryRepository->getByName($category_name);
+        $types = $category->types;
+
+        //check if this type of clothing exists
+        $result = in_array($type, explode(",", $types));
+        return $result;
     }
 }

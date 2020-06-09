@@ -21,7 +21,7 @@ class KidsController extends Controller
      */
     public function getAll()
     {
-        $products = $this->service->getByCategory('kids');
+        $products = $this->service->getByCategoryName('kids');
         return view('category.kids.kids', compact('products'));
     }
 
@@ -33,7 +33,8 @@ class KidsController extends Controller
      */
     public function getByType($type)
     {
-        $products = $this->service->getByCategoryAndType('kids', $type);
+        $products = $this->service->getByCategoryNameAndType('kids', $type);
+
         return view('category.kids.kids', compact('products'));
     }
 }

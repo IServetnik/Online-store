@@ -13,7 +13,7 @@ class ProductRepository
      */
     public function getAll()
     {
-        $products = Model::all();
+        $products = Model::with('category')->get();
         return $products;
     }
     
@@ -23,9 +23,9 @@ class ProductRepository
      * @param  mixed $category
      * @return void
      */
-    public function getByCategory(string $category)
+    public function getByCategoryName(string $category_name)
     {
-        $products = Model::where(compact('category'))->get();
+        $products = Model::where(compact('category_name'))->with('category')->get();
         return $products;
     }
     
@@ -37,7 +37,7 @@ class ProductRepository
      */
     public function getByType(string $type)
     {
-        $products = Model::where(compact('type'))->get();
+        $products = Model::where(compact('type'))->with('category')->get();
         return $products;
     }
     
@@ -48,9 +48,9 @@ class ProductRepository
      * @param  mixed $type
      * @return void
      */
-    public function getByCategoryAndType(string $category, string $type)
+    public function getByCategoryNameAndType(string $category_name, string $type)
     {
-        $products = Model::where(compact('category', 'type'))->get();
+        $products = Model::where(compact('category_name', 'type'))->with('category')->get();
         return $products;
     }
     
@@ -62,7 +62,7 @@ class ProductRepository
      */
     public function getById(string $id)
     {
-        $product = Model::where(compact('id'))->get();
+        $product = Model::where(compact('id'))->with('category')->get();
         return $product;
     }
     
@@ -74,7 +74,7 @@ class ProductRepository
      */
     public function getWhere(array $where)
     {
-        $products = Model::where($where)->get();
+        $products = Model::where($where)->with('category')->get();
         return $products;
     }
 }

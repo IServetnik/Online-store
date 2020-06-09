@@ -32,7 +32,7 @@
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->price }}</td>
                     <td>{{ $product->old_price }}</td>
-                    <td>{{ $product->category }}</td>
+                    <td>{{ $product->category_name }}</td>
                     <td>{{ $product->type }}</td>
                     <td>{{ $product->brand }}</td>
                     <td>{{ $product->color }}</td>
