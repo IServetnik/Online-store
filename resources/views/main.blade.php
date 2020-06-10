@@ -5,6 +5,14 @@
 @section('content')
     <h1>Main</h1>
 
+    @if(session()->has('success'))
+		<p class="text-success">{{ session()->get('success') }}</p>
+    @endif
+    
+    @if(Auth::user() && Auth::user()->is_admin)
+        <a href="/create">Create</a>
+    @endif
+
     <table class="table table-striped">
         <thead>
             <tr>

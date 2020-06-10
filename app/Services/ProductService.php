@@ -4,10 +4,13 @@ namespace App\Services;
 
 use App\Repositories\ProductRepository as Repository;
 use App\Repositories\CategoryRepository;
+use Illuminate\Http\Request;
+use App\Models\Product as Model;
 
 class ProductService
 {        
     private $repository;
+    private $categoryRepository;
 
     /**
      * __construct
@@ -16,7 +19,21 @@ class ProductService
      */
     public function __construct(Repository $repository)
     {
-        $this->repository = $repository;
+        $this->repository = app(Repository::class);
+        $this->categoryRepository = app(CategoryRepository::class);
+    }
+        
+    /**
+     * store
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function store(Request $request)
+    {
+        $data = $request->all();
+        $result = Model::create($data);
+        return $result;
     }
     
     /**
@@ -104,13 +121,12 @@ class ProductService
      */
     public function checkType(string $category_name, string $type)
     {
-        $categoryRepository = app(CategoryRepository::class);
-
-        $category = $categoryRepository->getByName($category_name);
-        $types = $category->types;
+        $category = $this->categoryRepository->getByName($category_name);
+        $typesCollection = $category->typesCollection;
 
         //check if this type of clothing exists
-        $result = in_array($type, explode(",", $types));
+        $result = ($typesCollection->search(strtolower($type)) !== false);
+
         return $result;
     }
 }
