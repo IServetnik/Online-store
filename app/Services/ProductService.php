@@ -26,6 +26,9 @@ class ProductService
     }
       
 
+
+
+
     /**
      * store
      *
@@ -63,6 +66,16 @@ class ProductService
         $result = $product->update($data);
         if(!$result) throw new ProductException("Something went wrong");
         
+        return $result;
+    }
+
+    public function destroy(string $name)
+    {
+        $product = $this->repository->getByName($name);
+
+        $result = $product->delete();
+        if(!$result) throw new ProductException("Something went wrong");
+
         return $result;
     }
 

@@ -110,8 +110,14 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($name)
     {
-        //
+        try {
+            $this->service->destroy($name);
+        } catch (ProductException $e) {
+            return back()->withErrors([$e->getMessage()])->withInput();
+        }
+        
+        return redirect()->route('main')->with(['success' => 'Product deleted successfully.']);
     }
 }
