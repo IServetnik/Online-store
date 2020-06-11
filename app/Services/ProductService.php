@@ -63,7 +63,10 @@ class ProductService
         if (!$this->checkName($data['name'], $name)) throw new ProductException("Name is not unique");
 
         $product = $this->getByName($name);
+        $data['old_price'] = $product->price;
+
         $result = $product->update($data);
+
         if(!$result) throw new ProductException("Something went wrong");
         
         return $result;
