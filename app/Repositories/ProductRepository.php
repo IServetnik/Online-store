@@ -65,7 +65,19 @@ class ProductRepository
         $product = Model::where(compact('id'))->with('category')->get();
         return $product;
     }
-    
+        
+    /**
+     * getByName
+     *
+     * @param  mixed $name
+     * @return void
+     */
+    public function getByName(string $name)
+    {
+        $product = Model::where(compact('name'))->with('category')->first();
+        return $product;
+    }
+
     /**
      * getWhere
      *

@@ -10,7 +10,7 @@
     @endif
     
     @if(Auth::user() && Auth::user()->is_admin)
-        <a href="/create">Create</a>
+        <a href={{ route('product.create') }}>Create</a>
     @endif
 
     <table class="table table-striped">
@@ -31,7 +31,7 @@
             @foreach($products as $product)
                 <tr>
                     <th scope="row">{{ $product->id }}</th>
-                    <td>{{ $product->name }}</td>
+                    <td><a href="{{ route('product.show', $product->name) }}">{{ $product->name }}</a></td>
                     <td>{{ $product->price }}</td>
                     <td>{{ $product->old_price }}</td>
                     <td>{{ $product->category_name }}</td>

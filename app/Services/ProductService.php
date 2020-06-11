@@ -97,7 +97,19 @@ class ProductService
         $products = $this->repository->getById($id);
         return $products;
     }
-    
+        
+    /**
+     * getByName
+     *
+     * @param  string $name
+     * @return void
+     */
+    public function getByName(string $name)
+    {
+        $product = $this->repository->getByName($name);
+        return $product;
+    }
+
     /**
      * getWhere
      *

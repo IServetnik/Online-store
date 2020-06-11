@@ -5,7 +5,7 @@
 @section('content')
     <h1>Create</h1>
 
-    <form action="{{ route('main.store') }}" method="POST">
+    <form action="{{ route('product.store') }}" method="POST">
         @csrf
         <div class="form-group">
             <label for="name">Name:</label>

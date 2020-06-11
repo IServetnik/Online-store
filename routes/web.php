@@ -3,7 +3,9 @@
 use Illuminate\Support\Facades\Route;
 
 
-Route::resource('/', 'MainController')->names('main');
+Route::get('/', 'MainController@index')->name('main');
+
+Route::resource('/product', 'ProductController')->names('product');
 
 
 //Cayegories
