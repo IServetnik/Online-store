@@ -18,20 +18,20 @@
         <div class="form-group">
             <label for="category">Category:</label>
             <select class="form-control" id="category_name" name="category_name">
-                <option @if (old('category_name') == "Mne") {{ 'selected' }} @endif>Men</option>
-                <option @if (old('category_name') == "Women") {{ 'selected' }} @endif>Women</option>
-                <option @if (old('category_name') == "Kids") {{ 'selected' }} @endif>Kids</option>
+                <option @if (strtolower(old('category_name')) == "men") {{ 'selected' }} @endif>Men</option>
+                <option @if (strtolower(old('category_name')) == "women") {{ 'selected' }} @endif>Women</option>
+                <option @if (strtolower(old('category_name')) == "kids") {{ 'selected' }} @endif>Kids</option>
             </select>
         </div>
         <div class="form-group">
             <label for="type">Type:</label>
             <select class="form-control" id="type" name="type">
-                <option @if (old('type') == "Shoes") {{ 'selected' }} @endif>Shoes</option>
-                <option @if (old('type') == "Shirts") {{ 'selected' }} @endif>Shirts</option>
-                <option @if (old('type') == "Trousers") {{ 'selected' }} @endif>Trousers</option>
-                <option @if (old('type') == "Hats") {{ 'selected' }} @endif>Hats</option>
-                <option @if (old('type') == "Socks") {{ 'selected' }} @endif>Socks</option>
-                <option @if (old('type') == "Dress") {{ 'selected' }} @endif>Dress</option>
+                <option @if (strtolower(old('type')) == "shoes") {{ 'selected' }} @endif>Shoes</option>
+                <option @if (strtolower(old('type')) == "shirts") {{ 'selected' }} @endif>Shirts</option>
+                <option @if (strtolower(old('type')) == "trousers") {{ 'selected' }} @endif>Trousers</option>
+                <option @if (strtolower(old('type')) == "hats") {{ 'selected' }} @endif>Hats</option>
+                <option @if (strtolower(old('type')) == "socks") {{ 'selected' }} @endif>Socks</option>
+                <option @if (strtolower(old('type')) == "dress") {{ 'selected' }} @endif>Dress</option>
             </select>
         </div>
         <div class="form-group">

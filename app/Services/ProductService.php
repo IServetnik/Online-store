@@ -6,11 +6,13 @@ use App\Repositories\ProductRepository as Repository;
 use App\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
 use App\Models\Product as Model;
+use App\Exceptions\ProductException;
 
 class ProductService
 {        
     private $repository;
     private $categoryRepository;
+
 
     /**
      * __construct
@@ -22,7 +24,8 @@ class ProductService
         $this->repository = app(Repository::class);
         $this->categoryRepository = app(CategoryRepository::class);
     }
-        
+      
+
     /**
      * store
      *
@@ -31,11 +34,42 @@ class ProductService
      */
     public function store(Request $request)
     {
-        $data = $request->all();
+        $data = array_map('strtolower', $request->all());
+
+        if (!$this->checkType($data['category_name'], $data['type'])) throw new ProductException('Incorrect type');
+        if (!$this->checkName($data['name'])) throw new ProductException("Name is not unique");
+
         $result = Model::create($data);
+        if(!$result) throw new ProductException("Something went wrong");
+
         return $result;
     }
-    
+        
+    /**
+     * update
+     *
+     * @param  mixed $request
+     * @param  mixed $name
+     * @return void
+     */
+    public function update(Request $request, $name)
+    {
+        $data = array_map('strtolower', $request->all());
+        
+        if (!$this->checkType($data['category_name'], $data['type'])) throw new ProductException('Incorrect type');
+        if (!$this->checkName($data['name'], $name)) throw new ProductException("Name is not unique");
+
+        $product = $this->getByName($name);
+        $result = $product->update($data);
+        if(!$result) throw new ProductException("Something went wrong");
+        
+        return $result;
+    }
+
+
+
+
+
     /**
      * getAll
      *
@@ -124,6 +158,8 @@ class ProductService
 
 
     
+
+
     /**
      * checkType
      *
@@ -134,11 +170,33 @@ class ProductService
     public function checkType(string $category_name, string $type)
     {
         $category = $this->categoryRepository->getByName($category_name);
+
         $typesCollection = $category->typesCollection;
+        $typesCollection->transform(function ($item, $key) {return strtolower($item);});
 
         //check if this type of clothing exists
         $result = ($typesCollection->search(strtolower($type)) !== false);
 
         return $result;
+    }
+    
+    /**
+     * checkName
+     *
+     * @param  mixed $newName
+     * @param  mixed $oldName
+     * @return void
+     */
+    public function checkName(string $newName, string $oldName = null)
+    {
+        $newName = strtolower($newName);
+        $oldName = strtolower($oldName);
+
+        if ($newName === $oldName) return true;
+
+        $products = $this->getWhere([['name', '=', $newName]]);
+        if ($products->isEmpty()) return true;
+
+        return false;
     }
 }

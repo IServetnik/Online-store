@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\ProductService as Service;
-use App\Http\Requests\ProductCreateRequest;
+use App\Http\Requests\ProductRequest;
+use App\Exceptions\ProductException;
 
 class ProductController extends Controller
 {
@@ -21,7 +22,7 @@ class ProductController extends Controller
     {
         $this->service = $service;
 
-        $this->middleware('isAdmin')->only('create');
+        $this->middleware('isAdmin')->only(['create', 'edit', 'update', 'destroy']);
     }
 
     /**
@@ -50,19 +51,15 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductCreateRequest $request)
+    public function store(ProductRequest $request)
     {
-        if (!$this->service->checkType($request->category_name, $request->type)) return back()
-                                                                                ->withErrors(["Incorrect type"])
-                                                                                ->withInput();
+        try {
+            $this->service->store($request);
+        } catch (ProductException $e) {
+            return back()->withErrors([$e->getMessage()])->withInput();
+        }
 
-        $result = $this->service->store($request);
-
-        if(!$result) return back()
-                        ->withErrors(["Something went wrong"])
-                        ->withInput();
-
-        return redirect()->route('main')->with(['success' => 'Product successfully created.']);
+        return redirect()->route('main')->with(['success' => 'Product created successfully.']);
     }
 
     /**
@@ -83,9 +80,10 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($name)
     {
-        //
+        $product = $this->service->getByName($name);
+        return view('product.edit', compact('product'));
     }
 
     /**
@@ -95,9 +93,15 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(ProductRequest $request, $name)
+    {   
+        try {
+            $this->service->update($request, $name);
+        } catch (ProductException $e) {
+            return back()->withErrors([$e->getMessage()])->withInput();
+        }
+
+        return redirect()->route('main')->with(['success' => 'Product edited successfully.']);
     }
 
     /**

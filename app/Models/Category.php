@@ -13,7 +13,7 @@ class Category extends Model
         
         $typesArray = explode(',', $types);
         //trim all types
-        $typesArray = array_map(function($type) {return strtolower(trim($type));}, $typesArray);
+        $typesArray = array_map(function($type) {return trim($type);}, $typesArray);
 
         $typesCollection = collect($typesArray);
 

@@ -12,7 +12,7 @@ $factory->define(Product::class, function (Faker $faker) {
         'old_price' => $faker->randomElement([null, $faker->randomFloat(3, 30, 300)]),
         'category_name' => $faker->randomElement(['men', 'women', 'kids']),
         'type' => $faker->randomElement(['shoes', 'shirts', 'trousers', 'hats', 'socks']),
-        'brand' => $faker->randomElement(['Nike', 'Adidas', 'Gucci', 'Vans', 'Lacoste']),
+        'brand' => $faker->randomElement(['nike', 'adidas', 'gucci', 'vans', 'lacoste']),
         'color' => $faker->randomElement(['white', 'black', 'blue', 'yellow', 'gray', 'pink']),
     ];
 });
