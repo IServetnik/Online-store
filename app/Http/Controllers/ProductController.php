@@ -70,7 +70,8 @@ class ProductController extends Controller
      */
     public function show($name)
     {
-        $product = $this->service->getByName($name);
+        $product = $this->service->show($name);
+
         return view('product.show', compact('product'));
     }
 

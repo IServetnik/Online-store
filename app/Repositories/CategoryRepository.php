@@ -3,27 +3,40 @@
 namespace App\Repositories;
 
 use App\Models\Category as Model;
+use Illuminate\Support\Collection;
 
 class CategoryRepository
 {        
     /**
      * getAll
      *
-     * @return void
+     * @return Collection
      */
-    public function getAll()
+    public function getAll() : Collection
     {
         $categories = Model::all();
         return $categories;
     }
     
     /**
+     * getById
+     *
+     * @param  mixed $id
+     * @return Model
+     */
+    public function getById(string $id) : Model
+    {
+        $product = Model::where(compact('id'))->first();
+        return $product;
+    }
+
+    /**
      * getByCategory
      *
      * @param  mixed $category
-     * @return void
+     * @return Model
      */
-    public function getByName(string $name)
+    public function getByName(string $name) : Model
     {
         $categories = Model::where(compact('name'))->first();
         return $categories;
@@ -33,9 +46,9 @@ class CategoryRepository
      * getWhere
      *
      * @param  mixed $where
-     * @return void
+     * @return Collection
      */
-    public function getWhere(array $where)
+    public function getWhere(array $where) : Collection
     {
         $categories = Model::where($where)->get();
         return $categories;

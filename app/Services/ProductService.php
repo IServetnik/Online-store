@@ -3,15 +3,14 @@
 namespace App\Services;
 
 use App\Repositories\ProductRepository as Repository;
-use App\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
 use App\Models\Product as Model;
 use App\Exceptions\ProductException;
+use App\Filters\ProductFilter;
 
 class ProductService
 {        
     private $repository;
-    private $categoryRepository;
 
 
     /**
@@ -19,10 +18,9 @@ class ProductService
      *
      * @return void
      */
-    public function __construct(Repository $repository)
+    public function __construct()
     {
         $this->repository = app(Repository::class);
-        $this->categoryRepository = app(CategoryRepository::class);
     }
       
 
@@ -63,7 +61,7 @@ class ProductService
         if (!$this->checkName($data['name'], $name)) throw new ProductException("Name is not unique");
 
         $product = $this->getByName($name);
-        $data['old_price'] = $product->price;
+        if ($data['price'] != $product->price) $data['old_price'] = $product->price;
 
         $result = $product->update($data);
 
@@ -71,7 +69,13 @@ class ProductService
         
         return $result;
     }
-
+    
+    /**
+     * destroy
+     *
+     * @param  mixed $name
+     * @return void
+     */
     public function destroy(string $name)
     {
         $product = $this->repository->getByName($name);
@@ -80,6 +84,20 @@ class ProductService
         if(!$result) throw new ProductException("Something went wrong");
 
         return $result;
+    }
+    
+    /**
+     * show
+     *
+     * @param  mixed $name
+     * @return void
+     */
+    public function show(string $name)
+    {
+        $product = $this->getByName($name);
+        if(!$product) abort(404);
+
+        return $product;
     }
 
 
@@ -133,6 +151,7 @@ class ProductService
         if (!$this->checkType($category_name, $type)) abort(404);
 
         $products = $this->repository->getByCategoryNameAndType($category_name, $type);
+        
         return $products;
     }
 
@@ -171,9 +190,25 @@ class ProductService
         $products = $this->repository->getWhere($where);
         return $products;
     }
+    
+    /**
+     * getByFilter
+     *
+     * @param  mixed $filter
+     * @param  mixed $category_name
+     * @param  mixed $type
+     * @return void
+     */
+    public function getByFilter($filters)
+    {
+        $filter = app(ProductFilter::class);
+        $products = $filter->apply($filters);
 
+        return $products;
+    }
 
     
+
 
 
     /**
@@ -185,7 +220,8 @@ class ProductService
      */
     public function checkType(string $category_name, string $type)
     {
-        $category = $this->categoryRepository->getByName($category_name);
+        $categoryService = app(CategoryService::class);
+        $category = $categoryService->getByName($category_name);
 
         $typesCollection = $category->typesCollection;
         $typesCollection->transform(function ($item, $key) {return strtolower($item);});
