@@ -31,11 +31,12 @@ class WomenController extends Controller
      */
     public function showAll()
     {
-        $category = self::CATEGORY;
-        $products = $this->productService->getByCategoryName($category);
-        $typesCollection = $this->categoryService->getByName($category)->typesCollection;
+        $products = $this->productService->getByCategoryName(self::CATEGORY);
+        $typesCollection = $this->categoryService->getByName(self::CATEGORY)->typesCollection;
 
-        return view('product.showByCategory', compact('products', 'category'))->with('types', $typesCollection);
+        return view('product.showByCategory', compact('products'))
+                                                    ->with('types', $typesCollection)
+                                                    ->with('category', self::CATEGORY);
     }
 
            
@@ -48,15 +49,15 @@ class WomenController extends Controller
      */
     public function showByType(Request $request, $type)
     {
-        $category = self::CATEGORY;
         $filters = $request->query();
 
         if(empty($filters)) {
-            $products = $this->productService->getByCategoryNameAndType($category, $type);
+            $products = $this->productService->getByCategoryNameAndType(self::CATEGORY, $type);
         } else {
-            $products = $this->productService->getByFilter(array_merge($filters, compact('category'), compact('type')));
+            $products = $this->productService->getByFilter(array_merge($filters, ['category' => self::CATEGORY], compact('type')));
         }
         
-        return view('product.showByType', compact('products', 'category', 'type'));
+        return view('product.showByType', compact('products', 'type'))
+                                                    ->with('category', self::CATEGORY);
     }
 }
