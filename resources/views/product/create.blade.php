@@ -18,28 +18,28 @@
         <div class="form-group">
             <label for="category">Category:</label>
             <select class="form-control" id="category_name" name="category_name">
-                <option @if (strtolower(old('category_name')) == "men") {{ 'selected' }} @endif>Men</option>
-                <option @if (strtolower(old('category_name')) == "women") {{ 'selected' }} @endif>Women</option>
-                <option @if (strtolower(old('category_name')) == "kids") {{ 'selected' }} @endif>Kids</option>
+                @foreach ($categories as $category)
+                    <option @if (strtolower(old('category_name')) == strtolower($category->name)) {{ 'selected' }} @endif>{{ ucfirst($category->name) }}</option>
+                @endforeach
             </select>
         </div>
         <div class="form-group">
-            <label for="type">Type:</label>
-            <select class="form-control" id="type" name="type">
-                <option @if (strtolower(old('type')) == "shoes") {{ 'selected' }} @endif>Shoes</option>
-                <option @if (strtolower(old('type')) == "shirts") {{ 'selected' }} @endif>Shirts</option>
-                <option @if (strtolower(old('type')) == "trousers") {{ 'selected' }} @endif>Trousers</option>
-                <option @if (strtolower(old('type')) == "hats") {{ 'selected' }} @endif>Hats</option>
-                <option @if (strtolower(old('type')) == "socks") {{ 'selected' }} @endif>Socks</option>
-                <option @if (strtolower(old('type')) == "dress") {{ 'selected' }} @endif>Dress</option>
+            <label for="type_name">Type:</label>
+            <select class="form-control" id="type_name" name="type_name">
+                <option @if (strtolower(old('type_name')) == "shoes") {{ 'selected' }} @endif>Shoes</option>
+                <option @if (strtolower(old('type_name')) == "shirts") {{ 'selected' }} @endif>Shirts</option>
+                <option @if (strtolower(old('type_name')) == "trousers") {{ 'selected' }} @endif>Trousers</option>
+                <option @if (strtolower(old('type_name')) == "hats") {{ 'selected' }} @endif>Hats</option>
+                <option @if (strtolower(old('type_name')) == "socks") {{ 'selected' }} @endif>Socks</option>
+                <option @if (strtolower(old('type_name')) == "dress") {{ 'selected' }} @endif>Dress</option>
             </select>
         </div>
         <div class="form-group">
-            <label for="brand">Brand</label>
+            <label for="brand">Brand:</label>
             <input type="text" class="form-control" id="brand" placeholder="Brand" value="{{ old('brand') }}" name="brand">
         </div>
         <div class="form-group">
-            <label for="color">Color</label>
+            <label for="color">Color:</label>
             <input type="text" class="form-control" id="color" placeholder="Color" value="{{ old('color') }}" name="color">
         </div>
         <input type="submit" class="btn btn-primary" value="Create">

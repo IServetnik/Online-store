@@ -13,18 +13,9 @@ class CategorySeeder extends Seeder
     {
         $categories = [];
 
-        $categories[] = [
-            'name' => 'men',
-            'types' => 'shoes,shirts,trousers,hats,socks',
-        ];
-        $categories[] = [
-            'name' => 'women',
-            'types' => 'shoes,shirts,trousers,hats,socks',
-        ];
-        $categories[] = [
-            'name' => 'kids',
-            'types' => 'shoes,shirts,trousers,hats,socks',
-        ];
+        $categories[] = ['name' => 'men', 'created_at' => date("Y-m-d H:i:s"), 'updated_at' => date("Y-m-d H:i:s")];
+        $categories[] = ['name' => 'women', 'created_at' => date("Y-m-d H:i:s"), 'updated_at' => date("Y-m-d H:i:s")];
+        $categories[] = ['name' => 'kids', 'created_at' => date("Y-m-d H:i:s"), 'updated_at' => date("Y-m-d H:i:s")];
 
         DB::table('categories')->insert($categories);
     }

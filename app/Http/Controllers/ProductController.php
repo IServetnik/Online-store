@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\ProductService as Service;
+use App\Services\ProductService;
+use App\Services\CategoryService;
 use App\Http\Requests\ProductRequest;
 use App\Exceptions\ProductException;
 
 class ProductController extends Controller
 {
-    private $service;
-
+    private $categoryService;
+    private $productService;
 
     /**
      * __construct
@@ -18,9 +19,10 @@ class ProductController extends Controller
      * @param  mixed $service
      * @return void
      */
-    public function __construct(Service $service)
+    public function __construct()
     {
-        $this->service = $service;
+        $this->categoryService = app(CategoryService::class);
+        $this->productService = app(ProductService::class);
 
         $this->middleware('isAdmin')->only(['create', 'edit', 'update', 'destroy']);
     }
@@ -42,7 +44,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('product.create');
+        $categories = $this->categoryService->getAll();
+        return view('product.create', compact('categories'));
     }
 
     /**
@@ -54,7 +57,7 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         try {
-            $this->service->store($request);
+            $this->productService->store($request);
         } catch (ProductException $e) {
             return back()->withErrors([$e->getMessage()])->withInput();
         }
@@ -70,7 +73,7 @@ class ProductController extends Controller
      */
     public function show($name)
     {
-        $product = $this->service->show($name);
+        $product = $this->productService->show($name);
 
         return view('product.show', compact('product'));
     }
@@ -83,7 +86,7 @@ class ProductController extends Controller
      */
     public function edit($name)
     {
-        $product = $this->service->getByName($name);
+        $product = $this->productService->getByName($name);
         return view('product.edit', compact('product'));
     }
 
@@ -97,7 +100,7 @@ class ProductController extends Controller
     public function update(ProductRequest $request, $name)
     {   
         try {
-            $this->service->update($request, $name);
+            $this->productService->update($request, $name);
         } catch (ProductException $e) {
             return back()->withErrors([$e->getMessage()])->withInput();
         }
@@ -114,7 +117,7 @@ class ProductController extends Controller
     public function destroy($name)
     {
         try {
-            $this->service->destroy($name);
+            $this->productService->destroy($name);
         } catch (ProductException $e) {
             return back()->withErrors([$e->getMessage()])->withInput();
         }

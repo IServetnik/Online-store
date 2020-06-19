@@ -32,10 +32,9 @@ class MenController extends Controller
     public function showAll()
     {
         $products = $this->productService->getByCategoryName(self::CATEGORY);
-        $typesCollection = $this->categoryService->getByName(self::CATEGORY)->typesCollection;
+        $types = $this->categoryService->getByName(self::CATEGORY)->types;
 
-        return view('product.showByCategory', compact('products'))
-                                                    ->with('types', $typesCollection)
+        return view('product.showByCategory', compact('products', 'types'))
                                                     ->with('category', self::CATEGORY);
     }
 
@@ -44,20 +43,21 @@ class MenController extends Controller
      * show by type
      *
      * @param  mixed $request
-     * @param  mixed $type
+     * @param  mixed $type_name
      * @return void
      */
-    public function showByType(Request $request, $type)
+    public function showByType(Request $request, $type_name)
     {
         $filters = $request->query();
 
         if(empty($filters)) {
-            $products = $this->productService->getByCategoryNameAndType(self::CATEGORY, $type);
+            $products = $this->productService->getByCategoryAndType(self::CATEGORY, $type_name);
         } else {
-            $products = $this->productService->getByFilter(array_merge($filters, ['category' => self::CATEGORY], compact('type')));
+            $products = $this->productService->getByFilter(array_merge($filters, ['category' => self::CATEGORY, 'type' => $type_name]));
         }
         
-        return view('product.showByType', compact('products', 'type'))
+        return view('product.showByType', compact('products'))
+                                                    ->with('type', $type_name)
                                                     ->with('category', self::CATEGORY);
     }
 }

@@ -8,7 +8,7 @@
 
         <p><b>Price: </b>{{ $product->price }} <strike class="text-danger">{{ $product->old_price }}</strike></p>
         <p><b>Category: </b>{{ ucfirst($product->category_name) }}</p>
-        <p><b>Type: </b>{{ ucfirst($product->type) }}</p>
+        <p><b>Type: </b>{{ ucfirst($product->type->name) }}</p>
         <p><b>Brand: </b>{{ ucfirst($product->brand) }}</p>
         <p><b>Color: </b>{{ ucfirst($product->color) }}</p>
 

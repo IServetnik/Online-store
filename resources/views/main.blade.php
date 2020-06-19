@@ -10,7 +10,8 @@
     @endif
     
     @if(Auth::user() && Auth::user()->is_admin)
-        <a href={{ route('product.create') }}>Create</a>
+        <a href={{ route('product.create') }}>Create product</a><br>
+        <a href={{ route('type.create') }}>Create type</a>
     @endif
 
     @include('inc.table', compact('products'))

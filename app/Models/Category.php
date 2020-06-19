@@ -6,17 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 class Category extends Model
-{
-    public function getTypesCollectionAttribute() : Collection
+{        
+    /**
+     * types
+     *
+     * @return void
+     */
+    public function types()
     {
-        $types = $this->types;
-        
-        $typesArray = explode(',', $types);
-        //trim all types
-        $typesArray = array_map(function($type) {return trim($type);}, $typesArray);
-
-        $typesCollection = collect($typesArray);
-
-        return $typesCollection;
+        return $this->hasMany(Type::class, 'category_name', 'name');
     }
 }

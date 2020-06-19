@@ -37,7 +37,7 @@ class ProductService
     {
         $data = array_map('strtolower', $request->all());
 
-        if (!$this->checkType($data['category_name'], $data['type'])) throw new ProductException('Incorrect type');
+        if (!$this->checkType($data['category_name'], $data['type_name'])) throw new ProductException('Incorrect type');
         if (!$this->checkName($data['name'])) throw new ProductException("Name is not unique");
 
         $result = Model::create($data);
@@ -57,7 +57,7 @@ class ProductService
     {
         $data = array_map('strtolower', $request->all());
         
-        if (!$this->checkType($data['category_name'], $data['type'])) throw new ProductException('Incorrect type');
+        if (!$this->checkType($data['category_name'], $data['type_name'])) throw new ProductException('Incorrect type');
         if (!$this->checkName($data['name'], $name)) throw new ProductException("Name is not unique");
 
         $product = $this->getByName($name);
@@ -132,9 +132,9 @@ class ProductService
      *
      * @return void
      */
-    public function getByType($type)
+    public function getByType(string $type_name)
     {
-        $products = $this->repository->getByType($type);
+        $products = $this->repository->getByType($type_name);
         return $products;
     }
 
@@ -142,15 +142,15 @@ class ProductService
      * getByCategoryAndType
      *
      * @param  mixed $category
-     * @param  mixed $type
+     * @param  mixed $type_name
      * @return void
      */
-    public function getByCategoryNameAndType(string $category_name, string $type)
+    public function getByCategoryAndType(string $category_name, string $type_name)
     {
         //check if this type of clothing exists in this category
-        if (!$this->checkType($category_name, $type)) abort(404);
+        if (!$this->checkType($category_name, $type_name)) abort(404);
 
-        $products = $this->repository->getByCategoryNameAndType($category_name, $type);
+        $products = $this->repository->getByCategoryAndType($category_name, $type_name);
         
         return $products;
     }
@@ -194,9 +194,7 @@ class ProductService
     /**
      * getByFilter
      *
-     * @param  mixed $filter
-     * @param  mixed $category_name
-     * @param  mixed $type
+     * @param  mixed $filters
      * @return void
      */
     public function getByFilter($filters)
@@ -215,19 +213,19 @@ class ProductService
      * checkType
      *
      * @param  mixed $category_name
-     * @param  mixed $type
+     * @param  mixed $type_name
      * @return void
      */
-    public function checkType(string $category_name, string $type)
+    public function checkType(string $category_name, string $type_name)
     {
         $categoryService = app(CategoryService::class);
         $category = $categoryService->getByName($category_name);
 
-        $typesCollection = $category->typesCollection;
-        $typesCollection->transform(function ($item, $key) {return strtolower($item);});
+        $types = $category->types;
+        $types->transform(function ($item, $key) {return strtolower($item->name);});
 
         //check if this type of clothing exists
-        $result = ($typesCollection->search(strtolower($type)) !== false);
+        $result = ($types->search(strtolower($type_name)) !== false);
 
         return $result;
     }
@@ -246,8 +244,8 @@ class ProductService
 
         if ($newName === $oldName) return true;
 
-        $products = $this->getWhere([['name', '=', $newName]]);
-        if ($products->isEmpty()) return true;
+        $products = $this->getByName($newName);
+        if (empty($products)) return true;
 
         return false;
     }

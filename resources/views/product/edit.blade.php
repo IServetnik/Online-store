@@ -4,7 +4,7 @@
 
 @section('content')
     <h1>Edit</h1>
-
+    
     <form action="{{ route('product.update', $product->name) }}" method="POST">
         @csrf
         @method('PATCH')
@@ -28,14 +28,14 @@
             </select>
         </div>
         <div class="form-group">
-            <label for="type">Type:</label>
-            <select class="form-control" id="type" name="type">
-                <option @if (strtolower(old('type')) == "shoes" || strtolower($product->type) == "shoes") {{ 'selected' }} @endif>Shoes</option>
-                <option @if (strtolower(old('type')) == "shirts" || strtolower($product->type) == "shirts") {{ 'selected' }} @endif>Shirts</option>
-                <option @if (strtolower(old('type')) == "trousers" || strtolower($product->type) == "trousers") {{ 'selected' }} @endif>Trousers</option>
-                <option @if (strtolower(old('type')) == "hats" || strtolower($product->type) == "hats") {{ 'selected' }} @endif>Hats</option>
-                <option @if (strtolower(old('type')) == "socks" || strtolower($product->type) == "socks") {{ 'selected' }} @endif>Socks</option>
-                <option @if (strtolower(old('type')) == "dress" || strtolower($product->type) == "dress") {{ 'selected' }} @endif>Dress</option>
+            <label for="type_name">Type:</label>
+            <select class="form-control" id="type_name" name="type_name">
+                <option @if (strtolower(old('type_name')) == "shoes" || strtolower($product->type_name) == "shoes") {{ 'selected' }} @endif>Shoes</option>
+                <option @if (strtolower(old('type_name')) == "shirts" || strtolower($product->type_name) == "shirts") {{ 'selected' }} @endif>Shirts</option>
+                <option @if (strtolower(old('type_name')) == "trousers" || strtolower($product->type_name) == "trousers") {{ 'selected' }} @endif>Trousers</option>
+                <option @if (strtolower(old('type_name')) == "hats" || strtolower($product->type_name) == "hats") {{ 'selected' }} @endif>Hats</option>
+                <option @if (strtolower(old('type_name')) == "socks" || strtolower($product->type_name) == "socks") {{ 'selected' }} @endif>Socks</option>
+                <option @if (strtolower(old('type_name')) == "dress" || strtolower($product->type_name) == "dress") {{ 'selected' }} @endif>Dress</option>
             </select>
         </div>
         <div class="form-group">

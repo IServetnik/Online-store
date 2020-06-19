@@ -124,6 +124,6 @@ class ProductFilter
      */
     public function type($value)
     {
-        $this->builder->where('type', $value);
+        $this->builder->where('type_name', $value);
     }
 }

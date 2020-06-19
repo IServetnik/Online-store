@@ -4,11 +4,14 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', 'MainController@index')->name('main');
+Route::get('/home', 'HomeController@index')->name('home');
+
 
 Route::resource('/product', 'ProductController')->names('product');
+Route::resource('/type', 'TypeController')->names('type');
 
 
-//Cayegories
+//Categories
 Route::namespace('Category')->group(function () {
     Route::group(['prefix' => 'men', 'as' => 'men.'], function () {
         Route::get('/', 'MenController@showAll')->name('all');
@@ -28,5 +31,3 @@ Route::namespace('Category')->group(function () {
 
 
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

@@ -33,12 +33,12 @@ class ProductRepository
     /**
      * getByType
      *
-     * @param  mixed $type
+     * @param  mixed $type_name
      * @return Collection
      */
-    public function getByType(string $type) : Collection
+    public function getByType(string $type_name) : Collection
     {
-        $products = Model::where(compact('type'))->with('category')->get();
+        $products = Model::where(compact('type_name'))->with('category')->get();
         return $products;
     }
     
@@ -46,12 +46,12 @@ class ProductRepository
      * getByCategoryAndType
      *
      * @param  mixed $category
-     * @param  mixed $type
+     * @param  mixed $type_name
      * @return Collection
      */
-    public function getByCategoryNameAndType(string $category_name, string $type) : Collection
+    public function getByCategoryAndType(string $category_name, string $type_name) : Collection
     {
-        $products = Model::where(compact('category_name', 'type'))->with('category')->get();
+        $products = Model::where(compact('category_name', 'type_name'))->with('category')->get();
         return $products;
     }
     
@@ -61,7 +61,7 @@ class ProductRepository
      * @param  mixed $id
      * @return Model
      */
-    public function getById(string $id) : Model
+    public function getById(string $id)
     {
         $product = Model::where(compact('id'))->with('category')->first();
         return $product;
@@ -73,7 +73,7 @@ class ProductRepository
      * @param  mixed $name
      * @return Model
      */
-    public function getByName(string $name) : Model
+    public function getByName(string $name)
     {
         $product = Model::where(compact('name'))->with('category')->first();
         return $product;

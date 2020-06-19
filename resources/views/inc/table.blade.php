@@ -20,7 +20,7 @@
                 <td>{{ $product->price }}</td>
                 <td>{{ $product->old_price }}</td>
                 <td>{{ $product->category_name }}</td>
-                <td>{{ $product->type }}</td>
+                <td>{{ $product->type->name }}</td>
                 <td>{{ $product->brand }}</td>
                 <td>{{ $product->color }}</td>
             </tr>
