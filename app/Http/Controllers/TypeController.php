@@ -73,7 +73,9 @@ class TypeController extends Controller
      */
     public function show($id)
     {
-        //
+        $type = $this->typeService->show($id);
+
+        return view('type.show', compact('type'));
     }
 
     /**

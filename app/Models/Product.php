@@ -20,6 +20,6 @@ class Product extends Model
 
     public function type()
     {
-        return $this->belongsTo(Type::class, 'type_name', 'name');
+        return $this->belongsTo(Type::class, 'type_name', 'name')->where('category_name', $this->category_name);
     }
 }

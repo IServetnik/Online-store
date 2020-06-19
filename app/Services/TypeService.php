@@ -43,6 +43,20 @@ class TypeService
 
         return $result;
     }
+    
+    /**
+     * show
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function show(string $id)
+    {
+        $type = $this->getById($id);
+        if(!$type) abort(404);
+
+        return $type;
+    }
 
 
 

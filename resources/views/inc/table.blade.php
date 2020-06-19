@@ -20,7 +20,11 @@
                 <td>{{ $product->price }}</td>
                 <td>{{ $product->old_price }}</td>
                 <td>{{ $product->category_name }}</td>
-                <td>{{ $product->type->name }}</td>
+                @if (Auth::user() && Auth::user()->is_admin)
+                    <td><a href="{{ route('type.show', $product->type->id) }}">{{ $product->type->name }}</a></td>
+                @else
+                    <td>{{ $product->type->name }}</td>
+                @endif
                 <td>{{ $product->brand }}</td>
                 <td>{{ $product->color }}</td>
             </tr>
