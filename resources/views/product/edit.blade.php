@@ -22,20 +22,25 @@
         <div class="form-group">
             <label for="category">Category:</label>
             <select class="form-control" id="category_name" name="category_name">
-                <option @if (strtolower(old('category_name')) == "men" || strtolower($product->category_name) == "men") {{ 'selected' }} @endif>Men</option>
-                <option @if (strtolower(old('category_name')) == "women" || strtolower($product->category_name) == "women") {{ 'selected' }} @endif>Women</option>
-                <option @if (strtolower(old('category_name')) == "kids" || strtolower($product->category_name) == "kids") {{ 'selected' }} @endif>Kids</option>
+                @foreach ($categories as $category)
+                    @if (old('category_name') !== null)
+                        <option @if (strtolower(old('category_name')) == strtolower($category->name)) {{ 'selected' }} @endif>{{ ucfirst($category->name) }}</option>
+                    @else
+                        <option @if (strtolower($product->category_name) == strtolower($category->name)) {{ 'selected' }} @endif>{{ ucfirst($category->name) }}</option>
+                    @endif
+                @endforeach
             </select>
         </div>
         <div class="form-group">
             <label for="type_name">Type:</label>
             <select class="form-control" id="type_name" name="type_name">
-                <option @if (strtolower(old('type_name')) == "shoes" || strtolower($product->type_name) == "shoes") {{ 'selected' }} @endif>Shoes</option>
-                <option @if (strtolower(old('type_name')) == "shirts" || strtolower($product->type_name) == "shirts") {{ 'selected' }} @endif>Shirts</option>
-                <option @if (strtolower(old('type_name')) == "trousers" || strtolower($product->type_name) == "trousers") {{ 'selected' }} @endif>Trousers</option>
-                <option @if (strtolower(old('type_name')) == "hats" || strtolower($product->type_name) == "hats") {{ 'selected' }} @endif>Hats</option>
-                <option @if (strtolower(old('type_name')) == "socks" || strtolower($product->type_name) == "socks") {{ 'selected' }} @endif>Socks</option>
-                <option @if (strtolower(old('type_name')) == "dress" || strtolower($product->type_name) == "dress") {{ 'selected' }} @endif>Dress</option>
+                @foreach ($types as $type)
+                    @if (old('category_name') !== null)
+                        <option @if (strtolower(old('type_name')) == strtolower($type->name)) {{ 'selected' }} @endif>{{ ucfirst($type->name) }}</option>
+                    @else
+                        <option @if (strtolower($product->type_name) == strtolower($type->name)) {{ 'selected' }} @endif>{{ ucfirst($type->name) }}</option>
+                    @endif
+                @endforeach
             </select>
         </div>
         <div class="form-group">

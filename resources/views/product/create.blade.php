@@ -26,12 +26,9 @@
         <div class="form-group">
             <label for="type_name">Type:</label>
             <select class="form-control" id="type_name" name="type_name">
-                <option @if (strtolower(old('type_name')) == "shoes") {{ 'selected' }} @endif>Shoes</option>
-                <option @if (strtolower(old('type_name')) == "shirts") {{ 'selected' }} @endif>Shirts</option>
-                <option @if (strtolower(old('type_name')) == "trousers") {{ 'selected' }} @endif>Trousers</option>
-                <option @if (strtolower(old('type_name')) == "hats") {{ 'selected' }} @endif>Hats</option>
-                <option @if (strtolower(old('type_name')) == "socks") {{ 'selected' }} @endif>Socks</option>
-                <option @if (strtolower(old('type_name')) == "dress") {{ 'selected' }} @endif>Dress</option>
+                @foreach ($types as $type)
+                    <option @if (strtolower(old('type_name')) == strtolower($type->name)) {{ 'selected' }} @endif>{{ ucfirst($type->name) }}</option>
+                @endforeach
             </select>
         </div>
         <div class="form-group">

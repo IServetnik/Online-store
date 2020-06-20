@@ -31,7 +31,7 @@ class KidsController extends Controller
      */
     public function showAll()
     {
-        $products = $this->productService->getByCategoryName(self::CATEGORY);
+        $products = $this->productService->getByCategory(self::CATEGORY);
         $types = $this->categoryService->getByName(self::CATEGORY)->types;
 
         return view('product.showByCategory', compact('products', 'types'))

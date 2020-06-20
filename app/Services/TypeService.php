@@ -58,6 +58,50 @@ class TypeService
         return $type;
     }
 
+    /**
+     * edit
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function edit(string $id)
+    {
+        $type = $this->getById($id);
+        if(!$type) abort(404);
+
+        return $type;
+    }
+    
+    /**
+     * update
+     *
+     * @param  mixed $request
+     * @param  mixed $id
+     * @return void
+     */
+    public function update(Request $request, $id)
+    {
+        $data = array_map('strtolower', $request->all());
+        $type = $this->getById($id);
+
+        if (!$this->checkName($data['category_name'], $data['name'], $type->name)) throw new TypeException('Name is not unique');
+        
+        //change type name and category name in products
+        $productService = app(ProductService::class);
+        $products = $productService->getByCategoryAndType($type->category_name, $type->name);
+
+        $products->each(function ($item, $key) use($data) {
+            $productData = ['type_name' => $data['name'],
+                        'category_name' => $data['category_name']];
+            $item->update($productData);
+        });
+
+        $result = $type->update($data);
+        if(!$result) throw new ProductException("Something went wrong");
+
+        return $result;
+    }
+
 
 
 
@@ -72,6 +116,17 @@ class TypeService
         $types = $this->repository->getAll();
         return $types;
     }
+
+    /**
+     * getAllUnique
+     *
+     * @return void
+     */
+    public function getAllUnique()
+    {
+        $types = $this->repository->getAllUnique();
+        return $types;
+    }
         
     /**
      * getByCategory
@@ -79,9 +134,9 @@ class TypeService
      * @param  mixed $category
      * @return void
      */
-    public function getByCategoryName(string $category_name)
+    public function getByCategory(string $category_name)
     {
-        $types = $this->repository->getByCategoryName($category_name);
+        $types = $this->repository->getByCategory($category_name);
         return $types;
     }
 
@@ -140,7 +195,7 @@ class TypeService
 
         if ($newName === $oldName) return true;
 
-        $types = $this->getByCategoryName($category_name);
+        $types = $this->getByCategory($category_name);
         $types->transform(function ($item, $key) {return strtolower($item->name);});
 
         if ($types->search(strtolower($newName)) === false) return true;

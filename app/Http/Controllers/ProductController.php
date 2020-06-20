@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\ProductService;
 use App\Services\CategoryService;
+use App\Services\TypeService;
 use App\Http\Requests\ProductRequest;
 use App\Exceptions\ProductException;
 
@@ -12,6 +13,7 @@ class ProductController extends Controller
 {
     private $categoryService;
     private $productService;
+    private $typeService;
 
     /**
      * __construct
@@ -23,6 +25,7 @@ class ProductController extends Controller
     {
         $this->categoryService = app(CategoryService::class);
         $this->productService = app(ProductService::class);
+        $this->typeService = app(TypeService::class);
 
         $this->middleware('isAdmin')->only(['create', 'edit', 'update', 'destroy']);
     }
@@ -45,7 +48,9 @@ class ProductController extends Controller
     public function create()
     {
         $categories = $this->categoryService->getAll();
-        return view('product.create', compact('categories'));
+        $types = $this->typeService->getAllUnique();
+
+        return view('product.create', compact('categories', 'types'));
     }
 
     /**
@@ -86,8 +91,11 @@ class ProductController extends Controller
      */
     public function edit($name)
     {
-        $product = $this->productService->getByName($name);
-        return view('product.edit', compact('product'));
+        $product = $this->productService->edit($name);
+        $categories = $this->categoryService->getAll();
+        $types = $this->typeService->getAllUnique();
+
+        return view('product.edit', compact('product', 'categories', 'types'));
     }
 
     /**

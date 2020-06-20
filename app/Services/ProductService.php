@@ -100,6 +100,20 @@ class ProductService
         return $product;
     }
 
+    /**
+     * edit
+     *
+     * @param  mixed $name
+     * @return void
+     */
+    public function edit(string $name)
+    {
+        $product = $this->getByName($name);
+        if(!$product) abort(404);
+
+        return $product;
+    }
+
 
 
 
@@ -121,9 +135,9 @@ class ProductService
      * @param  mixed $category
      * @return void
      */
-    public function getByCategoryName(string $category_name)
+    public function getByCategory(string $category_name)
     {
-        $products = $this->repository->getByCategoryName($category_name);
+        $products = $this->repository->getByCategory($category_name);
         return $products;
     }
 

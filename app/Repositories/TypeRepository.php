@@ -17,14 +17,25 @@ class TypeRepository
         $types = Model::with('category')->get();
         return $types;
     }
+
+    /**
+     * getAllUnique
+     *
+     * @return Collection
+     */
+    public function getAllUnique() : Collection
+    {
+        $types = Model::with('category')->get()->unique('name');
+        return $types;
+    }
       
     /**
-     * getByCategoryName
+     * getByCategory
      *
      * @param  mixed $category_name
      * @return Collection
      */
-    public function getByCategoryName(string $category_name) : Collection
+    public function getByCategory(string $category_name) : Collection
     {
         $types = Model::where(compact('category_name'))->with('category')->get();
         return $types;

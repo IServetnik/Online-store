@@ -19,12 +19,12 @@ class ProductRepository
     }
       
     /**
-     * getByCategoryName
+     * getByCategory
      *
      * @param  mixed $category_name
      * @return Collection
      */
-    public function getByCategoryName(string $category_name) : Collection
+    public function getByCategory(string $category_name) : Collection
     {
         $products = Model::where(compact('category_name'))->with('category')->get();
         return $products;

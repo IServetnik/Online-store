@@ -86,7 +86,10 @@ class TypeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $type = $this->typeService->edit($id);
+        $categories = $this->categoryService->getAll();
+
+        return view('type.edit', compact('type', 'categories'));
     }
 
     /**
@@ -98,7 +101,13 @@ class TypeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $this->typeService->update($request, $id);
+        } catch (TypeException $e) {
+            return back()->withErrors([$e->getMessage()])->withInput();
+        }
+
+        return redirect()->route('main')->with(['success' => 'Type edited successfully.']);
     }
 
     /**
