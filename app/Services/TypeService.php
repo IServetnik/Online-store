@@ -102,6 +102,30 @@ class TypeService
         return $result;
     }
 
+    /**
+     * destroy
+     *
+     * @param  mixed $name
+     * @return void
+     */
+    public function destroy(string $id)
+    {
+        $type = $this->getById($id);
+
+        //change type name and category name in products
+        $productService = app(ProductService::class);
+        $products = $productService->getByCategoryAndType($type->category_name, $type->name);
+
+        $products->each(function ($item, $key) {
+            $item->delete();
+        });
+
+        $result = $type->delete();
+        if(!$result) throw new ProductException("Something went wrong");
+
+        return $result;
+    }
+
 
 
 

@@ -118,6 +118,12 @@ class TypeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $this->typeService->destroy($id);
+        } catch (TypeException $e) {
+            return back()->withErrors([$e->getMessage()])->withInput();
+        }
+        
+        return redirect()->route('main')->with(['success' => 'Type deleted successfully.']);
     }
 }
