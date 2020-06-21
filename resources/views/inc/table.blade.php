@@ -31,3 +31,9 @@
         @endforeach
     </tbody>
 </table>
+
+<div class="col-md-12 card-body ">
+    <div class="d-flex justify-content-center">
+        {{ $products->withQueryString()->links() }}
+    </div>
+</div>

@@ -112,7 +112,7 @@ class TypeService
     {
         $type = $this->getById($id);
 
-        //change type name and category name in products
+        //delete products
         $productService = app(ProductService::class);
         $products = $productService->getByCategoryAndType($type->category_name, $type->name);
 

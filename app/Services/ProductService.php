@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Product as Model;
 use App\Exceptions\ProductException;
 use App\Filters\ProductFilter;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ProductService
 {        
@@ -121,34 +122,45 @@ class ProductService
     /**
      * getAll
      *
+     * @param  mixed $paginationCount
+     * 
      * @return void
      */
-    public function getAll()
+    public function getAll($paginationCount = null)
     {
-        $products = $this->repository->getAll();
+        $products = $this->repository->getAll($paginationCount);
+        $this->checkPagination($products);
+
         return $products;
     }
         
     /**
      * getByCategory
      *
-     * @param  mixed $category
+     * @param  mixed $category_name
+     * @param  mixed $paginationCount
      * @return void
      */
-    public function getByCategory(string $category_name)
+    public function getByCategory(string $category_name, $paginationCount = null)
     {
-        $products = $this->repository->getByCategory($category_name);
+        $products = $this->repository->getByCategory($category_name, $paginationCount);
+        $this->checkPagination($products);
+
         return $products;
     }
 
     /**
      * getByCategory
-     *
+     * 
+     * @param  mixed $paginationCount
+     * 
      * @return void
      */
-    public function getByType(string $type_name)
+    public function getByType(string $type_name, $paginationCount = null)
     {
-        $products = $this->repository->getByType($type_name);
+        $products = $this->repository->getByType($type_name, $paginationCount);
+        $this->checkPagination($products);
+
         return $products;
     }
 
@@ -157,15 +169,16 @@ class ProductService
      *
      * @param  mixed $category
      * @param  mixed $type_name
+     * @param  mixed $paginationCount
      * @return void
      */
-    public function getByCategoryAndType(string $category_name, string $type_name)
+    public function getByCategoryAndType(string $category_name, string $type_name, $paginationCount = null)
     {
-        //check if this type of clothing exists in this category
         if (!$this->checkType($category_name, $type_name)) abort(404);
 
-        $products = $this->repository->getByCategoryAndType($category_name, $type_name);
-        
+        $products = $this->repository->getByCategoryAndType($category_name, $type_name, $paginationCount);
+        $this->checkPagination($products);
+
         return $products;
     }
 
@@ -192,29 +205,34 @@ class ProductService
         $product = $this->repository->getByName($name);
         return $product;
     }
-
+ 
     /**
      * getWhere
      *
      * @param  mixed $where
+     * @param  mixed $paginationCount
      * @return void
      */
-    public function getWhere(array $where)
+    public function getWhere(array $where, $paginationCount = null)
     {
-        $products = $this->repository->getWhere($where);
+        $products = $this->repository->getWhere($where, $paginationCount);
+        $this->checkPagination($products);
+
         return $products;
     }
-    
+       
     /**
      * getByFilter
      *
      * @param  mixed $filters
+     * @param  mixed $paginationCount
      * @return void
      */
-    public function getByFilter($filters)
+    public function getByFilter($filters, $paginationCount = null)
     {
         $filter = app(ProductFilter::class);
-        $products = $filter->apply($filters);
+        $products = $filter->apply($filters, $paginationCount);
+        $this->checkPagination($products);
 
         return $products;
     }
@@ -262,5 +280,22 @@ class ProductService
         if (empty($products)) return true;
 
         return false;
+    }
+    
+    /**
+     * checkPagination
+     *
+     * @param  mixed $paginator
+     * @param  mixed $paginationCount
+     * @return void
+     */
+    public function checkPagination(LengthAwarePaginator $paginator)
+    {
+        $pageNumber = request()->input('page');
+        if($pageNumber !== null) {
+            if($pageNumber > $paginator->lastPage()) {
+                return redirect(\URL::current().'?page=' . $paginator->lastPage())->send();
+            }
+        }
     }
 }

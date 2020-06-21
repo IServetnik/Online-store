@@ -3,7 +3,7 @@
 namespace App\Filters;
 
 use App\Models\Product as Model;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ProductFilter
 {    
@@ -23,9 +23,9 @@ class ProductFilter
      * apply
      *
      * @param  mixed $filters
-     * @return Collection
+     * @return LengthAwarePaginator
      */
-    public function apply(array $filters) : Collection
+    public function apply(array $filters, $paginationCount = null) : LengthAwarePaginator
     {
         foreach($filters as $name => $value) {
             if (method_exists($this, $name) && $value !== null) {
@@ -33,7 +33,7 @@ class ProductFilter
             }
         }
 
-        return $this->builder->get();
+        return $this->builder->paginate($paginationCount);
     }
     
 

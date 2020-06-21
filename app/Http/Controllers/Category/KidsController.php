@@ -31,7 +31,7 @@ class KidsController extends Controller
      */
     public function showAll()
     {
-        $products = $this->productService->getByCategory(self::CATEGORY);
+        $products = $this->productService->getByCategory(self::CATEGORY, 10);
         $types = $this->categoryService->getByName(self::CATEGORY)->types;
 
         return view('product.showByCategory', compact('products', 'types'))
@@ -51,9 +51,9 @@ class KidsController extends Controller
         $filters = $request->query();
 
         if(empty($filters)) {
-            $products = $this->productService->getByCategoryAndType(self::CATEGORY, $type_name);
+            $products = $this->productService->getByCategoryAndType(self::CATEGORY, $type_name, 10);
         } else {
-            $products = $this->productService->getByFilter(array_merge($filters, ['category' => self::CATEGORY, 'type' => $type_name]));
+            $products = $this->productService->getByFilter(array_merge($filters, ['category' => self::CATEGORY, 'type' => $type_name]), 10);
         }
         
         return view('product.showByType', compact('products'))

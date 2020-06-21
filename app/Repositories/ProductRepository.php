@@ -3,55 +3,59 @@
 namespace App\Repositories;
 
 use App\Models\Product as Model;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ProductRepository
-{          
+{             
     /**
      * getAll
      *
-     * @return Collection
+     * @param  mixed $paginationCount
+     * @return LengthAwarePaginator
      */
-    public function getAll() : Collection
+    public function getAll($paginationCount = null) : LengthAwarePaginator
     {
-        $products = Model::with('category')->get();
+        $products = Model::with('category')->paginate($paginationCount);
         return $products;
     }
-      
+          
     /**
      * getByCategory
      *
      * @param  mixed $category_name
-     * @return Collection
+     * @param  mixed $paginationCount
+     * @return LengthAwarePaginator
      */
-    public function getByCategory(string $category_name) : Collection
+    public function getByCategory(string $category_name, $paginationCount = null) : LengthAwarePaginator
     {
-        $products = Model::where(compact('category_name'))->with('category')->get();
+        $products = Model::where(compact('category_name'))->with('category')->paginate($paginationCount);
         return $products;
     }
-    
+     
     /**
      * getByType
      *
      * @param  mixed $type_name
-     * @return Collection
+     * @param  mixed $paginationCount
+     * @return LengthAwarePaginator
      */
-    public function getByType(string $type_name) : Collection
+    public function getByType(string $type_name, $paginationCount = null) : LengthAwarePaginator
     {
-        $products = Model::where(compact('type_name'))->with('category')->get();
+        $products = Model::where(compact('type_name'))->with('category')->paginate($paginationCount);
         return $products;
     }
     
     /**
      * getByCategoryAndType
      *
-     * @param  mixed $category
+     * @param  mixed $category_name
      * @param  mixed $type_name
-     * @return Collection
+     * @param  mixed $paginationCount
+     * @return LengthAwarePaginator
      */
-    public function getByCategoryAndType(string $category_name, string $type_name) : Collection
+    public function getByCategoryAndType(string $category_name, string $type_name, $paginationCount = null) : LengthAwarePaginator
     {
-        $products = Model::where(compact('category_name', 'type_name'))->with('category')->get();
+        $products = Model::where(compact('category_name', 'type_name'))->with('category')->paginate($paginationCount);
         return $products;
     }
     
@@ -78,16 +82,17 @@ class ProductRepository
         $product = Model::where(compact('name'))->with('category')->first();
         return $product;
     }
-
+   
     /**
      * getWhere
      *
      * @param  mixed $where
-     * @return Collection
+     * @param  mixed $paginationCount
+     * @return LengthAwarePaginator
      */
-    public function getWhere(array $where) : Collection
+    public function getWhere(array $where, $paginationCount = null) : LengthAwarePaginator
     {
-        $products = Model::where($where)->with('category')->get();
+        $products = Model::where($where)->with('category')->paginate($paginationCount);
         return $products;
     }
 }
