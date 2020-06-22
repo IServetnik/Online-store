@@ -15,7 +15,7 @@ class ProductRepository
      */
     public function getAll($paginationCount = null) : LengthAwarePaginator
     {
-        $products = Model::with('category')->paginate($paginationCount);
+        $products = Model::paginate($paginationCount);
         return $products;
     }
           
@@ -28,7 +28,7 @@ class ProductRepository
      */
     public function getByCategory(string $category_name, $paginationCount = null) : LengthAwarePaginator
     {
-        $products = Model::where(compact('category_name'))->with('category')->paginate($paginationCount);
+        $products = Model::where(compact('category_name'))->paginate($paginationCount);
         return $products;
     }
      
@@ -41,7 +41,7 @@ class ProductRepository
      */
     public function getByType(string $type_name, $paginationCount = null) : LengthAwarePaginator
     {
-        $products = Model::where(compact('type_name'))->with('category')->paginate($paginationCount);
+        $products = Model::where(compact('type_name'))->paginate($paginationCount);
         return $products;
     }
     
@@ -55,7 +55,7 @@ class ProductRepository
      */
     public function getByCategoryAndType(string $category_name, string $type_name, $paginationCount = null) : LengthAwarePaginator
     {
-        $products = Model::where(compact('category_name', 'type_name'))->with('category')->paginate($paginationCount);
+        $products = Model::where(compact('category_name', 'type_name'))->paginate($paginationCount);
         return $products;
     }
     
@@ -67,7 +67,7 @@ class ProductRepository
      */
     public function getById(string $id)
     {
-        $product = Model::where(compact('id'))->with('category')->first();
+        $product = Model::where(compact('id'))->first();
         return $product;
     }
         
@@ -79,7 +79,7 @@ class ProductRepository
      */
     public function getByName(string $name)
     {
-        $product = Model::where(compact('name'))->with('category')->first();
+        $product = Model::where(compact('name'))->first();
         return $product;
     }
    
@@ -92,7 +92,7 @@ class ProductRepository
      */
     public function getWhere(array $where, $paginationCount = null) : LengthAwarePaginator
     {
-        $products = Model::where($where)->with('category')->paginate($paginationCount);
+        $products = Model::where($where)->paginate($paginationCount);
         return $products;
     }
 }

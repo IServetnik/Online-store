@@ -21,9 +21,9 @@
                 <td>{{ $product->old_price }}</td>
                 <td>{{ $product->category_name }}</td>
                 @if (Auth::user() && Auth::user()->is_admin)
-                    <td><a href="{{ route('type.show', $product->type->id) }}">{{ $product->type->name }}</a></td>
+                    <td><a href="{{ route('type.show', $product->type->id) }}">{{ $product->type_name }}</a></td>
                 @else
-                    <td>{{ $product->type->name }}</td>
+                    <td>{{ $product->type_name }}</td>
                 @endif
                 <td>{{ $product->brand }}</td>
                 <td>{{ $product->color }}</td>

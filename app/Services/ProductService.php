@@ -250,15 +250,10 @@ class ProductService
      */
     public function checkType(string $category_name, string $type_name)
     {
-        $categoryService = app(CategoryService::class);
-        $category = $categoryService->getByName($category_name);
+        $typeService = app(TypeService::class);
+        $type = $typeService->getByCategoryAndName($category_name, $type_name);
 
-        $types = $category->types;
-        $types->transform(function ($item, $key) {return strtolower($item->name);});
-
-        //check if this type of clothing exists
-        $result = ($types->search(strtolower($type_name)) !== false);
-
+        $result = ($type !== null) ? true : false;
         return $result;
     }
     

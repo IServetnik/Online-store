@@ -187,7 +187,20 @@ class TypeService
         $type = $this->repository->getByName($name);
         return $type;
     }
-
+  
+    /**
+     * getByCategoryAndName
+     *
+     * @param  mixed $category_name
+     * @param  mixed $name
+     * @return void
+     */
+    public function getByCategoryAndName(string $category_name, string $name)
+    {
+        $type = $this->repository->getByCategoryAndName($category_name, $name);
+        return $type;
+    }
+    
     /**
      * getWhere
      *

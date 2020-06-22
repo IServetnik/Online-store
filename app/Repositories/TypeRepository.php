@@ -64,6 +64,19 @@ class TypeRepository
         $type = Model::where(compact('name'))->with('category')->first();
         return $type;
     }
+    
+    /**
+     * getByCategoryAndName
+     *
+     * @param  mixed $category_name
+     * @param  mixed $name
+     * @return void
+     */
+    public function getByCategoryAndName(string $category_name, string $name)
+    {
+        $type = Model::where(compact('category_name', 'name'))->with('category')->first();
+        return $type;
+    }
 
     /**
      * getWhere
