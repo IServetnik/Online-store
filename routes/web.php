@@ -30,4 +30,10 @@ Route::namespace('Category')->group(function () {
 });
 
 
+//Cart
+Route::prefix('cart')->group(function () {
+    Route::get('/', 'CartController@index')->name('cart');
+    Route::post('/add', 'CartController@add')->name('cart.add');
+});
+
 Auth::routes();

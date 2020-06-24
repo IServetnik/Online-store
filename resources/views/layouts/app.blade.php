@@ -15,6 +15,9 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <!-- Scripts -->
+    <script type="text/javascript" src="{{ asset('/js/app.js') }}"></script>
 </head>
 <body>
     @include('inc.header')

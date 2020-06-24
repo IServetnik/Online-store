@@ -1,37 +1,30 @@
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Name</th>
-            <th scope="col">Price</th>
-            <th scope="col">Old Price</th>
-            <th scope="col">Category</th>
-            <th scope="col">Type</th>
-            <th scope="col">Brand</th>
-            <th scope="col">Color</th>
-        </tr>
-    </thead>
+<div class="container">
+    <div class="row">
+        @foreach ($products as $product)
+        <div class="col-md-4 col-sm-6 col-12">
+            <div class="card mb-4 box-shadow">
+                <div class="card-body">
+                    <h1><a href="{{ route('product.show', $product->name) }}">{{ ucfirst($product->name) }}</a></h1>
+                    <b>Id: </b> {{ $product->id }} <br>
+                    <b>Price: </b> {{ $product->price }} <del class="text text-danger">{{ $product->old_price}}</del><br>
+                    <b>Category: </b> {{ $product->category_name }}<br>
+                    <b>Type: </b>
+                    @if (Auth::user() && Auth::user()->is_admin)
+                        <td><a href="{{ route('type.show', $product->type->id) }}">{{ $product->type_name }}</a></td>
+                    @else
+                        <td>{{ $product->type_name }}</td>
+                    @endif <br>
+                    <b>Brand: </b>{{ ucfirst($product->brand) }} <br>
+                    <b>Color: </b>{{ ucfirst($product->color) }} <br>
 
-    <tbody>
-        @foreach($products as $product)
-            <tr>
-                <th scope="row">{{ $product->id }}</th>
-                <td><a href="{{ route('product.show', $product->name) }}">{{ $product->name }}</a></td>
-                <td>{{ $product->price }}</td>
-                <td>{{ $product->old_price }}</td>
-                <td>{{ $product->category_name }}</td>
-                @if (Auth::user() && Auth::user()->is_admin)
-                    <td><a href="{{ route('type.show', $product->type->id) }}">{{ $product->type_name }}</a></td>
-                @else
-                    <td>{{ $product->type_name }}</td>
-                @endif
-                <td>{{ $product->brand }}</td>
-                <td>{{ $product->color }}</td>
-            </tr>
+                    <a href="/" data-route="{{ route('cart.add') }}" data-product-name="{{ $product->name }}" class="btn btn-primary add-to-cart">Add to cart</a>
+                </div>
+                </div>
+            </div>
         @endforeach
-    </tbody>
-</table>
-
+    </div>
+</div>
+  
 <div class="col-md-12 card-body ">
     <div class="d-flex justify-content-center">
         {{ $products->withQueryString()->links() }}
