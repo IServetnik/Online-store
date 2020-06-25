@@ -42,11 +42,20 @@ class CartService
     {
         if(!session()->has("cart.$name")) {
             session()->put("cart.$name.quantity", 1);
-            session()->save();
         } else {
             $quantity = session()->get("cart.$name.quantity");
             session()->put("cart.$name.quantity", ++$quantity);
-            session()->save();
         }
+    }
+    
+    /**
+     * dlete
+     *
+     * @param  mixed $name
+     * @return void
+     */
+    public function delete(string $name)
+    {
+        session()->forget("cart.$name");
     }
 }

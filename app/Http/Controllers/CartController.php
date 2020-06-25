@@ -46,4 +46,12 @@ class CartController extends Controller
 
         return response()->json(['result'=>'success']);
     }
+
+    public function delete(Request $request)
+    {
+        $name = $request->name;
+        $this->service->delete($name);
+
+        return response()->json(['result'=>'success']);
+    }
 }

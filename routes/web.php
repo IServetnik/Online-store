@@ -33,7 +33,8 @@ Route::namespace('Category')->group(function () {
 //Cart
 Route::prefix('cart')->group(function () {
     Route::get('/', 'CartController@index')->name('cart');
-    Route::post('/add', 'CartController@add')->name('cart.add');
+    Route::post('/cart/add', 'CartController@add')->name('cart.add');
+    Route::post('/cart/delete', 'CartController@delete')->name('cart.delete');
 });
 
 Auth::routes();
