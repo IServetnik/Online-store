@@ -35,6 +35,8 @@ Route::prefix('cart')->group(function () {
     Route::get('/', 'CartController@index')->name('cart');
     Route::post('/cart/add', 'CartController@add')->name('cart.add');
     Route::post('/cart/delete', 'CartController@delete')->name('cart.delete');
+    Route::post('/cart/increase', 'CartController@increaseQuantity')->name('cart.increaseQuantity');
+    Route::post('/cart/decrease', 'CartController@decreaseQuantity')->name('cart.decreaseQuantity');
 });
 
 Auth::routes();

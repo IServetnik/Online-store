@@ -44,7 +44,7 @@ class CartService
             session()->put("cart.$name.quantity", 1);
         } else {
             $quantity = session()->get("cart.$name.quantity");
-            session()->put("cart.$name.quantity", ++$quantity);
+            session()->put("cart.$name.quantity", $quantity+1);
         }
     }
     
@@ -57,5 +57,34 @@ class CartService
     public function delete(string $name)
     {
         session()->forget("cart.$name");
+    }
+    
+    /**
+     * increaseQuantity
+     *
+     * @param  mixed $name
+     * @return void
+     */
+    public function increaseQuantity(string $name)
+    {
+        $quantity = session()->get("cart.$name.quantity");
+        session()->put("cart.$name.quantity", $quantity+1);
+
+        return $quantity;
+    }
+
+    /**
+     * decreaseQuantity
+     *
+     * @param  mixed $name
+     * @return void
+     */
+    public function decreaseQuantity(string $name)
+    {
+        $quantity = session()->get("cart.$name.quantity");
+        if($quantity === 1) session()->forget("cart.$name");
+        else session()->put("cart.$name.quantity", $quantity-1);
+
+        return $quantity;
     }
 }

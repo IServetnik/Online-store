@@ -32,8 +32,8 @@
                     <td data-product-name="{{ $item['product']->name }}">{{ $item['product']->old_price }}</td>
                     <td data-product-name="{{ $item['product']->name }}">{{ $item['product']->category_name }}</td>
                     <td data-product-name="{{ $item['product']->name }}">{{ $item['product']->type_name }}</td>
-                    <td data-product-name="{{ $item['product']->name }}">{{ $item['quantity'] }}</td>
-                    <td data-product-name="{{ $item['product']->name }}"><a href="" data-route="{{ route('cart.delete') }}" class="btn btn-danger delete-from-cart" data-product-name="{{ $item['product']->name }}">Delete from cart</a></td>
+                    <td data-product-name="{{ $item['product']->name }}"><a href="" data-route="{{ route('cart.increaseQuantity') }}" class="increase-quantity">+</a><span class="product-quantity">{{ $item['quantity'] }}</span><a href="" data-route="{{ route('cart.decreaseQuantity') }}" class="decrease-quantity">-</a></td>
+                    <td data-product-name="{{ $item['product']->name }}"><a href="" data-route="{{ route('cart.delete') }}" class="btn btn-danger delete-from-cart">Delete from cart</a></td>
                 </tr>
             @endforeach
         </tbody>

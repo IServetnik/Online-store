@@ -46,12 +46,46 @@ class CartController extends Controller
 
         return response()->json(['result'=>'success']);
     }
-
+    
+    /**
+     * delete
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function delete(Request $request)
     {
         $name = $request->name;
         $this->service->delete($name);
 
         return response()->json(['result'=>'success']);
+    }
+    
+    /**
+     * increaseQuantity
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function increaseQuantity(Request $request)
+    {
+        $name = $request->name;
+        $quantity = $this->service->increaseQuantity($name);
+
+        return response()->json(['quantity'=>$quantity]);
+    }
+    
+    /**
+     * decreaseQuantity
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function decreaseQuantity(Request $request)
+    {
+        $name = $request->name;
+        $quantity = $this->service->decreaseQuantity($name);
+
+        return response()->json(['quantity'=>$quantity]);
     }
 }
