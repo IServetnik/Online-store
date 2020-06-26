@@ -30,7 +30,8 @@ class CartController extends Controller
     public function index()
     {
         $items = $this->service->getAll();
-        return view('cart', compact('items'));
+        $totalPrice = $this->service->totalPrice();
+        return view('cart', compact('items', 'totalPrice'));
     }
         
     /**
@@ -70,9 +71,9 @@ class CartController extends Controller
     public function increaseQuantity(Request $request)
     {
         $name = $request->name;
-        $quantity = $this->service->increaseQuantity($name);
+        $cartItem = $this->service->increaseQuantity($name);
 
-        return response()->json(['quantity'=>$quantity]);
+        return response()->json(['quantity'=>$cartItem->quantity, 'totalPrice'=>$cartItem->totalPrice()]);
     }
     
     /**
@@ -84,8 +85,8 @@ class CartController extends Controller
     public function decreaseQuantity(Request $request)
     {
         $name = $request->name;
-        $quantity = $this->service->decreaseQuantity($name);
+        $cartItem = $this->service->decreaseQuantity($name);
 
-        return response()->json(['quantity'=>$quantity]);
+        return response()->json(['quantity'=>$cartItem->quantity, 'totalPrice'=>$cartItem->totalPrice()]);
     }
 }

@@ -4,18 +4,10 @@ namespace App\Repositories;
 
 use App\Services\ProductService;
 use Illuminate\Support\Collection;
+use \Cart as Model;
 
 class CartRepository
 {             
-    private $productService;
-
-
-    public function __construct()
-    {
-        $this->productService = app(ProductService::class);
-    }
-
-
     /**
      * getAll
      *
@@ -23,13 +15,7 @@ class CartRepository
      */
     public function getAll() : Collection
     {
-        $items = collect(session()->get("cart"));
-        $items->transform(function ($item, $key) {
-            return ['product' => $this->productService->getByName($key),
-                    'quantity' => $item['quantity']
-                ];
-        });
-
+        $items = Model::all();
         return $items;
     }
 }

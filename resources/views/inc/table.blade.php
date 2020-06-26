@@ -17,7 +17,7 @@
                     <b>Brand: </b>{{ ucfirst($product->brand) }} <br>
                     <b>Color: </b>{{ ucfirst($product->color) }} <br>
 
-                    <a href="" data-route="{{ route('cart.add') }}" data-product-name="{{ $product->name }}" class="btn btn-primary add-to-cart">Add to cart</a>
+                    <div data-product-name="{{ $product->name }}"><a href="" data-route="{{ route('cart.add') }}" class="btn btn-primary add-to-cart">Add to cart</a></div>
                 </div>
                 </div>
             </div>

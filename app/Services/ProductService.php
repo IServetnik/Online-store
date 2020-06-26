@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Repositories\ProductRepository as Repository;
 use Illuminate\Http\Request;
 use App\Models\Product as Model;
-use App\Exceptions\ProductException;
+use App\Exceptions\ProductException as Exception;
 use App\Filters\ProductFilter;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -38,11 +38,11 @@ class ProductService
     {
         $data = array_map('strtolower', $request->all());
 
-        if (!$this->checkType($data['category_name'], $data['type_name'])) throw new ProductException('Incorrect type');
-        if (!$this->checkName($data['name'])) throw new ProductException("Name is not unique");
+        if (!$this->checkType($data['category_name'], $data['type_name'])) throw new Exception('Incorrect type');
+        if (!$this->checkName($data['name'])) throw new Exception("Name is not unique");
 
         $result = Model::create($data);
-        if(!$result) throw new ProductException("Something went wrong");
+        if(!$result) throw new Exception("Something went wrong");
 
         return $result;
     }
@@ -58,15 +58,15 @@ class ProductService
     {
         $data = array_map('strtolower', $request->all());
         
-        if (!$this->checkType($data['category_name'], $data['type_name'])) throw new ProductException('Incorrect type');
-        if (!$this->checkName($data['name'], $name)) throw new ProductException("Name is not unique");
+        if (!$this->checkType($data['category_name'], $data['type_name'])) throw new Exception('Incorrect type');
+        if (!$this->checkName($data['name'], $name)) throw new Exception("Name is not unique");
 
         $product = $this->getByName($name);
         if ($data['price'] != $product->price) $data['old_price'] = $product->price;
 
         $result = $product->update($data);
 
-        if(!$result) throw new ProductException("Something went wrong");
+        if(!$result) throw new Exception("Something went wrong");
         
         return $result;
     }
@@ -82,7 +82,7 @@ class ProductService
         $product = $this->repository->getByName($name);
 
         $result = $product->delete();
-        if(!$result) throw new ProductException("Something went wrong");
+        if(!$result) throw new Exception("Something went wrong");
 
         return $result;
     }

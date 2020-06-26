@@ -4,11 +4,13 @@ namespace App\Services;
 
 use Illuminate\Http\Request;
 use App\Repositories\CartRepository as Repository;
+use \Cart as Model;
+use App\Exceptions\CartException as Exception;
 
 class CartService
 {        
     private $repository;
-    
+    private $productService;
 
     /**
      * __construct
@@ -18,6 +20,7 @@ class CartService
     public function __construct()
     {
         $this->repository = app(Repository::class);
+        $this->productService = app(ProductService::class);
     }
     
     
@@ -40,12 +43,12 @@ class CartService
      */
     public function add(string $name)
     {
-        if(!session()->has("cart.$name")) {
-            session()->put("cart.$name.quantity", 1);
-        } else {
-            $quantity = session()->get("cart.$name.quantity");
-            session()->put("cart.$name.quantity", $quantity+1);
-        }
+        $product = $this->productService->getByName($name);
+        $result = Model::add($product);
+
+        if(!$result) throw new Exception("Something went wrong");
+
+        return $result;
     }
     
     /**
@@ -56,7 +59,12 @@ class CartService
      */
     public function delete(string $name)
     {
-        session()->forget("cart.$name");
+        $product = $this->productService->getByName($name);
+        $result = Model::delete($product);
+
+        if(!$result) throw new Exception("Something went wrong");
+
+        return $result;
     }
     
     /**
@@ -67,10 +75,12 @@ class CartService
      */
     public function increaseQuantity(string $name)
     {
-        $quantity = session()->get("cart.$name.quantity");
-        session()->put("cart.$name.quantity", $quantity+1);
+        $product = $this->productService->getByName($name);
+        $result = Model::increaseQuantity($product);
 
-        return $quantity;
+        if(!$result) throw new Exception("Something went wrong");
+
+        return $result;
     }
 
     /**
@@ -81,10 +91,22 @@ class CartService
      */
     public function decreaseQuantity(string $name)
     {
-        $quantity = session()->get("cart.$name.quantity");
-        if($quantity === 1) session()->forget("cart.$name");
-        else session()->put("cart.$name.quantity", $quantity-1);
+        $product = $this->productService->getByName($name);
+        $result = Model::decreaseQuantity($product);
 
-        return $quantity;
+        if(!$result) throw new Exception("Something went wrong");
+
+        return $result;
+    }
+    
+    /**
+     * totalPrice
+     *
+     * @return void
+     */
+    public function totalPrice()
+    {
+        $totalPrice = Model::totalPrice();
+        return $totalPrice;
     }
 }

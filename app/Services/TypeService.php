@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Repositories\TypeRepository as Repository;
 use Illuminate\Http\Request;
 use App\Models\Type as Model;
-use App\Exceptions\TypeException;
+use App\Exceptions\TypeException as Exception;
 
 class TypeService
 {        
@@ -36,10 +36,10 @@ class TypeService
     {
         $data = array_map('strtolower', $request->all());
 
-        if (!$this->checkName($data['category_name'], $data['name'])) throw new TypeException('Name is not unique');
+        if (!$this->checkName($data['category_name'], $data['name'])) throw new Exception('Name is not unique');
 
         $result = Model::create($data);
-        if(!$result) throw new TypeException("Something went wrong");
+        if(!$result) throw new Exception("Something went wrong");
 
         return $result;
     }
@@ -84,7 +84,7 @@ class TypeService
         $data = array_map('strtolower', $request->all());
         $type = $this->getById($id);
 
-        if (!$this->checkName($data['category_name'], $data['name'], $type->name)) throw new TypeException('Name is not unique');
+        if (!$this->checkName($data['category_name'], $data['name'], $type->name)) throw new Exception('Name is not unique');
         
         //change type name and category name in products
         $productService = app(ProductService::class);
