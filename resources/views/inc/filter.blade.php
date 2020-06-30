@@ -14,19 +14,19 @@
 
         <h2>Color:</h2>
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" value="white" id="white" name="color[]" @if (request()->has('color') && in_array('white', request()->input('color'))) {{ 'checked' }} @endif>
+            <input class="form-check-input color" data-name="color" type="checkbox" value="white" id="white" name="color[]" @if (request()->has('color') && in_array('white', request()->input('color'))) {{ 'checked' }} @endif>
             <label class="form-check-label" for="white">White</label>
         </div>
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" value="black" id="black" name="color[]" @if (request()->has('color') && in_array('black', request()->input('color'))) {{ 'checked' }} @endif>
+            <input class="form-check-input color" data-name="color" type="checkbox" value="black" id="black" name="color[]" @if (request()->has('color') && in_array('black', request()->input('color'))) {{ 'checked' }} @endif>
             <label class="form-check-label" for="black">Black</label>
         </div>
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" value="blue" id="blue" name="color[]" @if (request()->has('color') && in_array('blue', request()->input('color'))) {{ 'checked' }} @endif>
+            <input class="form-check-input color" data-name="color" type="checkbox" value="blue" id="blue" name="color[]" @if (request()->has('color') && in_array('blue', request()->input('color'))) {{ 'checked' }} @endif>
             <label class="form-check-label" for="blue">Blue</label>
         </div>
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" value="red" id="red" name="color[]" @if (request()->has('color') && in_array('red', request()->input('color'))) {{ 'checked' }} @endif>
+            <input class="form-check-input color" data-name="color" type="checkbox" value="red" id="red" name="color[]" @if (request()->has('color') && in_array('red', request()->input('color'))) {{ 'checked' }} @endif>
             <label class="form-check-label" for="red">Red</label>
         </div><br><br>
 

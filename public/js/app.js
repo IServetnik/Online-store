@@ -37229,6 +37229,8 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 __webpack_require__(/*! ./cart */ "./resources/js/cart.js");
 
+__webpack_require__(/*! ./product */ "./resources/js/product.js");
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
@@ -37283,12 +37285,41 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*! no static exports found */
 /***/ (function(module, exports) {
 
+var processing = false;
+
+function sendAjax(btn, success_callback, error_callback) {
+  if (!processing) {
+    processing = true;
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    $.ajax({
+      url: btn.data('route'),
+      type: 'POST',
+      data: {
+        name: btn.parent().data('product-name')
+      },
+      success: function success(response) {
+        processing = false;
+        success_callback(response);
+      },
+      error: function error(jqXHR) {
+        processing = false;
+        error_callback(jqXHR);
+      }
+    });
+  }
+}
+
 $(document).ready(function () {
   $('.add-to-cart').click(function (e) {
     e.preventDefault();
     var btn = $(this);
     sendAjax(btn, function (response) {
       $('#response').text("Product successfully added to cart").addClass("text-success");
+      $('#total-price').text(response.totalPrice.toFixed(3));
     }, function (jqXHR) {
       $('#response').text("Product has not been added to cart").addClass("text-danger");
     });
@@ -37299,6 +37330,7 @@ $(document).ready(function () {
     sendAjax(btn, function (response) {
       $('#response').text("Product successfully deleted from cart").addClass("text-success");
       btn.parent().parent().remove();
+      $('#total-price').text(response.totalPrice.toFixed(3));
     }, function (jqXHR) {
       $('#response').text("Product has not been deleted from cart").addClass("text-danger");
     });
@@ -37336,22 +37368,30 @@ $(document).ready(function () {
     });
   });
 });
+
+/***/ }),
+
+/***/ "./resources/js/product.js":
+/*!*********************************!*\
+  !*** ./resources/js/product.js ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
 var processing = false;
 
-function sendAjax(btn, success_callback, error_callback) {
+function sendAjax(input, success_callback, error_callback) {
   if (!processing) {
     processing = true;
+    updateUrl(input);
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
     $.ajax({
-      url: btn.data('route'),
-      type: 'POST',
-      data: {
-        name: btn.parent().data('product-name')
-      },
+      url: window.location.href,
+      type: 'GET',
       success: function success(response) {
         processing = false;
         success_callback(response);
@@ -37363,6 +37403,85 @@ function sendAjax(btn, success_callback, error_callback) {
     });
   }
 }
+
+function updateUrl(input) {
+  var url = window.location.href.split('?')[0];
+  var inputSerialize = input.val() ? input.serialize() + "&" : '';
+  var params = window.location.search.substr(1);
+
+  if (input.attr('type') == 'checkbox') {
+    if (!input.is(":checked")) {
+      params = params.replace(new RegExp(encodeURI(input.prop('name') + "=" + input.val() + "&?")), '');
+      var urlParams = "?" + params;
+    } else {
+      var urlParams = "?" + inputSerialize + params;
+    }
+  } else {
+    params = params.replace(new RegExp(input.attr('id') + "=" + "[^&]*&?"), '');
+    var urlParams = "?" + inputSerialize + params;
+  }
+
+  window.history.pushState({}, "IS", url + urlParams);
+}
+
+function updateProducts(response) {
+  var page = $(response);
+  var table = $('.products', page);
+  $(".products").replaceWith(table);
+  var pagination = $('.div-pagination', page);
+  $(".div-pagination").replaceWith(pagination);
+}
+
+$(document).ready(function () {
+  $('#min_price').change(function (e) {
+    var input = $(this);
+    sendAjax(input, function (response) {
+      updateProducts(response);
+    }, function (jqXHR) {
+      $('#response').text("Product has not been deleted from cart").addClass("text-danger");
+    });
+  });
+  $('#max_price').change(function (e) {
+    var input = $(this);
+    sendAjax(input, function (response) {
+      updateProducts(response);
+    }, function (jqXHR) {
+      $('#response').text("Product has not been deleted from cart").addClass("text-danger");
+    });
+  });
+  $('#discount').change(function (e) {
+    var input = $(this);
+    sendAjax(input, function (response) {
+      updateProducts(response);
+    }, function (jqXHR) {
+      $('#response').text("Product has not been deleted from cart").addClass("text-danger");
+    });
+  });
+  $('.color').change(function (e) {
+    var checkbox = $(this);
+    sendAjax(checkbox, function (response) {
+      updateProducts(response);
+    }, function (jqXHR) {
+      $('#response').text("Product has not been deleted from cart").addClass("text-danger");
+    });
+  });
+  $('#brand').change(function (e) {
+    var input = $(this);
+    sendAjax(input, function (response) {
+      updateProducts(response);
+    }, function (jqXHR) {
+      $('#response').text("Product has not been deleted from cart").addClass("text-danger");
+    });
+  });
+  $('#name').change(function (e) {
+    var input = $(this);
+    sendAjax(input, function (response) {
+      updateProducts(response);
+    }, function (jqXHR) {
+      $('#response').text("Product has not been deleted from cart").addClass("text-danger");
+    });
+  });
+});
 
 /***/ }),
 

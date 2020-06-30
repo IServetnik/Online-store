@@ -5,6 +5,8 @@
 @section('content')
     <h1><a href="{{ route("$category.all") }}">{{ ucfirst($category) }}</a>/{{ ucfirst($type) }}</h1>
 
+    <p id="response"></p>
+
     <div class="row" style="margin-top: 30px; margin-right: 0px;">
         <div class="col-md-3 col-sm-12">
             @include('inc.filter', compact('category', 'type'))

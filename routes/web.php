@@ -5,10 +5,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'MainController@index')->name('main');
 Route::get('/home', 'HomeController@index')->name('home');
-
-
+Route::get('/cart', 'CartController@index')->name('cart');
 Route::resource('/product', 'ProductController')->names('product');
 Route::resource('/type', 'TypeController')->names('type');
+
 
 
 //Categories
@@ -30,9 +30,8 @@ Route::namespace('Category')->group(function () {
 });
 
 
-//Cart
-Route::prefix('cart')->group(function () {
-    Route::get('/', 'CartController@index')->name('cart');
+//Ajax
+Route::group(['prefix' => 'ajax', 'as' => 'ajax.', 'namespace' => 'Ajax'], function () {
     Route::post('/cart/add', 'CartController@add')->name('cart.add');
     Route::post('/cart/delete', 'CartController@delete')->name('cart.delete');
     Route::post('/cart/increase', 'CartController@increaseQuantity')->name('cart.increaseQuantity');
