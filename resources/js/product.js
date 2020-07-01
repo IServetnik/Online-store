@@ -29,7 +29,7 @@ function sendAjax(input, success_callback, error_callback) {
 function updateUrl(input) {
     var url = window.location.href.split('?')[0];
     var inputSerialize = input.val() ? input.serialize()+"&" : '';
-
+    
     var params = window.location.search.substr(1);
     if(input.attr('type') == 'checkbox') {
         if(!input.is(":checked")) {
@@ -38,7 +38,14 @@ function updateUrl(input) {
         } else {
             var urlParams = "?"+inputSerialize+params;
         }
-    }else {
+    } else if(input.is('a')) {
+        var inputs = $(".filter input[type=text]");
+        inputs.val("");
+        var checkbox = $(".filter input[type=checkbox]");
+        checkbox.prop("checked", false);
+        
+        var urlParams = "";
+    } else {
         params = params.replace(new RegExp(input.attr('id')+"="+"[^&]*&?"), '');
         var urlParams = "?"+inputSerialize+params;
     }
@@ -47,6 +54,7 @@ function updateUrl(input) {
 }
 function updateProducts(response) {
     var page = $(response);
+
     var table = $('.products', page);
     $(".products").replaceWith(table);
 
@@ -66,7 +74,7 @@ $(document).ready(function() {
         sendAjax(input, function(response) {
             updateProducts(response);
         }, function(jqXHR) {
-            $('#response').text("Product has not been deleted from cart").addClass("text-danger");
+            $('#response').text("Something went wrong").addClass("text-danger");
         });
     });
 
@@ -76,7 +84,7 @@ $(document).ready(function() {
         sendAjax(input, function(response) {
             updateProducts(response);
         }, function(jqXHR) {
-            $('#response').text("Product has not been deleted from cart").addClass("text-danger");
+            $('#response').text("Something went wrong").addClass("text-danger");
         });
     });
 
@@ -86,7 +94,7 @@ $(document).ready(function() {
         sendAjax(input, function(response) {
             updateProducts(response);
         }, function(jqXHR) {
-            $('#response').text("Product has not been deleted from cart").addClass("text-danger");
+            $('#response').text("Something went wrong").addClass("text-danger");
         });
     });
 
@@ -96,7 +104,7 @@ $(document).ready(function() {
         sendAjax(checkbox, function(response) {
             updateProducts(response);
         }, function(jqXHR) {
-            $('#response').text("Product has not been deleted from cart").addClass("text-danger");
+            $('#response').text("Something went wrong").addClass("text-danger");
         });
     });
 
@@ -106,7 +114,7 @@ $(document).ready(function() {
         sendAjax(input, function(response) {
             updateProducts(response);
         }, function(jqXHR) {
-            $('#response').text("Product has not been deleted from cart").addClass("text-danger");
+            $('#response').text("Something went wrong").addClass("text-danger");
         });
     });
 
@@ -116,7 +124,18 @@ $(document).ready(function() {
         sendAjax(input, function(response) {
             updateProducts(response);
         }, function(jqXHR) {
-            $('#response').text("Product has not been deleted from cart").addClass("text-danger");
+            $('#response').text("Something went wrong").addClass("text-danger");
+        });
+    });
+
+    $('#clear').click(function(e) {
+        e.preventDefault();
+        var input = $(this);
+
+        sendAjax(input, function(response) {
+            updateProducts(response);
+        }, function(jqXHR) {
+            $('#response').text("Something went wrong").addClass("text-danger");
         });
     });
 });

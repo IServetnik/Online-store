@@ -37416,6 +37416,12 @@ function updateUrl(input) {
     } else {
       var urlParams = "?" + inputSerialize + params;
     }
+  } else if (input.is('a')) {
+    var inputs = $(".filter input[type=text]");
+    inputs.val("");
+    var checkbox = $(".filter input[type=checkbox]");
+    checkbox.prop("checked", false);
+    var urlParams = "";
   } else {
     params = params.replace(new RegExp(input.attr('id') + "=" + "[^&]*&?"), '');
     var urlParams = "?" + inputSerialize + params;
@@ -37438,7 +37444,7 @@ $(document).ready(function () {
     sendAjax(input, function (response) {
       updateProducts(response);
     }, function (jqXHR) {
-      $('#response').text("Product has not been deleted from cart").addClass("text-danger");
+      $('#response').text("Something went wrong").addClass("text-danger");
     });
   });
   $('#max_price').change(function (e) {
@@ -37446,7 +37452,7 @@ $(document).ready(function () {
     sendAjax(input, function (response) {
       updateProducts(response);
     }, function (jqXHR) {
-      $('#response').text("Product has not been deleted from cart").addClass("text-danger");
+      $('#response').text("Something went wrong").addClass("text-danger");
     });
   });
   $('#discount').change(function (e) {
@@ -37454,7 +37460,7 @@ $(document).ready(function () {
     sendAjax(input, function (response) {
       updateProducts(response);
     }, function (jqXHR) {
-      $('#response').text("Product has not been deleted from cart").addClass("text-danger");
+      $('#response').text("Something went wrong").addClass("text-danger");
     });
   });
   $('.color').change(function (e) {
@@ -37462,7 +37468,7 @@ $(document).ready(function () {
     sendAjax(checkbox, function (response) {
       updateProducts(response);
     }, function (jqXHR) {
-      $('#response').text("Product has not been deleted from cart").addClass("text-danger");
+      $('#response').text("Something went wrong").addClass("text-danger");
     });
   });
   $('#brand').change(function (e) {
@@ -37470,7 +37476,7 @@ $(document).ready(function () {
     sendAjax(input, function (response) {
       updateProducts(response);
     }, function (jqXHR) {
-      $('#response').text("Product has not been deleted from cart").addClass("text-danger");
+      $('#response').text("Something went wrong").addClass("text-danger");
     });
   });
   $('#name').change(function (e) {
@@ -37478,7 +37484,16 @@ $(document).ready(function () {
     sendAjax(input, function (response) {
       updateProducts(response);
     }, function (jqXHR) {
-      $('#response').text("Product has not been deleted from cart").addClass("text-danger");
+      $('#response').text("Something went wrong").addClass("text-danger");
+    });
+  });
+  $('#clear').click(function (e) {
+    e.preventDefault();
+    var input = $(this);
+    sendAjax(input, function (response) {
+      updateProducts(response);
+    }, function (jqXHR) {
+      $('#response').text("Something went wrong").addClass("text-danger");
     });
   });
 });
