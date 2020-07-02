@@ -15,6 +15,10 @@
                                                 value="{{ old('name') ? old('name') : $product->name }}" name="name">
         </div>
         <div class="form-group">
+            <label for="name">Description:</label>
+            <textarea class="form-control" name="description" id="description" placeholder="Description" rows="3">{{ old('description') ? old('description') : $product->description }}</textarea>
+        </div>
+        <div class="form-group">
           <label for="price">Price</label>
           <input type="text" class="form-control" id="price" placeholder="Price" 
                                             value="{{ old('price') ? old('price') : $product->price }}" name="price">

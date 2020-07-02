@@ -36,8 +36,7 @@ class ProductService
      */
     public function store(Request $request)
     {
-        $request['sizes'] = implode(", ", $request['sizes']);
-        $data = array_map('strtolower', $request->all());
+        $data = $this->makeData($request);
 
         if (!$this->checkType($data['category_name'], $data['type_name'])) throw new Exception('Incorrect type');
         if (!$this->checkName($data['name'])) throw new Exception("Name is not unique");
@@ -57,9 +56,8 @@ class ProductService
      */
     public function update(Request $request, $name)
     {
-        $request['sizes'] = implode(", ", $request['sizes']);
-        $data = array_map('strtolower', $request->all());
-        
+        $data = $this->makeData($request);
+
         if (!$this->checkType($data['category_name'], $data['type_name'])) throw new Exception('Incorrect type');
         if (!$this->checkName($data['name'], $name)) throw new Exception("Name is not unique");
 
@@ -294,5 +292,20 @@ class ProductService
                 return redirect(\URL::current().'?page=' . $paginator->lastPage())->send();
             }
         }
+    }
+    
+    /**
+     * makeData
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function makeData(Request $request)
+    {
+        $request['sizes'] = implode(", ", $request['sizes']);
+        $data = array_map('strtolower', $request->except(['description']));
+        $data['description'] = $request['description'];
+
+        return $data;
     }
 }

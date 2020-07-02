@@ -5,6 +5,7 @@
                 <div class="card mb-4 box-shadow">
                     <div class="card-body">
                         <h1><a href="{{ route('product.show', $product->name) }}">{{ ucfirst($product->name) }}</a></h1>
+                        <h4>{{ $product->description }}</h4>
                         <b>Id: </b> {{ $product->id }} <br>
                         <b>Price: </b> {{ $product->price }} <del class="text text-danger">{{ $product->old_price}}</del><br>
                         <b>Category: </b> {{ $product->category_name }}<br>
