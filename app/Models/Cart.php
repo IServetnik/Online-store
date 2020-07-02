@@ -8,19 +8,24 @@ use Illuminate\Support\Collection;
 class Cart
 {   
     public $product;
+    public $size;
     public $quantity;
 
     /**
      * __construct
      *
-     * @param  Product $product
+     * @param  mixed $product
+     * @param  mixed $size
      * @param  mixed $quantity
      * @return void
      */
-    public function __construct(Product $product = null, int $quantity = null)
+    public function __construct(Product $product = null, string $size = null, int $quantity = null)
     {
-        $this->product = $product;
-        $this->quantity = $quantity;
+        if ($product && $size && $quantity) {
+            $this->product = $product;
+            $this->size = $size;
+            $this->quantity = $quantity;
+        }
     }
     
     
@@ -33,34 +38,34 @@ class Cart
     {
         return collect(session()->get("cart"));
     }
-    
+      
     /**
      * add
      *
-     * @param  Product $product
+     * @param  mixed $product
+     * @param  mixed $sizes
      * @return void
      */
-    public function add(Product $product)
-    {
-        if($this->has($product)) {
-            $cartItem = $this->get($product);
-            $cartItem->quantity++;
-        } else $cartItem = $this->createCartItem($product, 0);
-        
-        $this->putInCart($cartItem);
+    public function add(Product $product, array $sizes)
+    {   
+        $cartItems = $this->createCartItem($product, $sizes, 0);
+        foreach($cartItems as $cartItem) {
+            $this->putInCart($cartItem);
+        }
     
-        return $cartItem;
+        return $cartItems;
     }
  
     /**
      * delete
      *
      * @param  mixed $product
+     * @param  mixed $size
      * @return void
      */
-    public function delete(Product $product)
+    public function delete(Product $product, string $size)
     {
-        $cartItem = $this->get($product);
+        $cartItem = $this->get($product, $size);
         $this->deleteFromCart($cartItem);
 
         return $cartItem;
@@ -70,11 +75,12 @@ class Cart
      * increaseQuantity
      *
      * @param  mixed $product
+     * @param  mixed $size
      * @return void
      */
-    public function increaseQuantity(Product $product)
+    public function increaseQuantity(Product $product, string $size)
     {
-        $cartItem = $this->get($product);
+        $cartItem = $this->get($product, $size);
         $cartItem->quantity++;
 
         $this->putInCart($cartItem);
@@ -86,11 +92,12 @@ class Cart
      * decreaseQuantity
      *
      * @param  mixed $product
+     * @param  mixed $size
      * @return void
      */
-    public function decreaseQuantity(Product $product)
+    public function decreaseQuantity(Product $product, string $size)
     {
-        $cartItem = $this->get($product);
+        $cartItem = $this->get($product, $size);
         $cartItem->quantity--;
 
         if($cartItem->quantity === 0) $this->deleteFromCart($cartItem);
@@ -98,7 +105,12 @@ class Cart
         
         return $cartItem;
     }
-
+    
+    /**
+     * totalPrice
+     *
+     * @return void
+     */
     public function totalPrice()
     {
         $totalPrice = 0;
@@ -121,7 +133,8 @@ class Cart
      */
     protected function putInCart(self $cartItem)
     {
-        session()->put("cart.{$cartItem->product->name}", $cartItem);
+        session()->put("cart.{$this->name($cartItem->product, $cartItem->size)}", $cartItem);
+
         return true;
     }
     
@@ -133,7 +146,7 @@ class Cart
      */
     protected function deleteFromCart(self $cartItem)
     {
-        session()->forget("cart.{$cartItem->product->name}");
+        session()->forget("cart.{$this->name($cartItem->product, $cartItem->size)}");
         return true;
     }
 
@@ -141,11 +154,12 @@ class Cart
      * has
      *
      * @param  mixed $product
+     * @param  mixed $size
      * @return void
      */
-    protected function has(Product $product)
+    protected function has(Product $product, string $size)
     {
-        $result = session()->has("cart.$product->name");
+        $result = session()->has("cart.".$this->name($product, $size));
         return $result;
     }
     
@@ -153,11 +167,12 @@ class Cart
      * get
      *
      * @param  mixed $product
+     * @param  mixed $size
      * @return void
      */
-    protected function get(Product $product)
+    protected function get(Product $product, string $size)
     {
-        $result = session()->get("cart.$product->name");
+        $result = session()->get("cart.".$this->name($product, $size));
         return $result;
     }
 
@@ -165,11 +180,38 @@ class Cart
      * createCartItem
      *
      * @param  mixed $product
+     * @param  mixed $sizes
      * @param  mixed $quantity
      * @return void
      */
-    protected function createCartItem(Product $product, int $quantity)
+    protected function createCartItem(Product $product, array $sizes, int $quantity)
     {
-        return new self($product, $quantity+1);
+        $cartItems = [];
+
+        foreach($sizes as $size) {
+            $name = $this->name($product, $size);
+            if($this->has($product, $size)) {
+                $cartItem = $this->get($product, $size);
+                $cartItem->quantity++;
+                $cartItems[] = $cartItem;
+            } else {
+                $cartItem = new self($product, $size, $quantity+1);
+                $cartItems[] = $cartItem;
+            }
+        }
+        return $cartItems;
+    }
+    
+    /**
+     * name
+     *
+     * @param  mixed $product
+     * @param  mixed $sizes
+     * @return void
+     */
+    protected function name(Product $product, string $size)
+    {
+        $name = $product->name."-".$size;
+        return $name;
     }
 }

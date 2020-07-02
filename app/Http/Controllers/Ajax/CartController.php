@@ -33,9 +33,10 @@ class CartController extends Controller
     public function add(Request $request)
     {
         $name = $request->name;
-        $cartItem = $this->service->add($name);
+        $sizes = $request->size;
 
-        return response()->json(['result'=>'success', 'totalPrice'=>$cartItem->totalPrice()]);
+        $cartItem = $this->service->add($name, $sizes);
+        return response()->json(['totalPrice'=>$cartItem[0]->totalPrice()]);
     }
     
     /**
@@ -47,9 +48,10 @@ class CartController extends Controller
     public function delete(Request $request)
     {
         $name = $request->name;
-        $cartItem = $this->service->delete($name);
+        $size = $request->size;
 
-        return response()->json(['result'=>'success', 'totalPrice'=>$cartItem->totalPrice()]);
+        $cartItem = $this->service->delete($name, $size);
+        return response()->json(['totalPrice'=>$cartItem->totalPrice()]);
     }
     
     /**
@@ -61,8 +63,9 @@ class CartController extends Controller
     public function increaseQuantity(Request $request)
     {
         $name = $request->name;
-        $cartItem = $this->service->increaseQuantity($name);
+        $size = $request->size;
 
+        $cartItem = $this->service->increaseQuantity($name, $size);
         return response()->json(['quantity'=>$cartItem->quantity, 'totalPrice'=>$cartItem->totalPrice()]);
     }
     
@@ -75,8 +78,9 @@ class CartController extends Controller
     public function decreaseQuantity(Request $request)
     {
         $name = $request->name;
-        $cartItem = $this->service->decreaseQuantity($name);
+        $size = $request->size;
 
+        $cartItem = $this->service->decreaseQuantity($name, $size);
         return response()->json(['quantity'=>$cartItem->quantity, 'totalPrice'=>$cartItem->totalPrice()]);
     }
 }

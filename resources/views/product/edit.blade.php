@@ -53,6 +53,20 @@
             <input type="text" class="form-control" id="color" placeholder="Color" 
                                         value="{{ old('color') ? old('color') : $product->color }}" name="color">
         </div>
+        <div class="form-group">
+            <label for="color">Sizes:</label>
+            @if(!empty(old('sizes')))
+                @foreach (old('sizes') as $size)
+                    <input type="text" class="form-control size-input" value='{{ $size }}' placeholder="Size" name="sizes[]">
+                @endforeach
+            @else
+                @foreach ($product->sizeCollection as $size)
+                    <input type="text" class="form-control size-input" value='{{ $size }}' placeholder="Size" name="sizes[]">
+                @endforeach
+            @endif
+            <button type="button" class="btn btn-link btn-sm add-size">Add new size</button>
+        </div>
+
         <input type="submit" class="btn btn-primary" value="Update">
     </form>
 

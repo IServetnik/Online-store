@@ -39,6 +39,17 @@
             <label for="color">Color:</label>
             <input type="text" class="form-control" id="color" placeholder="Color" value="{{ old('color') }}" name="color">
         </div>
+        <div class="form-group">
+            <label for="color">Sizes:</label>
+            @if(!empty(old('sizes')))
+                @foreach (old('sizes') as $size)
+                    <input type="text" class="form-control size-input" value='{{ $size }}' placeholder="Size" name="sizes[]">
+                @endforeach
+            @else
+                <input type="text" class="form-control size-input" placeholder="Size" name="sizes[]">
+            @endif
+            <button type="button" class="btn btn-link btn-sm add-size">Add new size</button>
+        </div>
         <input type="submit" class="btn btn-primary" value="Create">
     </form>
 

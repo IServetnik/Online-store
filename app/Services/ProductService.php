@@ -36,6 +36,7 @@ class ProductService
      */
     public function store(Request $request)
     {
+        $request['sizes'] = implode(", ", $request['sizes']);
         $data = array_map('strtolower', $request->all());
 
         if (!$this->checkType($data['category_name'], $data['type_name'])) throw new Exception('Incorrect type');
@@ -56,6 +57,7 @@ class ProductService
      */
     public function update(Request $request, $name)
     {
+        $request['sizes'] = implode(", ", $request['sizes']);
         $data = array_map('strtolower', $request->all());
         
         if (!$this->checkType($data['category_name'], $data['type_name'])) throw new Exception('Incorrect type');

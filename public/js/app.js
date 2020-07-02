@@ -37231,6 +37231,8 @@ __webpack_require__(/*! ./cart */ "./resources/js/cart.js");
 
 __webpack_require__(/*! ./product */ "./resources/js/product.js");
 
+__webpack_require__(/*! ./createProduct.js */ "./resources/js/createProduct.js");
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
@@ -37287,7 +37289,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 var processing = false;
 
-function sendAjax(btn, success_callback, error_callback) {
+function sendAjax(btn, size, success_callback, error_callback) {
   if (!processing) {
     processing = true;
     $.ajaxSetup({
@@ -37299,7 +37301,8 @@ function sendAjax(btn, success_callback, error_callback) {
       url: btn.data('route'),
       type: 'POST',
       data: {
-        name: btn.parent().data('product-name')
+        name: btn.parent().parent().data('product-name'),
+        size: size
       },
       success: function success(response) {
         processing = false;
@@ -37315,19 +37318,28 @@ function sendAjax(btn, success_callback, error_callback) {
 
 $(document).ready(function () {
   $('.add-to-cart').click(function (e) {
-    e.preventDefault();
     var btn = $(this);
-    sendAjax(btn, function (response) {
-      $('#response').text("Product successfully added to cart").addClass("text-success");
-      $('#total-price').text(response.totalPrice.toFixed(3));
-    }, function (jqXHR) {
-      $('#response').text("Product has not been added to cart").addClass("text-danger");
-    });
+    var checkboxes = $('input.size-' + btn.parent().parent().data('product-name') + ':checked');
+
+    if (checkboxes.length == 0) {
+      $('#response').text("You did not select a size").addClass("text-danger");
+    } else {
+      var sizes = $('input.size-' + btn.parent().parent().data('product-name') + ':checked').map(function () {
+        return this.value;
+      }).get();
+      sendAjax(btn, sizes, function (response) {
+        $('#response').text("Product successfully added to cart").addClass("text-success");
+        $('#total-price').text(response.totalPrice.toFixed(3));
+      }, function (jqXHR) {
+        $('#response').text("Product has not been added to cart").addClass("text-danger");
+      });
+    }
   });
   $('.delete-from-cart').click(function (e) {
     e.preventDefault();
     var btn = $(this);
-    sendAjax(btn, function (response) {
+    var size = btn.parent().parent().data('size');
+    sendAjax(btn, size, function (response) {
       $('#response').text("Product successfully deleted from cart").addClass("text-success");
       btn.parent().parent().remove();
       $('#total-price').text(response.totalPrice.toFixed(3));
@@ -37338,7 +37350,8 @@ $(document).ready(function () {
   $('.increase-quantity').click(function (e) {
     e.preventDefault();
     var btn = $(this);
-    sendAjax(btn, function (response) {
+    var size = btn.parent().parent().data('size');
+    sendAjax(btn, size, function (response) {
       $('#response').text("The quantity of products in the cart increased").addClass("text-success");
       var quantity = btn.siblings('span.product-quantity');
       var quantityText = quantity.text();
@@ -37351,7 +37364,8 @@ $(document).ready(function () {
   $('.decrease-quantity').click(function (e) {
     e.preventDefault();
     var btn = $(this);
-    sendAjax(btn, function (response) {
+    var size = btn.parent().parent().data('size');
+    sendAjax(btn, size, function (response) {
       $('#response').text("The quantity of products in the cart decreased").addClass("text-success");
 
       if (response.quantity === 0) {
@@ -37366,6 +37380,22 @@ $(document).ready(function () {
     }, function (jqXHR) {
       $('#response').text("The quantity of products in the cart has not decreased").addClass("text-danger");
     });
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/createProduct.js":
+/*!***************************************!*\
+  !*** ./resources/js/createProduct.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+$(document).ready(function () {
+  $('.add-size').click(function () {
+    var lastInput = $('.size-input').last();
+    lastInput.after('<input type="text" class="form-control size-input" placeholder="Size" name="sizes[]">');
   });
 });
 
@@ -37439,7 +37469,7 @@ function updateProducts(response) {
 }
 
 $(document).ready(function () {
-  $('#min_price').change(function (e) {
+  $('.filter-div > #min_price').change(function (e) {
     var input = $(this);
     sendAjax(input, function (response) {
       updateProducts(response);
@@ -37447,7 +37477,7 @@ $(document).ready(function () {
       $('#response').text("Something went wrong").addClass("text-danger");
     });
   });
-  $('#max_price').change(function (e) {
+  $('.filter-div > #max_price').change(function (e) {
     var input = $(this);
     sendAjax(input, function (response) {
       updateProducts(response);
@@ -37455,7 +37485,7 @@ $(document).ready(function () {
       $('#response').text("Something went wrong").addClass("text-danger");
     });
   });
-  $('#discount').change(function (e) {
+  $('.filter-div > #discount').change(function (e) {
     var input = $(this);
     sendAjax(input, function (response) {
       updateProducts(response);
@@ -37463,7 +37493,7 @@ $(document).ready(function () {
       $('#response').text("Something went wrong").addClass("text-danger");
     });
   });
-  $('.color').change(function (e) {
+  $('.filter-div > .color').change(function (e) {
     var checkbox = $(this);
     sendAjax(checkbox, function (response) {
       updateProducts(response);
@@ -37471,7 +37501,7 @@ $(document).ready(function () {
       $('#response').text("Something went wrong").addClass("text-danger");
     });
   });
-  $('#brand').change(function (e) {
+  $('.filter-div > #brand').change(function (e) {
     var input = $(this);
     sendAjax(input, function (response) {
       updateProducts(response);
@@ -37479,7 +37509,7 @@ $(document).ready(function () {
       $('#response').text("Something went wrong").addClass("text-danger");
     });
   });
-  $('#name').change(function (e) {
+  $('.filter-div > #name').change(function (e) {
     var input = $(this);
     sendAjax(input, function (response) {
       updateProducts(response);
@@ -37487,7 +37517,7 @@ $(document).ready(function () {
       $('#response').text("Something went wrong").addClass("text-danger");
     });
   });
-  $('#clear').click(function (e) {
+  $('.filter-div > #clear').click(function (e) {
     e.preventDefault();
     var input = $(this);
     sendAjax(input, function (response) {

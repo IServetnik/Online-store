@@ -19,6 +19,7 @@
                 <th scope="col">Old Price</th>
                 <th scope="col">Category</th>
                 <th scope="col">Type</th>
+                <th scope="col">Size</th>
                 <th scope="col">Quantity</th>
                 <th scope="col"></th>
             </tr>
@@ -27,12 +28,13 @@
         <tbody>
 
             @foreach($items as $item)
-                <tr data-product-name="{{ $item->product->name }}">
+                <tr data-product-name="{{ $item->product->name }}" data-size="{{ $item->size }}">
                     <td><a href="{{ route('product.show', $item->product->name) }}">{{ $item->product->name }}</a></td>
                     <td>{{ $item->product->price }}</td>
                     <td>{{ $item->product->old_price }}</td>
                     <td>{{ $item->product->category_name }}</td>
                     <td>{{ $item->product->type_name }}</td>
+                    <td>{{ $item->size }}</td>
                     <td><a href="" data-route="{{ route('ajax.cart.increaseQuantity') }}" class="increase-quantity">+</a><span class="product-quantity">{{ $item->quantity }}</span><a href="" data-route="{{ route('ajax.cart.decreaseQuantity') }}" class="decrease-quantity">-</a></td>
                     <td><a href="" data-route="{{ route('ajax.cart.delete') }}" class="btn btn-danger delete-from-cart">Delete from cart</a></td>
                 </tr>

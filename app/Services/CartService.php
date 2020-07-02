@@ -39,15 +39,15 @@ class CartService
      * add
      *
      * @param  mixed $name
+     * @param  mixed $sizes
      * @return void
      */
-    public function add(string $name)
+    public function add(string $name, array $sizes)
     {
         $product = $this->productService->getByName($name);
-        $result = Model::add($product);
+        $result = Model::add($product, $sizes);
 
         if(!$result) throw new Exception("Something went wrong");
-
         return $result;
     }
     
@@ -55,15 +55,15 @@ class CartService
      * dlete
      *
      * @param  mixed $name
+     * @param  mixed $size
      * @return void
      */
-    public function delete(string $name)
+    public function delete(string $name, string $size)
     {
         $product = $this->productService->getByName($name);
-        $result = Model::delete($product);
+        $result = Model::delete($product, $size);
 
         if(!$result) throw new Exception("Something went wrong");
-
         return $result;
     }
     
@@ -71,15 +71,15 @@ class CartService
      * increaseQuantity
      *
      * @param  mixed $name
+     * @param  mixed $size
      * @return void
      */
-    public function increaseQuantity(string $name)
+    public function increaseQuantity(string $name, string $size)
     {
         $product = $this->productService->getByName($name);
-        $result = Model::increaseQuantity($product);
+        $result = Model::increaseQuantity($product, $size);
 
         if(!$result) throw new Exception("Something went wrong");
-
         return $result;
     }
 
@@ -87,15 +87,15 @@ class CartService
      * decreaseQuantity
      *
      * @param  mixed $name
+     * @param  mixed $size
      * @return void
      */
-    public function decreaseQuantity(string $name)
+    public function decreaseQuantity(string $name, string $size)
     {
         $product = $this->productService->getByName($name);
-        $result = Model::decreaseQuantity($product);
+        $result = Model::decreaseQuantity($product, $size);
 
         if(!$result) throw new Exception("Something went wrong");
-
         return $result;
     }
     

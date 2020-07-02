@@ -30,6 +30,19 @@ class ProductRequest extends FormRequest
             'type_name' => 'required',
             'brand' => 'required|max:255',
             'color' => 'required|max:255',
+            'sizes.*' => 'required',
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'sizes.*' => 'size',
         ];
     }
 }

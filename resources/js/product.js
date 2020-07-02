@@ -68,7 +68,7 @@ function updateProducts(response) {
 
 
 $(document).ready(function() {
-    $('#min_price').change(function(e) {
+    $('.filter-div > #min_price').change(function(e) {
         var input = $(this);
 
         sendAjax(input, function(response) {
@@ -78,7 +78,7 @@ $(document).ready(function() {
         });
     });
 
-    $('#max_price').change(function(e) {
+    $('.filter-div > #max_price').change(function(e) {
         var input = $(this);
 
         sendAjax(input, function(response) {
@@ -88,7 +88,7 @@ $(document).ready(function() {
         });
     });
 
-    $('#discount').change(function(e) {
+    $('.filter-div > #discount').change(function(e) {
         var input = $(this);
 
         sendAjax(input, function(response) {
@@ -98,7 +98,7 @@ $(document).ready(function() {
         });
     });
 
-    $('.color').change(function(e) {
+    $('.filter-div > .color').change(function(e) {
         var checkbox = $(this);
 
         sendAjax(checkbox, function(response) {
@@ -108,7 +108,7 @@ $(document).ready(function() {
         });
     });
 
-    $('#brand').change(function(e) {
+    $('.filter-div > #brand').change(function(e) {
         var input = $(this);
 
         sendAjax(input, function(response) {
@@ -118,7 +118,7 @@ $(document).ready(function() {
         });
     });
 
-    $('#name').change(function(e) {
+    $('.filter-div > #name').change(function(e) {
         var input = $(this);
 
         sendAjax(input, function(response) {
@@ -128,7 +128,7 @@ $(document).ready(function() {
         });
     });
 
-    $('#clear').click(function(e) {
+    $('.filter-div > #clear').click(function(e) {
         e.preventDefault();
         var input = $(this);
 

@@ -1,5 +1,5 @@
 var processing = false; 
-function sendAjax(btn, success_callback, error_callback) {
+function sendAjax(btn, size, success_callback, error_callback) {
     if(!processing){
         processing = true;
         $.ajaxSetup({
@@ -11,7 +11,8 @@ function sendAjax(btn, success_callback, error_callback) {
             url: btn.data('route'),
             type: 'POST',
             data: {
-                name: btn.parent().data('product-name'),
+                name: btn.parent().parent().data('product-name'),
+                size: size,
             },
             success: function (response) {
                 processing = false;
@@ -31,16 +32,23 @@ function sendAjax(btn, success_callback, error_callback) {
 
 $(document).ready(function() {
     $('.add-to-cart').click(function(e) {
-        e.preventDefault();
         var btn = $(this);
 
-        sendAjax(btn, function (response) {
-            $('#response').text("Product successfully added to cart").addClass("text-success");
-
-            $('#total-price').text(response.totalPrice.toFixed(3));
-        }, function (jqXHR) {
-            $('#response').text("Product has not been added to cart").addClass("text-danger");
-        });
+        var checkboxes = $('input.size-'+btn.parent().parent().data('product-name')+':checked');
+        if(checkboxes.length == 0) {
+            $('#response').text("You did not select a size").addClass("text-danger");
+        } else {
+            var sizes = $('input.size-'+btn.parent().parent().data('product-name')+':checked').map(function(){
+                                                                return this.value;
+                                                            }).get();
+            sendAjax(btn, sizes, function (response) {
+                $('#response').text("Product successfully added to cart").addClass("text-success");
+    
+                $('#total-price').text(response.totalPrice.toFixed(3));
+            }, function (jqXHR) {
+                $('#response').text("Product has not been added to cart").addClass("text-danger");
+            });
+        }
     });
 
 
@@ -48,7 +56,8 @@ $(document).ready(function() {
         e.preventDefault();
         var btn = $(this);
 
-        sendAjax(btn, function(response) {
+        var size = btn.parent().parent().data('size');
+        sendAjax(btn, size, function(response) {
             $('#response').text("Product successfully deleted from cart").addClass("text-success");
             btn.parent().parent().remove();
 
@@ -63,7 +72,8 @@ $(document).ready(function() {
         e.preventDefault();
         var btn = $(this);
 
-        sendAjax(btn, function(response) {
+        var size = btn.parent().parent().data('size');
+        sendAjax(btn, size, function(response) {
             $('#response').text("The quantity of products in the cart increased").addClass("text-success");
             var quantity = btn.siblings('span.product-quantity');
             var quantityText = quantity.text();
@@ -80,7 +90,8 @@ $(document).ready(function() {
         e.preventDefault();
         var btn = $(this);
 
-        sendAjax(btn, function(response) {
+        var size = btn.parent().parent().data('size');
+        sendAjax(btn, size, function(response) {
             $('#response').text("The quantity of products in the cart decreased").addClass("text-success");
 
             if(response.quantity === 0) {
