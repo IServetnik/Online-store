@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Services\CategoryService;
 use App\Services\TypeService;
 use App\Http\Requests\TypeRequest;
-use App\Exceptions\TypeException;
+use App\Exceptions\TypeException as Exception;
 
 class TypeController extends Controller
 {
@@ -58,7 +58,7 @@ class TypeController extends Controller
     {
         try {
             $this->typeService->store($request);
-        } catch (TypeException $e) {
+        } catch (Exception $e) {
             return back()->withErrors([$e->getMessage()])->withInput();
         }
 
@@ -103,7 +103,7 @@ class TypeController extends Controller
     {
         try {
             $this->typeService->update($request, $id);
-        } catch (TypeException $e) {
+        } catch (Exception $e) {
             return back()->withErrors([$e->getMessage()])->withInput();
         }
 
@@ -120,7 +120,7 @@ class TypeController extends Controller
     {
         try {
             $this->typeService->destroy($id);
-        } catch (TypeException $e) {
+        } catch (Exception $e) {
             return back()->withErrors([$e->getMessage()])->withInput();
         }
         

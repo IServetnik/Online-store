@@ -34,64 +34,72 @@ class CartService
         $items = $this->repository->getAll();
         return $items;
     }
-    
+     
     /**
      * add
      *
-     * @param  mixed $name
-     * @param  mixed $sizes
+     * @param  mixed $request
      * @return void
      */
-    public function add(string $name, array $sizes)
+    public function add(Request $request)
     {
+        $name = $request->name;
+        $sizes = $request->size;
+
         $product = $this->productService->getByName($name);
         $result = Model::add($product, $sizes);
 
         if(!$result) throw new Exception("Something went wrong");
         return $result;
     }
-    
+      
     /**
-     * dlete
+     * delete
      *
+     * @param  mixed $request
      * @param  mixed $name
-     * @param  mixed $size
      * @return void
      */
-    public function delete(string $name, string $size)
+    public function delete(Request $request, string $name)
     {
+        $size = $request->size;
+        
         $product = $this->productService->getByName($name);
         $result = Model::delete($product, $size);
 
         if(!$result) throw new Exception("Something went wrong");
         return $result;
     }
-    
+      
     /**
      * increaseQuantity
      *
+     * @param  mixed $request
      * @param  mixed $name
-     * @param  mixed $size
      * @return void
      */
-    public function increaseQuantity(string $name, string $size)
+    public function increaseQuantity(Request $request, string $name)
     {
+        $size = $request->size;
+
         $product = $this->productService->getByName($name);
         $result = Model::increaseQuantity($product, $size);
 
         if(!$result) throw new Exception("Something went wrong");
         return $result;
     }
-
+ 
     /**
      * decreaseQuantity
      *
+     * @param  mixed $request
      * @param  mixed $name
-     * @param  mixed $size
      * @return void
      */
-    public function decreaseQuantity(string $name, string $size)
+    public function decreaseQuantity(Request $request, string $name)
     {
+        $size = $request->size;
+
         $product = $this->productService->getByName($name);
         $result = Model::decreaseQuantity($product, $size);
 

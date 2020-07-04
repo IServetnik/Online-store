@@ -16,6 +16,11 @@ class Product extends Model
         return $this->belongsTo(Category::class, 'category_name', 'name');
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'product_id', 'id');
+    }
+
     public function type()
     {
         return $this->belongsTo(Type::class, 'type_name', 'name')->where('category_name', $this->category_name);

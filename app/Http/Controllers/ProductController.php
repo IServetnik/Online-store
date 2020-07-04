@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Services\ProductService;
 use App\Services\CategoryService;
 use App\Services\TypeService;
-use App\Http\Requests\ProductRequest;
+use App\Http\Requests\ProductRequest as Request;
 use App\Exceptions\ProductException;
 
 class ProductController extends Controller
@@ -59,7 +58,7 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductRequest $request)
+    public function store(Request $request)
     {
         try {
             $this->productService->store($request);
@@ -105,7 +104,7 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProductRequest $request, $name)
+    public function update(Request $request, $name)
     {   
         try {
             $this->productService->update($request, $name);

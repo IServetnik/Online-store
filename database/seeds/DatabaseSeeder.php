@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use \App\Models\User;
 use \App\Models\Product;
+use \App\Models\Review;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,7 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         factory(User::class, 20)->create();
-        factory(Product::class, 50)->create();
+        factory(Product::class, 100)->create();
 
         $this->call(CategorySeeder::class);
         $this->call(TypeSeeder::class);

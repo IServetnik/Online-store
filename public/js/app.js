@@ -37229,9 +37229,11 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 __webpack_require__(/*! ./cart */ "./resources/js/cart.js");
 
-__webpack_require__(/*! ./product */ "./resources/js/product.js");
+__webpack_require__(/*! ./filter */ "./resources/js/filter.js");
 
 __webpack_require__(/*! ./createProduct.js */ "./resources/js/createProduct.js");
+
+__webpack_require__(/*! ./showProduct */ "./resources/js/showProduct.js");
 
 /***/ }),
 
@@ -37301,7 +37303,7 @@ function sendAjax(btn, size, success_callback, error_callback) {
       url: btn.data('route'),
       type: 'POST',
       data: {
-        name: btn.parent().parent().data('product-name'),
+        name: btn.data('product-name'),
         size: size
       },
       success: function success(response) {
@@ -37328,6 +37330,9 @@ $(document).ready(function () {
         return this.value;
       }).get();
       sendAjax(btn, sizes, function (response) {
+        checkboxes.each(function (index, value) {
+          $(value).prop('checked', false);
+        });
         $('#response').text("Product successfully added to cart").addClass("text-success");
         $('#total-price').text(response.totalPrice.toFixed(3));
       }, function (jqXHR) {
@@ -37401,10 +37406,10 @@ $(document).ready(function () {
 
 /***/ }),
 
-/***/ "./resources/js/product.js":
-/*!*********************************!*\
-  !*** ./resources/js/product.js ***!
-  \*********************************/
+/***/ "./resources/js/filter.js":
+/*!********************************!*\
+  !*** ./resources/js/filter.js ***!
+  \********************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -37525,6 +37530,92 @@ $(document).ready(function () {
     }, function (jqXHR) {
       $('#response').text("Something went wrong").addClass("text-danger");
     });
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/showProduct.js":
+/*!*************************************!*\
+  !*** ./resources/js/showProduct.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var processing = false;
+
+function sendAjax(btn, rating, text, success_callback, error_callback) {
+  if (!processing) {
+    processing = true;
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    $.ajax({
+      url: btn.data('route'),
+      type: 'POST',
+      data: {
+        product_id: btn.data('product-id'),
+        rating: rating.val(),
+        text: text.val()
+      },
+      success: function success(response) {
+        processing = false;
+        success_callback(response);
+      },
+      error: function error(jqXHR) {
+        processing = false;
+        error_callback(jqXHR);
+      }
+    });
+  }
+}
+
+function updateReviews(response) {
+  var reviews = response.reviews;
+  $('.reviews').empty();
+  reviews.forEach(function (review) {
+    //format: YYYY-MM-DD hh:mm:ss
+    var created_at = new Date(review['created_at']).toISOString().replace(/T/, ' ').replace(/\..+/, '');
+    var updated_at = new Date(review['updated_at']).toISOString().replace(/T/, ' ').replace(/\..+/, '');
+    $('.reviews').append('<h4>' + review['text'] + '</h4>');
+    $('.reviews').append('<b><i>Rating:' + review['rating'] + '</i></b><br>');
+    $('.reviews').append('<small>created: ' + created_at + '</small>');
+
+    if (review['created_at'] != review['updated_at']) {
+      $('.reviews').append('<small>updated: ' + updated_at + '</small><br><br>');
+    }
+  });
+}
+
+$(document).ready(function () {
+  $('.write-review').click(function (e) {
+    var btn = $(this);
+    var rating = $('input.rating-radio:checked');
+    var text = $('textarea#text');
+
+    if (rating.val() == undefined) {
+      $('#response').text("You did not rate").addClass("text-danger");
+    } else if (text.val() == "") {
+      $('#response').text("You did not write a review").addClass("text-danger");
+    } else {
+      sendAjax(btn, rating, text, function (response) {
+        rating.prop('checked', false);
+        text.val('');
+        updateReviews(response);
+
+        if ($('#rating').length) {
+          $('#rating').text(response.rating);
+        } else {
+          $('#type').after('<p><b>Rating: </b> <span id="rating">' + response.rating + '</span><p>');
+        }
+
+        $('#response').text("Review written successfully").addClass("text-success");
+      }, function (jqXHR) {
+        $('#response').text("The review was not written").addClass("text-danger");
+      });
+    }
   });
 });
 

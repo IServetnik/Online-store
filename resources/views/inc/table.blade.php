@@ -15,6 +15,9 @@
                         @else
                             <td>{{ $product->type_name }}</td>
                         @endif <br>
+                        @if ($product->rating !== null)
+                            <b>Rating: </b> {{ $product->rating }}<br>
+                        @endif
                         <b>Brand: </b>{{ ucfirst($product->brand) }} <br>
                         <b>Color: </b>{{ ucfirst($product->color) }} <br>
                         <b>Sizes: </b>{{ $product->sizes }} <br>
@@ -41,9 +44,12 @@
                                 </div>
                                 <div data-product-name="{{ $product->name }}">
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary add-to-cart" data-dismiss="modal" data-route="{{ route('ajax.cart.add') }}">Add to cart</button>
+                                        <button type="button" class="btn btn-primary add-to-cart" data-product-name="{{ $product->name }}" data-dismiss="modal" data-route="{{ route('cart.add') }}">Add to cart</button>
                                     </div>
                                 </div>
+                                @foreach ($errors->all() as $error)
+                                    <p class="text-danger">{{ $error }}</p>
+                                @endforeach
                             </div>
                             </div>
                         </div>

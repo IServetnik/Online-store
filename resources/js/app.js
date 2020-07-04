@@ -1,4 +1,5 @@
 require('./bootstrap');
 require('./cart');
-require('./product');
+require('./filter');
 require('./createProduct.js');
+require('./showProduct');

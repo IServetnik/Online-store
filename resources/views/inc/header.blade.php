@@ -7,7 +7,7 @@
         <a class="py-2" href="{{ route('women.all') }}">Women</a>
         <a class="py-2" href="{{ route('kids.all') }}">Kids</a>
         
-        <a class="py-2" href="{{ route('cart') }}">Cart</a>
+        <a class="py-2" href="{{ route('cart.index') }}">Cart</a>
 
         @auth
             <a class="py-2" href="{{ url('/home') }}">Home</a>

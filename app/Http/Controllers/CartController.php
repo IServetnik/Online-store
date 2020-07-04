@@ -18,6 +18,8 @@ class CartController extends Controller
     public function __construct()
     {
         $this->service = app(Service::class);
+
+        $this->middleware('isAjax')->except('index');
     }
 
     /**
@@ -30,5 +32,56 @@ class CartController extends Controller
         $items = $this->service->getAll();
         $totalPrice = $this->service->totalPrice();
         return view('cart', compact('items', 'totalPrice'));
+    }
+
+    /**
+     * add
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function add(Request $request)
+    {
+        $cartItem = $this->service->add($request);
+        return response()->json(['totalPrice'=>$cartItem[0]->totalPrice()]);
+    }
+    
+    /**
+     * delete
+     *
+     * @param  mixed $request
+     * @param  mixed $name
+     * @return void
+     */
+    public function delete(Request $request, $name)
+    {
+        $cartItem = $this->service->delete($request, $name);
+        return response()->json(['totalPrice'=>$cartItem->totalPrice()]);
+    }
+    
+    /**
+     * increaseQuantity
+     *
+     * @param  mixed $request
+     * @param  mixed $name
+     * @return void
+     */
+    public function increaseQuantity(Request $request, $name)
+    {
+        $cartItem = $this->service->increaseQuantity($request, $name);
+        return response()->json(['quantity'=>$cartItem->quantity, 'totalPrice'=>$cartItem->totalPrice()]);
+    }
+    
+    /**
+     * decreaseQuantity
+     *
+     * @param  mixed $request
+     * @param  mixed $name
+     * @return void
+     */
+    public function decreaseQuantity(Request $request, $name)
+    {
+        $cartItem = $this->service->decreaseQuantity($request, $name);
+        return response()->json(['quantity'=>$cartItem->quantity, 'totalPrice'=>$cartItem->totalPrice()]);
     }
 }

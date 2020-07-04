@@ -35,8 +35,8 @@
                     <td>{{ $item->product->category_name }}</td>
                     <td>{{ $item->product->type_name }}</td>
                     <td>{{ $item->size }}</td>
-                    <td><a href="" data-route="{{ route('ajax.cart.increaseQuantity') }}" class="increase-quantity">+</a><span class="product-quantity">{{ $item->quantity }}</span><a href="" data-route="{{ route('ajax.cart.decreaseQuantity') }}" class="decrease-quantity">-</a></td>
-                    <td><a href="" data-route="{{ route('ajax.cart.delete') }}" class="btn btn-danger delete-from-cart">Delete from cart</a></td>
+                    <td><a href="" data-route="{{ route('cart.increaseQuantity', $item->product->name) }}" class="increase-quantity">+</a><span class="product-quantity">{{ $item->quantity }}</span><a href="" data-route="{{ route('cart.decreaseQuantity', $item->product->name) }}" class="decrease-quantity">-</a></td>
+                    <td><a href="" data-route="{{ route('cart.delete', $item->product->name) }}" class="btn btn-danger delete-from-cart">Delete from cart</a></td>
                 </tr>
             @endforeach
         </tbody>

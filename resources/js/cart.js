@@ -11,7 +11,7 @@ function sendAjax(btn, size, success_callback, error_callback) {
             url: btn.data('route'),
             type: 'POST',
             data: {
-                name: btn.parent().parent().data('product-name'),
+                name: btn.data('product-name'),
                 size: size,
             },
             success: function (response) {
@@ -42,8 +42,11 @@ $(document).ready(function() {
                                                                 return this.value;
                                                             }).get();
             sendAjax(btn, sizes, function (response) {
+                checkboxes.each(function(index, value) {
+                    $(value).prop('checked', false);
+                });
+
                 $('#response').text("Product successfully added to cart").addClass("text-success");
-    
                 $('#total-price').text(response.totalPrice.toFixed(3));
             }, function (jqXHR) {
                 $('#response').text("Product has not been added to cart").addClass("text-danger");
