@@ -31,14 +31,11 @@ class ReviewService
      */
     public function store(Request $request)
     {
-        $data = $this->makeData($request);
-
+        $data = $request->all();
         $result = Model::create($data);
         if(!$result) throw new Exception("Something went wrong");
 
         $reviews = $this->getByProduct($data['product_id']);
-        $this->setRating($data['product_id']);
-
         return $reviews;
     }
 
@@ -78,36 +75,5 @@ class ReviewService
     {
         $reviews = $this->repository->getByUser($user_id);
         return $reviews;
-    }
-    
-
-
-
-    /**
-     * makeData
-     *
-     * @param  mixed $request
-     * @return void
-     */
-    public function makeData(Request $request)
-    {
-        $data = $request->all();
-        $data['user_id'] = \Auth::user()->id;
-
-        return $data;
-    }
-
-    public function setRating(string $product_id)
-    {
-        $reviews = $this->getByProduct($product_id);
-
-        //set the average rating of the product
-        $ratings = [];
-        foreach($reviews as $review) $ratings[] = $review->rating;
-        $rating = array_sum($ratings)/count($ratings);
-
-        $product = $this->productService->getById($product_id);
-        $product->rating = $rating;
-        $product->save();
     }
 }

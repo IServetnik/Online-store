@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-md-6">
                 <h1>{{ $product->name }}</h1>
-    
+                <h4>{{ $product->description }}</h4>
                 <p><b>Price: </b>{{ $product->price }} <strike class="text-danger">{{ $product->old_price }}</strike></p>
                 <p><b>Category: </b>{{ ucfirst($product->category_name) }}</p>
                 <p id="type"><b>Type: </b>{{ ucfirst($product->type->name) }}</p>

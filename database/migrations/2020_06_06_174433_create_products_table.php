@@ -17,7 +17,6 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->text('description');
             $table->string('name')->unique();
-            $table->float('rating', 3, 2)->nullable();
             $table->float('price', 12, 3);
             $table->float('old_price', 12, 3)->nullable();
             $table->string('category_name');
