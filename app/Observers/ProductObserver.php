@@ -38,7 +38,7 @@ class ProductObserver
      */
     private function prepareData(Product $product)
     {
-        $product->sizes = strtolower(implode(", ", $product->sizes));
+        if( request()->has('sizes') ) $product->sizes = implode(", ", request()->get('sizes'));
 
         foreach($product->getAttributes() as $key => $value) {
             if ($key !== "description" && $key !== "old_price") {

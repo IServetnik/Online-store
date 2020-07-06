@@ -15,6 +15,8 @@ class ReviewObserver
      */
     public function creating(Review $review)
     {
-        $review->user_id = Auth::user()->id;
+        if (Auth::check()) {
+            $review->user_id = Auth::user()->id;
+        }
     }
 }

@@ -20,7 +20,9 @@ class CreateProductsTable extends Migration
             $table->float('price', 12, 3);
             $table->float('old_price', 12, 3)->nullable();
             $table->string('category_name');
+            $table->foreign('category_name')->references('name')->on('categories')->onDelete('cascade');
             $table->string('type_name');
+            $table->foreign('type_name')->references('name')->on('types')->onDelete('cascade');
             $table->string('brand');
             $table->string('color');
             $table->text('sizes');

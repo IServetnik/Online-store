@@ -17,7 +17,7 @@ class CreateTypesTable extends Migration
             $table->id();
             $table->string('name')->index();
             $table->string('category_name');
-            $table->foreign('category_name')->references('name')->on('categories');
+            $table->foreign('category_name')->references('name')->on('categories')->onDelete('cascade');
             $table->timestamps();
         });
     }
