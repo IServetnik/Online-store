@@ -130,13 +130,25 @@ class ProductService
     /**
      * getAll
      *
+     * @return void
+     */
+    public function getAll()
+    {
+        $products = $this->repository->getAll();
+
+        return $products;
+    }
+
+    /**
+     * getAllWithPaginate
+     *
      * @param  mixed $paginationCount
      * 
      * @return void
      */
-    public function getAll($paginationCount = null)
+    public function getAllWithPaginate($paginationCount = null)
     {
-        $products = $this->repository->getAll($paginationCount);
+        $products = $this->repository->getAllWithPaginate($paginationCount);
         $this->checkPagination($products);
 
         return $products;

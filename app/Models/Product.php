@@ -32,14 +32,4 @@ class Product extends Model
         $sizes = collect(array_map('trim', $sizes));
         return $sizes;
     }
-
-    public function getRatingAttribute()
-    {
-        $reviews = $this->reviews;
-        if($reviews->isEmpty()) return null;
-
-        $rating = $reviews->sum('rating') / $reviews->count();
-        $rating = round($rating, 1);
-        return $rating;
-    }
 }

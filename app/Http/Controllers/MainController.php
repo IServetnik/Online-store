@@ -28,7 +28,7 @@ class MainController extends Controller
      */
     public function index()
     {
-        $products = $this->service->getAll(15);
+        $products = $this->service->getAllWithPaginate(15);
         return view('main', compact('products'));
     }
 }

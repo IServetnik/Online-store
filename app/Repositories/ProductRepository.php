@@ -4,16 +4,28 @@ namespace App\Repositories;
 
 use App\Models\Product as Model;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class ProductRepository
-{             
+{              
     /**
      * getAll
+     *
+     * @return Collection
+     */
+    public function getAll() : Collection
+    {
+        $products = Model::all();
+        return $products;
+    }
+
+    /**
+     * getAllWithPaginate
      *
      * @param  mixed $paginationCount
      * @return LengthAwarePaginator
      */
-    public function getAll($paginationCount = null) : LengthAwarePaginator
+    public function getAllWithPaginate($paginationCount = null) : LengthAwarePaginator
     {
         $products = Model::paginate($paginationCount);
         return $products;
