@@ -30,6 +30,8 @@ class ReviewObserver
      */
     public function created(Review $review)
     {
+        if (!request()->has('product_id')) return false;
+        
         $reviews = app(ReviewService::class)->getByProduct(request()->get('product_id'));
         $product = app(ProductService::class)->getById(request()->get('product_id'));
 

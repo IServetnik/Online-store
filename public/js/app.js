@@ -37604,6 +37604,7 @@ $(document).ready(function () {
         rating.prop('checked', false);
         text.val('');
         updateReviews(response);
+        $('#write-review').remove();
 
         if ($('#rating').length) {
           $('#rating').text(response.rating);

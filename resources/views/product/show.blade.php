@@ -18,8 +18,8 @@
                 <p><b>Brand: </b>{{ ucfirst($product->brand) }}</p>
                 <p><b>Color: </b>{{ ucfirst($product->color) }}</p>
                 
-                @if (Auth::user())
-                    <button type="button" class="btn btn-secondary d-inline" data-toggle="modal" data-target="#modal-review">Write a review</button>
+                @if (Auth::user() && !$product->reviews->contains('user_id',Auth::user()->id))
+                    <button type="button" class="btn btn-secondary d-inline" data-toggle="modal" data-target="#modal-review" id="write-review">Write a review</button>
                 @endif
                 @if (Auth::user() && Auth::user()->is_admin)
                     <a href="{{ route('product.edit', $product->name) }}" class="btn btn-warning d-inline">Edit</a>

@@ -66,6 +66,8 @@ $(document).ready(function() {
 
                 updateReviews(response);
 
+                $('#write-review').remove();
+                
                 if($('#rating').length) {
                     $('#rating').text(response.rating);
                 } else {
