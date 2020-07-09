@@ -20,8 +20,6 @@ class ReviewController extends Controller
     {
         $this->service = app(Service::class);
         $this->productService = app(ProductService::class);
-
-        $this->middleware('isAjax');
     }
     
     /**
@@ -32,10 +30,9 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
-        $reviews = $this->service->store($request);
-        $product = $this->productService->getById($request->product_id);
+        $this->service->store($request);
 
-        return response()->json(['reviews'=>$reviews, 'rating'=>$product->rating]);
+        return back();
     }
     
     /**
@@ -56,8 +53,10 @@ class ReviewController extends Controller
      * @param  mixed $id
      * @return void
      */
-    public function destroy($id)
+    public function destroy(string $id)
     {
-        //
+        $this->service->destroy($id);
+
+        return back();
     }
 }

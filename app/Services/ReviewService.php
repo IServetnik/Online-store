@@ -35,9 +35,25 @@ class ReviewService
         $result = Model::create($data);
         if(!$result) throw new Exception("Something went wrong");
 
-        $reviews = $this->getByProduct($data['product_id']);
-        return $reviews;
+        return $result;
     }
+    
+    /**
+     * destroy
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function destroy(string $id)
+    {
+        $review = $this->getById($id);
+
+        $result = $review->delete();
+        if(!$result) throw new Exception("Something went wrong");
+        
+        return $result;
+    }
+
 
 
 

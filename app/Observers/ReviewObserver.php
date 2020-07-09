@@ -32,10 +32,35 @@ class ReviewObserver
     {
         if (!request()->has('product_id')) return false;
         
-        $reviews = app(ReviewService::class)->getByProduct(request()->get('product_id'));
-        $product = app(ProductService::class)->getById(request()->get('product_id'));
+        $this->updateRating($review);
+    }
+     
+    /**
+     * deleted
+     *
+     * @param  App\Models\Review $review
+     * @return void
+     */
+    public function deleted(Review $review)
+    {   
+        $this->updateRating($review);
+    }
+    
 
-        $rating = $reviews->sum('rating') / $reviews->count();
+
+    /**
+     * updateRating
+     *
+     * @param  mixed $review
+     * @return void
+     */
+    public function updateRating(Review $review)
+    {
+        $product = $review->product;
+        $reviews = $product->reviews;
+        $count = $reviews->count() ? $reviews->count() : 1;
+
+        $rating = $reviews->sum('rating') / $count;
         $rating = round($rating, 1);
         $product->rating = $rating;
         $product->save();

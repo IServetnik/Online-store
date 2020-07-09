@@ -15,7 +15,7 @@
                         @else
                             <td>{{ $product->type_name }}</td>
                         @endif <br>
-                        @if ($product->rating !== null)
+                        @if ($product->rating != 0)
                             <b>Rating: </b> {{ $product->rating }}<br>
                         @endif
                         <b>Brand: </b>{{ ucfirst($product->brand) }} <br>
