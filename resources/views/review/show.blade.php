@@ -8,10 +8,13 @@
         @endif 
         <br>
         @if (Auth::check() && ($review->user_id == Auth::user()->id || Auth::user()->is_admin))
-            <form action="{{ route('review.destroy', $review->id) }}" method="POST">
+            <button type="button" class="btn btn-warning btn-sm d-inline" data-toggle="modal" data-target="#edit-review-{{ $review->id }}">edit</button>
+            @include('review.edit', $review)
+
+            <form action="{{ route('review.destroy', $review->id) }}" method="POST" class="d-inline">
                 @csrf
                 @method('DELETE')
-                <input type="submit" class="btn btn-link text-danger btn-sm" value="delete">
+                <input type="submit" class="btn btn-danger btn-sm" value="delete">
             </form>
         @endif
         <br><br>

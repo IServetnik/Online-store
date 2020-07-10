@@ -30,11 +30,20 @@ class ReviewObserver
      */
     public function created(Review $review)
     {
-        if (!request()->has('product_id')) return false;
-        
         $this->updateRating($review);
     }
-     
+         
+    /**
+     * updated
+     *
+     * @param  App\Models\Review $review
+     * @return void
+     */
+    public function updated(Review $review)
+    {
+        $this->updateRating($review);
+    }
+
     /**
      * deleted
      *

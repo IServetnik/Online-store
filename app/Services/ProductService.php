@@ -65,7 +65,6 @@ class ProductService
         if ($data['price'] != $product->price) $data['old_price'] = $product->price;
 
         $result = $product->update($data);
-
         if(!$result) throw new Exception("Something went wrong");
         
         return $result;

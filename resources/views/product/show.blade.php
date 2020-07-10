@@ -3,10 +3,12 @@
 @section('title') IS @endsection
 
 @section('content')
-    <p id="response"></p>
     <div class="container">
         <div class="row">
             <div class="col-md-6">
+                @if(session()->has('success'))
+                    <p class="text-success">{{ session()->get('success') }}</p>
+                @endif
                 <h1>{{ $product->name }}</h1>
                 <h4>{{ $product->description }}</h4>
                 <p><b>Price: </b>{{ $product->price }} <strike class="text-danger">{{ $product->old_price }}</strike></p>
@@ -19,7 +21,7 @@
                 <p><b>Color: </b>{{ ucfirst($product->color) }}</p>
                 
                 @if (Auth::check() && !$product->reviews->contains('user_id',Auth::user()->id))
-                    <button type="button" class="btn btn-secondary d-inline" data-toggle="modal" data-target="#modal-review" id="write-review">Write a review</button>
+                    <button type="button" class="btn btn-secondary d-inline" data-toggle="modal" data-target="#create-review">Write a review</button>
                 @endif
                 @if (Auth::check() && Auth::user()->is_admin)
                     <a href="{{ route('product.edit', $product->name) }}" class="btn btn-warning d-inline">Edit</a>

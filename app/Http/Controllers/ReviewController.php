@@ -32,7 +32,7 @@ class ReviewController extends Controller
     {
         $this->service->store($request);
 
-        return back();
+        return back()->with(['success' => 'Review created successfully.']);;
     }
     
     /**
@@ -44,7 +44,9 @@ class ReviewController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->service->update($request, $id);
+
+        return back()->with(['success' => 'Review updated successfully.']);;
     }
     
     /**
@@ -57,6 +59,6 @@ class ReviewController extends Controller
     {
         $this->service->destroy($id);
 
-        return back();
+        return back()->with(['success' => 'Review deleted successfully.']);;
     }
 }

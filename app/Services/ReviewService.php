@@ -10,7 +10,6 @@ use App\Exceptions\ReviewException as Exception;
 class ReviewService
 {        
     private $repository;
-    private $productService;
 
     /**
      * __construct
@@ -20,7 +19,6 @@ class ReviewService
     public function __construct()
     {
         $this->repository = app(Repository::class);
-        $this->productService = app(ProductService::class);
     }
         
     /**
@@ -35,6 +33,24 @@ class ReviewService
         $result = Model::create($data);
         if(!$result) throw new Exception("Something went wrong");
 
+        return $result;
+    }
+    
+    /**
+     * update
+     *
+     * @param  mixed $request
+     * @param  mixed $id
+     * @return void
+     */
+    public function update(Request $request, string $id)
+    {
+        $data = $request->all();
+        $review = $this->repository->getById($id);
+
+        $result = $review->update($data);
+        if(!$result) throw new Exception("Something went wrong");
+        
         return $result;
     }
     
