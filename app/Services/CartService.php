@@ -44,10 +44,10 @@ class CartService
     public function add(Request $request)
     {
         $name = $request->name;
-        $sizes = $request->size;
+        $sizes_name = $request->size_name;
 
         $product = $this->productService->getByName($name);
-        $result = Model::add($product, $sizes);
+        $result = Model::add($product, $sizes_name);
 
         if(!$result) throw new Exception("Something went wrong");
         return $result;
@@ -62,10 +62,10 @@ class CartService
      */
     public function delete(Request $request, string $name)
     {
-        $size = $request->size;
+        $size_name = $request->size_name;
         
         $product = $this->productService->getByName($name);
-        $result = Model::delete($product, $size);
+        $result = Model::delete($product, $size_name);
 
         if(!$result) throw new Exception("Something went wrong");
         return $result;
@@ -80,10 +80,10 @@ class CartService
      */
     public function increaseQuantity(Request $request, string $name)
     {
-        $size = $request->size;
+        $size_name = $request->size_name;
 
         $product = $this->productService->getByName($name);
-        $result = Model::increaseQuantity($product, $size);
+        $result = Model::increaseQuantity($product, $size_name);
 
         if(!$result) throw new Exception("Something went wrong");
         return $result;
@@ -98,10 +98,10 @@ class CartService
      */
     public function decreaseQuantity(Request $request, string $name)
     {
-        $size = $request->size;
+        $size_name = $request->size_name;
 
         $product = $this->productService->getByName($name);
-        $result = Model::decreaseQuantity($product, $size);
+        $result = Model::decreaseQuantity($product, $size_name);
 
         if(!$result) throw new Exception("Something went wrong");
         return $result;

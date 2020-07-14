@@ -31,7 +31,8 @@ class ProductRequest extends FormRequest
             'type_name' => 'required|max:255',
             'brand' => 'required|max:255',
             'color' => 'required|max:255',
-            'sizes.*' => 'required|max:255',
+            'sizes_name.*' => 'required|max:255',
+            'quantity.*' => 'required|integer'
         ];
     }
 
@@ -43,7 +44,8 @@ class ProductRequest extends FormRequest
     public function attributes()
     {
         return [
-            'sizes.*' => 'size',
+            'sizes_name.*' => 'size',
+            'quantity.*' => 'size quantity'
         ];
     }
 }

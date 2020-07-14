@@ -15,6 +15,6 @@ $factory->define(Product::class, function (Faker $faker) {
         'type_name' => $faker->randomElement(['shoes', 'shirts', 'trousers', 'hats', 'socks']),
         'brand' => $faker->randomElement(['nike', 'adidas', 'gucci', 'vans', 'lacoste']),
         'color' => $faker->randomElement(['white', 'black', 'blue', 'yellow', 'gray', 'pink']),
-        'sizes' => implode(", ", $faker->randomElements(['xs', 's', 'm', 'l', 'xl', 'xxl'], rand(2, 6))),
+        'sizes_name' => implode(", ", $faker->randomElements(['xs', 's', 'm', 'l', 'xl', 'xxl'], rand(2, 6))),
     ];
 });

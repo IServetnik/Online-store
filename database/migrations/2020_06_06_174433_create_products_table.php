@@ -17,16 +17,16 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->text('description');
             $table->string('name')->unique();
-            $table->float('rating', 2, 1)->default(0);
-            $table->float('price', 12, 3);
-            $table->float('old_price', 12, 3)->nullable();
+            $table->float('rating', 2, 1)->default(0)->unsigned();
+            $table->float('price', 12, 3)->unsigned();
+            $table->float('old_price', 12, 3)->nullable()->unsigned();
             $table->string('category_name');
             $table->foreign('category_name')->references('name')->on('categories')->onDelete('cascade');
             $table->string('type_name');
             $table->foreign('type_name')->references('name')->on('types')->onDelete('cascade');
             $table->string('brand');
             $table->string('color');
-            $table->text('sizes');
+            $table->text('sizes_name');
             $table->timestamps();
         });
     }

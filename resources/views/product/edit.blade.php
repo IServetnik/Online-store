@@ -58,14 +58,22 @@
                                         value="{{ old('color') ? old('color') : $product->color }}" name="color">
         </div>
         <div class="form-group">
-            <label for="color">Sizes:</label>
-            @if(!empty(old('sizes')))
-                @foreach (old('sizes') as $size)
-                    <input type="text" class="form-control size-input" value='{{ $size }}' placeholder="Size" name="sizes[]">
+            <label for="color">Sizes:</label><br>
+            @if(!empty(old('sizes_name')))
+                @foreach (old('sizes_name') as $key => $size_name)
+                    <div class="form-check form-check-inline">
+                        <input type="text" class="form-control size-input d-inline" value='{{ $size_name }}' placeholder="Size" name="sizes_name[]">
+                        <input type="text" class="form-control size-input d-inline" value='{{ old('quantity')[$key] }}' placeholder="Quantity" name="quantity[]">
+                        <button class="btn btn-danger btn-sm delete-size">delete</button>
+                    </div>
                 @endforeach
             @else
-                @foreach ($product->sizeCollection as $size)
-                    <input type="text" class="form-control size-input" value='{{ $size }}' placeholder="Size" name="sizes[]">
+                @foreach ($product->sizes as $size)
+                    <div class="form-check form-check-inline">
+                        <input type="text" class="form-control size-input d-inline" value='{{ $size->name }}' placeholder="Size" name="sizes_name[]">
+                        <input type="text" class="form-control size-input d-inline" value='{{ $size->quantity }}' placeholder="Quantity" name="quantity[]">
+                        <button class="btn btn-danger btn-sm delete-size">delete</button>
+                    </div>
                 @endforeach
             @endif
             <button type="button" class="btn btn-link btn-sm add-size">Add new size</button>

@@ -26,10 +26,16 @@ class Product extends Model
         return $this->belongsTo(Type::class, 'type_name', 'name')->where('category_name', $this->category_name);
     }
 
-    public function getSizeCollectionAttribute()
+    public function sizes()
     {
-        $sizes = explode(",",$this->sizes);
-        $sizes = collect(array_map('trim', $sizes));
-        return $sizes;
+        return $this->hasMany(Size::class, 'product_id', 'id');
+    }
+
+    public function getSizesNameArrayAttribute()
+    {
+        $sizes_array = explode(",",$this->sizes_name);
+        $sizes_array = collect(array_map('trim', $sizes_array));
+        
+        return $sizes_array;
     }
 }

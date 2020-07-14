@@ -1,5 +1,5 @@
 var processing = false; 
-function sendAjax(btn, size, success_callback, error_callback) {
+function sendAjax(btn, size_name, success_callback, error_callback) {
     if(!processing){
         processing = true;
         $.ajaxSetup({
@@ -12,7 +12,7 @@ function sendAjax(btn, size, success_callback, error_callback) {
             type: 'POST',
             data: {
                 name: btn.data('product-name'),
-                size: size,
+                size_name: size_name,
             },
             success: function (response) {
                 processing = false;
@@ -38,10 +38,10 @@ $(document).ready(function() {
         if(checkboxes.length == 0) {
             $('#response').text("You did not select a size").addClass("text-danger");
         } else {
-            var sizes = $('input.size-'+btn.parent().parent().data('product-name')+':checked').map(function(){
+            var size_name = $('input.size-'+btn.parent().parent().data('product-name')+':checked').map(function(){
                                                                 return this.value;
                                                             }).get();
-            sendAjax(btn, sizes, function (response) {
+            sendAjax(btn, size_name, function (response) {
                 checkboxes.each(function(index, value) {
                     $(value).prop('checked', false);
                 });
@@ -59,8 +59,8 @@ $(document).ready(function() {
         e.preventDefault();
         var btn = $(this);
 
-        var size = btn.parent().parent().data('size');
-        sendAjax(btn, size, function(response) {
+        var size_name = btn.parent().parent().data('size');
+        sendAjax(btn, size_name, function(response) {
             $('#response').text("Product successfully deleted from cart").addClass("text-success");
             btn.parent().parent().remove();
 
@@ -75,8 +75,8 @@ $(document).ready(function() {
         e.preventDefault();
         var btn = $(this);
 
-        var size = btn.parent().parent().data('size');
-        sendAjax(btn, size, function(response) {
+        var size_name = btn.parent().parent().data('size');
+        sendAjax(btn, size_name, function(response) {
             $('#response').text("The quantity of products in the cart increased").addClass("text-success");
             var quantity = btn.siblings('span.product-quantity');
             var quantityText = quantity.text();
@@ -93,8 +93,8 @@ $(document).ready(function() {
         e.preventDefault();
         var btn = $(this);
 
-        var size = btn.parent().parent().data('size');
-        sendAjax(btn, size, function(response) {
+        var size_name = btn.parent().parent().data('size');
+        sendAjax(btn, size_name, function(response) {
             $('#response').text("The quantity of products in the cart decreased").addClass("text-success");
 
             if(response.quantity === 0) {

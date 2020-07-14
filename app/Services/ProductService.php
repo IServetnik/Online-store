@@ -80,14 +80,6 @@ class ProductService
     {
         $product = $this->repository->getByName($name);
 
-        //delete reviews
-        $reviewService = app(ReviewService::class);
-        $reviews = $reviewService->getByProduct($product->id);
-
-        $reviews->each(function ($item, $key) {
-            $item->delete();
-        });
-
         $result = $product->delete();
         if(!$result) throw new Exception("Something went wrong");
 

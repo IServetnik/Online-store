@@ -20,7 +20,7 @@
                         @endif
                         <b>Brand: </b>{{ ucfirst($product->brand) }} <br>
                         <b>Color: </b>{{ ucfirst($product->color) }} <br>
-                        <b>Sizes: </b>{{ $product->sizes }} <br>
+                        <b>Sizes: </b>{{ $product->sizes_name }} <br>
 
                         <div><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-{{$product->name}}">Add to cart</button></div>
                         <div class="modal fade" id="modal-{{$product->name}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -33,11 +33,11 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    @foreach ($product->sizeCollection as $size)
+                                    @foreach ($product->sizesNameArray as $sizeName)
                                         <form>
                                             <div class="form-group">
-                                                <input type="checkbox" value="{{$size}}" id="size-{{$product->name}}-{{$size}}" name="size" class="size-{{$product->name}}">
-                                                <label class="form-check-label" for="size-{{$product->name}}-{{$size}}"> {{ strtoupper($size) }}</label>
+                                                <input type="checkbox" value="{{$sizeName}}" id="size-{{$product->name}}-{{$sizeName}}" name="size_name" class="size-{{$product->name}}">
+                                                <label class="form-check-label" for="size-{{$product->name}}-{{$sizeName}}"> {{ strtoupper($sizeName) }}</label>
                                             </div>
                                         </form>
                                     @endforeach
