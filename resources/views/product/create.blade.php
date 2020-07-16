@@ -45,18 +45,18 @@
         </div>
         <div class="form-group">
             <label for="color">Sizes:</label><br>
-            @if(!empty(old('sizes_name')))
-                @foreach (old('sizes_name') as $key => $size_name)
+            @if(!empty(old('sizes')))
+                @foreach (old('sizes') as $key => $size)
                     <div class="form-check form-check-inline">
-                        <input type="text" class="form-control size-input d-inline" value='{{ $size_name }}' placeholder="Size" name="sizes_name[]">
-                        <input type="text" class="form-control size-input d-inline" value='{{ old('quantity')[$key] }}' placeholder="Quantity" name="quantity[]">
+                        <input type="text" class="form-control size-input d-inline" value='{{ $size['name'] }}' placeholder="Size" name="sizes[{{$key}}][name]">
+                        <input type="text" class="form-control size-input d-inline" value='{{ $size['quantity'] }}' placeholder="Quantity" name="sizes[{{$key}}][quantity]">
                         <button class="btn btn-danger btn-sm delete-size">delete</button>
                     </div>
                 @endforeach
             @else
                 <div class="form-check form-check-inline">
-                    <input type="text" class="form-control size-input d-inline" placeholder="Size" name="sizes_name[]">
-                    <input type="text" class="form-control size-input d-inline" placeholder="Quantity" name="quantity[]">
+                    <input type="text" class="form-control size-input d-inline" placeholder="Size" name="sizes[0][name]">
+                    <input type="text" class="form-control size-input d-inline" placeholder="Quantity" name="sizes[0][quantity]">
                     <button class="btn btn-danger btn-sm delete-size">delete</button>
                 </div>
             @endif

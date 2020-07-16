@@ -26,19 +26,7 @@ class ProductObserver
      */
     public function created(Product $product)
     {
-        if(request()->has('sizes_name') && request()->has('quantity')) {
-            $data = request()->all();
-            $sizeService = app(\App\Services\SizeService::class);
-
-            foreach($data['sizes_name'] as $key => $size_name) {
-                $sizeRequest = new Request([
-                    'name'   => $size_name,
-                    'product_id'  => $product->id,
-                    'quantity' => $data['quantity'][$key],
-                ]);
-                $sizeService->store($sizeRequest);
-            }
-        }
+        if(request()->has('sizes')) $this->createSizes(request()->all(), $product);
     }
     
     /**
@@ -61,32 +49,27 @@ class ProductObserver
      */
     public function updated(Product $product)
     {
-        if(request()->has('sizes_name') && request()->has('quantity')) {
-            $data = request()->all();
+        if(request()->has('sizes')) {
             $sizeService = app(\App\Services\SizeService::class);
             $sizes = $product->sizes;
 
+            $data = request()->all();
+            $sizes_name = array_column($data['sizes'], 'name');
+            $sizes_quantity = array_column($data['sizes'], 'quantity');
+
             foreach($sizes as $size) {
-                $key = array_search($size->name, $data['sizes_name']);
+                $key = array_search($size->name, $sizes_name);
                 if($key !== false) {
-                    if($size->quantity = $data['quantity'][$key]) {
-                        $size->update(['quantity' => $data['quantity'][$key]]);
+                    if($size->quantity != $sizes_quantity[$key]) {
+                        $size->update(['quantity' => $sizes_name[$key]]);
                     }
-                    unset($data['sizes_name'][$key]);
-                    unset($data['quantity'][$key]);
+                    unset($data['sizes'][$key]);
                 } else {
                     $size->delete();
                 }
             }
-            
-            foreach($data['sizes_name'] as $key => $size_name) {
-                $sizeRequest = new Request([
-                    'name'   => $size_name,
-                    'product_id'  => $product->id,
-                    'quantity' => $data['quantity'][$key],
-                ]);
-                $sizeService->store($sizeRequest);
-            }
+
+            $this->createSizes($data, $product);
         }
     }
     
@@ -118,12 +101,37 @@ class ProductObserver
      */
     private function prepareData(Product $product)
     {
-        if(request()->has('sizes_name')) $product->sizes_name = implode(", ", request()->get('sizes_name'));
+        if(request()->has('sizes')) {
+            $sizes = request()->get('sizes');
+            $sizes_name = array_column($sizes, 'name');
+            $product->sizes_name = implode(", ", $sizes_name);
+        }
 
         foreach($product->getAttributes() as $key => $value) {
             if ($key !== "description" && $key !== "old_price") {
                 $product->$key = strtolower($value);
             } 
         } 
+    }
+          
+    /**
+     * createSizes
+     *
+     * @param  mixed $data
+     * @param  mixed $product
+     * @return void
+     */
+    private function createSizes(array $data, Product $product)
+    {
+        $sizeService = app(\App\Services\SizeService::class);
+
+        foreach($data['sizes'] as $size) {
+            $sizeRequest = new Request([
+                'name'   => $size['name'],
+                'product_id'  => $product->id,
+                'quantity' => $size['quantity'],
+            ]);
+            $sizeService->store($sizeRequest);
+        }
     }
 }
