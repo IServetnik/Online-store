@@ -1,5 +1,5 @@
 <div class="filter" style="border: 2px solid rgb(222, 226, 230);">
-    <form action="{{ route("$category.type", $type) }}" method="GET">
+    <form action="{{ route("$category.type", $type->name) }}" method="GET">
         <div class="form-group filter-div">
             <label for="min_price"><h2>Price:</h2></label>
             <input type="text" class="form-control" id="min_price" value="{{ request()->input('min_price') }}" placeholder="Min Price" name="min_price">
@@ -41,7 +41,7 @@
         </div>
 
         <div class="filter-div">
-            <a href="{{ route("$category.type", $type) }}" id="clear">Clear</a>
+            <a href="{{ route("$category.type", $type->name) }}" id="clear">Clear</a>
         </div>
         <input class="btn btn-primary" type="submit" value="Filter">
     </form>

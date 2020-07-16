@@ -16,4 +16,14 @@ class Category extends Model
     {
         return $this->hasMany(Type::class, 'category_name', 'name');
     }
+
+    /**
+     * products
+     *
+     * @return void
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'category_name', 'name');
+    }
 }

@@ -159,18 +159,16 @@ class ProductService
 
         return $products;
     }
-
+   
     /**
-     * getByCategory
-     * 
-     * @param  mixed $paginationCount
-     * 
+     * getByType
+     *
+     * @param  mixed $type_name
      * @return void
      */
-    public function getByType(string $type_name, $paginationCount = null)
+    public function getByType(string $type_name)
     {
-        $products = $this->repository->getByType($type_name, $paginationCount);
-        $this->checkPagination($products);
+        $products = $this->repository->getByType($type_name);
 
         return $products;
     }

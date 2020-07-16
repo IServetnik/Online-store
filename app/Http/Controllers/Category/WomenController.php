@@ -5,13 +5,16 @@ namespace App\Http\Controllers\Category;
 use App\Http\Controllers\Controller;
 use App\Services\CategoryService;
 use App\Services\ProductService;
+use App\Services\TypeService;
 use Illuminate\Http\Request;
 
 class WomenController extends Controller
 {
     const CATEGORY = 'women';
+
     private $categoryService;
     private $productService;
+    private $typeService;
     
     /**
      * __construct
@@ -22,6 +25,7 @@ class WomenController extends Controller
     {
         $this->categoryService = app(CategoryService::class);
         $this->productService = app(ProductService::class);
+        $this->typeService = app(TypeService::class);
     }
 
     /**
@@ -56,8 +60,8 @@ class WomenController extends Controller
             $products = $this->productService->getByFilter(array_merge($filters, ['category' => self::CATEGORY, 'type' => $type_name]), 12);
         }
         
-        return view('product.showByType', compact('products'))
-                                                    ->with('type', $type_name)
+        $type = $this->typeService->getByCategoryAndName(self::CATEGORY, $type_name);
+        return view('product.showByType', compact('products', 'type'))
                                                     ->with('category', self::CATEGORY);
     }
 }

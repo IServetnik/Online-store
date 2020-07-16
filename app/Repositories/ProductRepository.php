@@ -43,17 +43,16 @@ class ProductRepository
         $products = Model::where(compact('category_name'))->paginate($paginationCount);
         return $products;
     }
-     
+  
     /**
      * getByType
      *
      * @param  mixed $type_name
-     * @param  mixed $paginationCount
-     * @return LengthAwarePaginator
+     * @return Collection
      */
-    public function getByType(string $type_name, $paginationCount = null) : LengthAwarePaginator
+    public function getByType(string $type_name) : Collection 
     {
-        $products = Model::where(compact('type_name'))->paginate($paginationCount);
+        $products = Model::where(compact('type_name'))->get();
         return $products;
     }
     

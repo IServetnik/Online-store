@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use \App\Services\SizeService;
 
 class ProductObserver
 {  
@@ -123,7 +124,7 @@ class ProductObserver
      */
     private function createSizes(array $data, Product $product)
     {
-        $sizeService = app(\App\Services\SizeService::class);
+        $sizeService = app(SizeService::class);
 
         foreach($data['sizes'] as $size) {
             $sizeRequest = new Request([

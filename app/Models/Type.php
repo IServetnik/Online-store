@@ -19,4 +19,14 @@ class Type extends Model
     {
         return $this->belongsTo(Category::class, 'category_name', 'name');
     }
+    
+    /**
+     * products
+     *
+     * @return void
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'type_name', 'name')->where('category_name', $this->category_name);
+    }
 }

@@ -4,8 +4,6 @@ namespace App\Observers;
 
 use App\Models\Review;
 use \Auth;
-use App\Services\ProductService;
-use App\Services\ReviewService;
 
 class ReviewObserver
 {    

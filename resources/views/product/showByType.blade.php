@@ -3,7 +3,13 @@
 @section('title') IS @endsection
 
 @section('content')
-    <h1><a href="{{ route("$category.all") }}">{{ ucfirst($category) }}</a>/{{ ucfirst($type) }}</h1>
+    <h1><a href="{{ route("$category.all") }}">{{ ucfirst($category) }}</a>/
+        @if(Auth::user() && Auth::user()->is_admin) 
+            <a href="{{ route('type.show', $type->id) }}">{{ ucfirst($type->name) }}</a>
+        @else 
+            {{ ucfirst($type->name) }}
+        @endif
+    </h1>
 
     <p id="response"></p>
 
