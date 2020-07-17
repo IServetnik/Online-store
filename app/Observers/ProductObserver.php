@@ -27,7 +27,7 @@ class ProductObserver
      */
     public function created(Product $product)
     {
-        if(request()->has('sizes')) $this->createSizes(request()->all(), $product);
+        if(request()->has('sizes')) $this->createSizes(request()->all(), $product->id);
     }
     
     /**
@@ -55,14 +55,14 @@ class ProductObserver
             $sizes = $product->sizes;
 
             $data = request()->all();
-            $sizes_name = array_column($data['sizes'], 'name');
-            $sizes_quantity = array_column($data['sizes'], 'quantity');
+            $size_names = array_column($data['sizes'], 'name');
+            $size_quantities = array_column($data['sizes'], 'quantity');
 
             foreach($sizes as $size) {
-                $key = array_search($size->name, $sizes_name);
+                $key = array_search($size->name, $size_names);
                 if($key !== false) {
-                    if($size->quantity != $sizes_quantity[$key]) {
-                        $size->update(['quantity' => $sizes_name[$key]]);
+                    if($size->quantity != $size_quantities[$key]) {
+                        $size->update(['quantity' => $size_names[$key]]);
                     }
                     unset($data['sizes'][$key]);
                 } else {
@@ -70,7 +70,7 @@ class ProductObserver
                 }
             }
 
-            $this->createSizes($data, $product);
+            $this->createSizes($data, $product->id);
         }
     }
     
@@ -104,8 +104,8 @@ class ProductObserver
     {
         if(request()->has('sizes')) {
             $sizes = request()->get('sizes');
-            $sizes_name = array_column($sizes, 'name');
-            $product->sizes_name = implode(", ", $sizes_name);
+            $size_names = array_column($sizes, 'name');
+            $product->size_names = implode(", ", $size_names);
         }
 
         foreach($product->getAttributes() as $key => $value) {
@@ -119,17 +119,17 @@ class ProductObserver
      * createSizes
      *
      * @param  mixed $data
-     * @param  mixed $product
+     * @param  mixed $product_id
      * @return void
      */
-    private function createSizes(array $data, Product $product)
+    private function createSizes(array $data, string $product_id)
     {
         $sizeService = app(SizeService::class);
 
         foreach($data['sizes'] as $size) {
             $sizeRequest = new Request([
                 'name'   => $size['name'],
-                'product_id'  => $product->id,
+                'product_id'  => $product_id,
                 'quantity' => $size['quantity'],
             ]);
             $sizeService->store($sizeRequest);

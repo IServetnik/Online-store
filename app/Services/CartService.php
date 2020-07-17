@@ -44,10 +44,10 @@ class CartService
     public function add(Request $request)
     {
         $name = $request->name;
-        $sizes_name = $request->size_name;
+        $size_names = $request->size_name;
 
         $product = $this->productService->getByName($name);
-        $result = Model::add($product, $sizes_name);
+        $result = Model::add($product, $size_names);
 
         if(!$result) throw new Exception("Something went wrong");
         return $result;

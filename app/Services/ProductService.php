@@ -39,6 +39,7 @@ class ProductService
         $data = $request->all();
 
         if (!$this->checkType($data['category_name'], $data['type_name'])) throw new Exception('Incorrect type');
+        if (!$this->checkSizes($data['sizes'])) throw new Exception("Size names aren't unique");
         if (!$this->checkName($data['name'])) throw new Exception("Name is not unique");
 
         $result = Model::create($data);
@@ -59,6 +60,7 @@ class ProductService
         $data = $request->all();
 
         if (!$this->checkType($data['category_name'], $data['type_name'])) throw new Exception('Incorrect type');
+        if (!$this->checkSizes($data['sizes'])) throw new Exception("Size names aren't unique");
         if (!$this->checkName($data['name'], $name)) throw new Exception("Name is not unique");
 
         $product = $this->getByName($name);
@@ -265,7 +267,22 @@ class ProductService
         $result = ($type !== null) ? true : false;
         return $result;
     }
-    
+        
+    /**
+     * checkSizes
+     *
+     * @param  mixed $sizes
+     * @return void
+     */
+    public function checkSizes(array $sizes)
+    {
+        $size_names = array_column($sizes, 'name');
+
+        //if the size names are unique
+        $result = count($size_names) == count(array_unique($size_names)); 
+        return $result;
+    }
+
     /**
      * checkName
      *

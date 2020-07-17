@@ -15,9 +15,9 @@ class SizeSeeder extends Seeder
         $products = app(ProductService::class)->getAll();
 
         foreach($products as $product) {
-            $sizes_name = $product->sizesNameArray;
+            $size_names = $product->sizeNamesArray;
 
-            foreach($sizes_name as $size_name) {
+            foreach($size_names as $size_name) {
                 DB::table('sizes')->insert(['name' => $size_name, 'product_id' => $product->id, 'quantity' => rand(1, 50), 'created_at' => date("Y-m-d H:i:s"), 'updated_at' => date("Y-m-d H:i:s")]);
             }
         }

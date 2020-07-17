@@ -38,4 +38,65 @@ class SizeService
 
         return $result;
     }
+
+
+
+    /**
+     * getAll
+     *
+     * @return void
+     */
+    public function getAll()
+    {
+        $sizes = $this->repository->getAll();
+        return $sizes;
+    }
+
+    /**
+     * getByProduct
+     *
+     * @param  mixed $product_name
+     * @return void
+     */
+    public function getByProduct(string $product_name)
+    {
+        $sizes = $this->repository->getByProduct($product_name);
+        return $sizes;
+    }
+
+    /**
+     * getById
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function getById(string $id)
+    {
+        $sizes = $this->repository->getById($id);
+        return $sizes;
+    }
+        
+    /**
+     * getByName
+     *
+     * @param  string $name
+     * @return void
+     */
+    public function getByName(string $name)
+    {
+        $size = $this->repository->getByName($name);
+        return $size;
+    }
+ 
+    /**
+     * getWhere
+     *
+     * @param  mixed $where
+     * @return void
+     */
+    public function getWhere(array $where)
+    {
+        $products = $this->repository->getWhere($where);
+        return $products;
+    }
 }
