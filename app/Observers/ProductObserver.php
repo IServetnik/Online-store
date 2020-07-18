@@ -39,7 +39,12 @@ class ProductObserver
     public function updating(Product $product)
     {
         $this->prepareData($product);
-        if ($product->isDirty('price')) $product->old_price = $product->price;
+        
+        if(request()->get('withDiscount')) {
+            if ($product->isDirty('price')) $product->old_price = $product->getOriginal('price');
+        } else {
+            $product->old_price = null;
+        }
     }
     
     /**

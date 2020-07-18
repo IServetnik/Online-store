@@ -14,7 +14,7 @@
                     <label for="rating">Rating:</label>
                     @for ($i = 1; $i <= 5; $i++)
                         <div class="form-check form-check-inline">
-                            <input type="radio" name="rating" class="form-check-input rating-radio" value="{{$i}}" @if ($review->rating == $i) {{ 'checked' }} @endif)>
+                            <input type="radio" name="rating" class="form-check-input rating-radio" value="{{$i}}" @if ($review->rating == $i) {{ 'checked' }} @endif>
                             <label class="form-check-label" for="rating-{{$i}}">{{$i}}</label>
                         </div>
                     @endfor

@@ -22,6 +22,15 @@
           <label for="price">Price</label>
           <input type="text" class="form-control" id="price" placeholder="Price" 
                                             value="{{ old('price') ? old('price') : $product->price }}" name="price">
+            <div class="form-check">
+                <input type='hidden' value='0' name='withDiscount'>
+                @if (old('withDiscount') !== null)
+                    <input type="checkbox" class="form-check-input" id="withDiscount" value="1" name="withDiscount"  @if (old('withDiscount')) {{ 'checked' }} @endif>
+                @else
+                    <input type="checkbox" class="form-check-input" id="withDiscount" value="1" name="withDiscount"  @if ($product->old_price !== null) {{ 'checked' }} @endif>
+                @endif
+                <label class="form-check-label" for="withDiscount">With discount</label>
+            </div>
         </div>
         <div class="form-group">
             <label for="category">Category:</label>
