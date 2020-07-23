@@ -25,7 +25,7 @@ class TypeRepository
      */
     public function getAllUnique() : Collection
     {
-        $types = Model::with('category')->get()->unique('name');
+        $types = Model::all()->unique('name');
         return $types;
     }
       

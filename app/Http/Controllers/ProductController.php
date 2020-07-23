@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\ProductService;
 use App\Services\CategoryService;
 use App\Services\TypeService;
+use App\Services\SizeService;
 use App\Http\Requests\ProductRequest as Request;
 use App\Exceptions\ProductException;
 
@@ -13,6 +14,7 @@ class ProductController extends Controller
     private $categoryService;
     private $productService;
     private $typeService;
+    private $sizeService;
 
     /**
      * __construct
@@ -25,6 +27,7 @@ class ProductController extends Controller
         $this->categoryService = app(CategoryService::class);
         $this->productService = app(ProductService::class);
         $this->typeService = app(TypeService::class);
+        $this->sizeService = app(SizeService::class);
 
         $this->middleware('isAdmin')->only(['create', 'edit', 'update', 'destroy']);
     }
@@ -48,8 +51,9 @@ class ProductController extends Controller
     {
         $categories = $this->categoryService->getAll();
         $types = $this->typeService->getAllUnique();
+        $sizes = $this->sizeService->getAll();
 
-        return view('product.create', compact('categories', 'types'));
+        return view('product.create', compact('categories', 'types', 'sizes'));
     }
 
     /**
@@ -93,8 +97,9 @@ class ProductController extends Controller
         $product = $this->productService->edit($name);
         $categories = $this->categoryService->getAll();
         $types = $this->typeService->getAllUnique();
+        $sizes = $this->sizeService->getAll();
 
-        return view('product.edit', compact('product', 'categories', 'types'));
+        return view('product.edit', compact('product', 'categories', 'types', 'sizes'));
     }
 
     /**

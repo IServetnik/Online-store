@@ -12,14 +12,14 @@ class SizeSeeder extends Seeder
      */
     public function run()
     {
-        $products = app(ProductService::class)->getAll();
+        $sizes = [];
 
-        foreach($products as $product) {
-            $size_names = $product->sizeNamesArray;
+        $sizes[] = ['name' => 'XS', 'created_at' => date("Y-m-d H:i:s"), 'updated_at' => date("Y-m-d H:i:s")];
+        $sizes[] = ['name' => 'S', 'created_at' => date("Y-m-d H:i:s"), 'updated_at' => date("Y-m-d H:i:s")];
+        $sizes[] = ['name' => 'M', 'created_at' => date("Y-m-d H:i:s"), 'updated_at' => date("Y-m-d H:i:s")];
+        $sizes[] = ['name' => 'L', 'created_at' => date("Y-m-d H:i:s"), 'updated_at' => date("Y-m-d H:i:s")];
+        $sizes[] = ['name' => 'XL', 'created_at' => date("Y-m-d H:i:s"), 'updated_at' => date("Y-m-d H:i:s")];
 
-            foreach($size_names as $size_name) {
-                DB::table('sizes')->insert(['name' => $size_name, 'product_id' => $product->id, 'quantity' => rand(1, 50), 'created_at' => date("Y-m-d H:i:s"), 'updated_at' => date("Y-m-d H:i:s")]);
-            }
-        }
+        DB::table('sizes')->insert($sizes);
     }
 }

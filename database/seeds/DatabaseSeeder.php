@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         factory(Review::class, 100)->create();
 
         $this->call(SizeSeeder::class);
+        $this->call(ProductSizeSeeder::class);
 
         Artisan::call('command:setcorrectrating');
     }

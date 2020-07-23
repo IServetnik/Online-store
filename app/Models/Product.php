@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Product extends Model
 {
     protected $fillable = [
-        'name', 'description', 'price', 'old_price', 'category_name', 'type_name', 'brand', 'color', 'size_names'
+        'name', 'description', 'price', 'old_price', 'category_name', 'type_name', 'brand', 'color'
     ];
 
     public function category()
@@ -28,14 +28,6 @@ class Product extends Model
 
     public function sizes()
     {
-        return $this->hasMany(Size::class, 'product_id', 'id');
-    }
-
-    public function getSizeNamesArrayAttribute()
-    {
-        $size_names_array = explode(",",$this->size_names);
-        $size_names_array = collect(array_map('trim', $size_names_array));
-        
-        return $size_names_array;
+        return $this->belongsToMany(Size::class)->withPivot('quantity');
     }
 }

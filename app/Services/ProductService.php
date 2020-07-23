@@ -40,7 +40,7 @@ class ProductService
 
         if (!$this->checkType($data['category_name'], $data['type_name'])) throw new Exception('Incorrect type');
         if (!$this->checkSizes($data['sizes'])) throw new Exception("Size names aren't unique");
-        if (!$this->checkName($data['name'])) throw new Exception("Name is not unique");
+        if (!$this->checkName($data['name'])) throw new Exception("The name has already been taken.");
 
         $result = Model::create($data);
         if(!$result) throw new Exception("Something went wrong");
@@ -61,7 +61,7 @@ class ProductService
 
         if (!$this->checkType($data['category_name'], $data['type_name'])) throw new Exception('Incorrect type');
         if (!$this->checkSizes($data['sizes'])) throw new Exception("Size names aren't unique");
-        if (!$this->checkName($data['name'], $name)) throw new Exception("Name is not unique");
+        if (!$this->checkName($data['name'], $name)) throw new Exception("The name has already been taken.");
 
         $product = $this->getByName($name);
         if ($data['price'] != $product->price) $data['old_price'] = $product->price;
@@ -112,7 +112,7 @@ class ProductService
     {
         $product = $this->getByName($name);
         if(!$product) abort(404);
-
+        
         return $product;
     }
 

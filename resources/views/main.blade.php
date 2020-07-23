@@ -12,7 +12,8 @@
 
     @if(Auth::user() && Auth::user()->is_admin)
         <a href={{ route('product.create') }}>Create product</a><br>
-        <a href={{ route('type.create') }}>Create type</a>
+        <a href={{ route('type.create') }}>Create type</a><br>
+        <a href={{ route('size.create') }}>Create size</a>
     @endif
 
     @include('inc.table', compact('products'))

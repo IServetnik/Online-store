@@ -7,6 +7,7 @@ Route::get('/', 'MainController@index')->name('main');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('/product', 'ProductController')->names('product');
 Route::resource('/type', 'TypeController')->names('type');
+Route::resource('/size', 'SizeController')->names('size');
 
 
 

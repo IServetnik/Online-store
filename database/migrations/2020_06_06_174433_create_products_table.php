@@ -24,7 +24,6 @@ class CreateProductsTable extends Migration
             $table->string('type_name');
             $table->string('brand');
             $table->string('color');
-            $table->text('size_names');
             $table->timestamps();
         });
     }

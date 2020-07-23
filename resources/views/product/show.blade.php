@@ -9,6 +9,8 @@
                 @if(session()->has('success'))
                     <p class="text-success">{{ session()->get('success') }}</p>
                 @endif
+                <p id="response"></p>
+                
                 <h1>{{ $product->name }}</h1>
                 <h4>{{ $product->description }}</h4>
                 <p><b>Price: </b>{{ $product->price }} <strike class="text-danger">{{ $product->old_price }}</strike></p>
@@ -19,6 +21,39 @@
                 @endif
                 <p><b>Brand: </b>{{ ucfirst($product->brand) }}</p>
                 <p><b>Color: </b>{{ ucfirst($product->color) }}</p>
+                <b>Sizes: </b>{{ strtoupper($product->sizes->implode('name', ', ')) }} <br>
+
+                <div><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-{{$product->name}}">Add to cart</button></div>
+                <div class="modal fade" id="modal-{{$product->name}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Choose size</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            @foreach ($product->sizes->pluck('name') as $sizeName)
+                                <form>
+                                    <div class="form-group">
+                                        <input type="checkbox" value="{{$sizeName}}" id="size-{{$product->name}}-{{$sizeName}}" name="size_name" class="size-{{$product->name}}">
+                                        <label class="form-check-label" for="size-{{$product->name}}-{{$sizeName}}"> {{ strtoupper($sizeName) }}</label>
+                                    </div>
+                                </form>
+                            @endforeach
+                        </div>
+                        <div data-product-name="{{ $product->name }}">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary add-to-cart" data-product-name="{{ $product->name }}" data-dismiss="modal" data-route="{{ route('cart.add') }}">Add to cart</button>
+                            </div>
+                        </div>
+                        @foreach ($errors->all() as $error)
+                            <p class="text-danger">{{ $error }}</p>
+                        @endforeach
+                    </div>
+                    </div>
+                </div><br>
                 
                 @if (Auth::check() && !$product->reviews->contains('user_id',Auth::user()->id))
                     <button type="button" class="btn btn-secondary d-inline" data-toggle="modal" data-target="#create-review">Write a review</button>

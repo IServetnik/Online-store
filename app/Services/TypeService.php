@@ -36,7 +36,7 @@ class TypeService
     {
         $data = array_map('strtolower', $request->all());
 
-        if (!$this->checkName($data['category_name'], $data['name'])) throw new Exception('Name is not unique');
+        if (!$this->checkName($data['category_name'], $data['name'])) throw new Exception('The name has already been taken.');
 
         $result = Model::create($data);
         if(!$result) throw new Exception("Something went wrong");
@@ -84,7 +84,7 @@ class TypeService
         $data = array_map('strtolower', $request->all());
         $type = $this->getById($id);
 
-        if (!$this->checkName($data['category_name'], $data['name'], $type->name)) throw new Exception('Name is not unique');
+        if (!$this->checkName($data['category_name'], $data['name'], $type->name)) throw new Exception('The name has already been taken.');
         
         //change type name and category name in products
         $productService = app(ProductService::class);

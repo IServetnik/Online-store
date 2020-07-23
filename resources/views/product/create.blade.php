@@ -44,22 +44,32 @@
             <input type="text" class="form-control" id="color" placeholder="Color" value="{{ old('color') }}" name="color">
         </div>
         <div class="form-group">
-            <label for="color">Sizes:</label><br>
+            <label>Sizes:</label><br>
+
             @if(!empty(old('sizes')))
-                @foreach (old('sizes') as $key => $size)
+                @foreach (old('sizes') as $key => $old_size)
                     <div class="form-check form-check-inline">
-                        <input type="text" class="form-control size-input d-inline" value='{{ $size['name'] }}' placeholder="Size" name="sizes[{{$key}}][name]">
-                        <input type="text" class="form-control size-input d-inline" value='{{ $size['quantity'] }}' placeholder="Quantity" name="sizes[{{$key}}][quantity]">
-                        <button class="btn btn-danger btn-sm delete-size">delete</button>
+                        <select class="form-control size_name_select" name="sizes[{{$key}}][id]">
+                            @foreach ($sizes as $size)
+                                <option @if (strtolower($old_size['id']) == strtolower($size->id)) {{ 'selected' }} @endif value="{{ $size->id }}">{{ ucfirst($size->name) }}</option>
+                            @endforeach
+                        </select>
+                        <input type="text" class="form-control size-input d-inline" value='{{ $old_size['quantity'] }}' placeholder="Quantity" name="sizes[{{$key}}][quantity]">
+                        <button class="btn btn-danger btn-sm delete-size" @if(min(array_keys(old('sizes'))) == $key){{'disabled'}}@endif>delete</button>
                     </div>
                 @endforeach
             @else
                 <div class="form-check form-check-inline">
-                    <input type="text" class="form-control size-input d-inline" placeholder="Size" name="sizes[0][name]">
+                    <select class="form-control size_name_select" name="sizes[0][id]">
+                        @foreach ($sizes as $key => $size)
+                            <option value="{{ $size->id }}">{{ ucfirst($size->name) }}</option>
+                        @endforeach
+                    </select>
                     <input type="text" class="form-control size-input d-inline" placeholder="Quantity" name="sizes[0][quantity]">
-                    <button class="btn btn-danger btn-sm delete-size">delete</button>
+                    <button class="btn btn-danger btn-sm delete-size" disabled>delete</button>
                 </div>
             @endif
+
             <button type="button" class="btn btn-link btn-sm add-size">Add new size</button>
         </div>
         <input type="submit" class="btn btn-primary block" value="Create">
