@@ -5,7 +5,7 @@
 @section('content')
     <h1>Edit</h1>
     
-    <form action="{{ route('product.update', $product->name) }}" method="POST">
+    <form action="{{ route('product.update', $product->name) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PATCH')
         
@@ -97,6 +97,22 @@
 
             <button type="button" class="btn btn-link btn-sm add-size">Add new size</button>
         </div>
+        <div class="form-group">
+            <label for="color">Image:</label><br>
+            <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#imageDiv" aria-expanded="false" aria-controls="imageDiv">
+                Update image
+            </button>
+            <div class="collapse" id="imageDiv">
+                <div class="card card-body" style="background-color: rgb(247, 247, 247)">
+                    <input type="hidden" name="image" value="0">
+                    <input type="file" name="image" accept="image/*" class="form-control-file">
+                </div>
+            </div>
+            @if(!empty(session()->getOldInput()))
+                <span class="text-danger">Load the image again</span>
+            @endif
+        </div>
+        
 
         <input type="submit" class="btn btn-primary" value="Update">
     </form>

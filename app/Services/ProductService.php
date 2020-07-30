@@ -8,6 +8,7 @@ use App\Models\Product as Model;
 use App\Exceptions\ProductException as Exception;
 use App\Filters\ProductFilter;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Http\UploadedFile;
 
 class ProductService
 {        
@@ -41,6 +42,7 @@ class ProductService
         if (!$this->checkType($data['category_name'], $data['type_name'])) throw new Exception('Incorrect type');
         if (!$this->checkSizes($data['sizes'])) throw new Exception("Size names aren't unique");
         if (!$this->checkName($data['name'])) throw new Exception("The name has already been taken.");
+        if (!$this->checkFile($data['image'])) throw new Exception("The file must be an image.");
 
         $result = Model::create($data);
         if(!$result) throw new Exception("Something went wrong");
@@ -62,6 +64,9 @@ class ProductService
         if (!$this->checkType($data['category_name'], $data['type_name'])) throw new Exception('Incorrect type');
         if (!$this->checkSizes($data['sizes'])) throw new Exception("Size names aren't unique");
         if (!$this->checkName($data['name'], $name)) throw new Exception("The name has already been taken.");
+        if ($data['image']) {
+            if (!$this->checkFile($data['image'])) throw new Exception("The file must be an image.");
+        }
 
         $product = $this->getByName($name);
         if ($data['price'] != $product->price) $data['old_price'] = $product->price;
@@ -317,6 +322,24 @@ class ProductService
             if($pageNumber > $paginator->lastPage()) {
                 return redirect(\URL::current().'?page=' . $paginator->lastPage())->send();
             }
+        }
+    }
+    
+    /**
+     * checkFile
+     *
+     * @param  mixed $file
+     * @return void
+     */
+    public function checkFile(UploadedFile $file)
+    {
+        $fileExtension = $file->getClientOriginalExtension();
+        $allowedExtensions = ['png', 'jpg', 'jpeg'];
+
+        if(array_search($fileExtension, $allowedExtensions) !== null) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

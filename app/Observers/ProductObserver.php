@@ -75,6 +75,23 @@ class ProductObserver
         $product->sizes()->detach();
     }
     
+    /**
+     * deleted
+     *
+     * @param  mixed $product
+     * @return void
+     */
+    public function deleted(Product $product)
+    {
+        if(!empty($product->image_name)) {
+            $filePath = public_path('storage/images/product/'.$product->image_name);
+            unlink($filePath);
+        }
+    }
+    
+
+
+
     
     /**
      * makeData
@@ -84,6 +101,25 @@ class ProductObserver
      */
     private function prepareData(Product $product)
     {
+        if(request()->hasFile('image')) {
+            //Delete product image if it exists
+            if(!empty($product->image_name)) {
+                $filePath = public_path('storage/images/product/'.$product->image_name);
+                unlink($filePath);
+            }
+
+            //Get image name
+            $clientFileName = request()->file('image')->getClientOriginalName();
+            $fileName = pathinfo($clientFileName, PATHINFO_FILENAME);
+            $fileExtension = request()->file('image')->getClientOriginalExtension();
+            $fileNameToStore = $fileName.'_'.time().'.'.$fileExtension;
+
+            $product->image_name = $fileNameToStore;
+
+            //Store image
+            $path = request()->file('image')->move(public_path('storage/images/product'), $fileNameToStore);
+        }
+
         foreach($product->getAttributes() as $key => $value) {
             if ($key !== "description" && $key !== "old_price") {
                 $product->$key = strtolower($value);

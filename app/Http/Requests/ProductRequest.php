@@ -32,7 +32,8 @@ class ProductRequest extends FormRequest
             'brand' => 'required|max:255',
             'color' => 'required|max:255',
             'sizes.*.id' => 'required|max:255',
-            'sizes.*.quantity' => 'required|integer'
+            'sizes.*.quantity' => 'required|integer',
+            'image' => 'required|max:4000'
         ];
     }
 
@@ -45,7 +46,8 @@ class ProductRequest extends FormRequest
     {
         return [
             'sizes.*.id' => 'size',
-            'sizes.*.quantity' => 'size quantity'
+            'sizes.*.quantity' => 'size quantity',
+            'image' => 'file'
         ];
     }
 }

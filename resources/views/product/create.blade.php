@@ -5,7 +5,7 @@
 @section('content')
     <h1>Create</h1>
 
-    <form action="{{ route('product.store') }}" method="POST">
+    <form action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
             <label for="name">Name:</label>
@@ -69,9 +69,16 @@
                     <button class="btn btn-danger btn-sm delete-size" disabled>delete</button>
                 </div>
             @endif
-
             <button type="button" class="btn btn-link btn-sm add-size">Add new size</button>
         </div>
+        <div class="form-group">
+            <label for="color">Image:</label>
+            <input type="file" name="image" accept="image/*" class="form-control-file">
+            @if(!empty(session()->getOldInput()))
+                <span class="text-danger">Load the image again</span>
+            @endif
+        </div>
+        
         <input type="submit" class="btn btn-primary block" value="Create">
     </form>
 

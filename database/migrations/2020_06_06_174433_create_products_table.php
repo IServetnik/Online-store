@@ -24,6 +24,7 @@ class CreateProductsTable extends Migration
             $table->string('type_name');
             $table->string('brand');
             $table->string('color');
+            $table->string('image_name')->nullable();
             $table->timestamps();
         });
     }
@@ -35,6 +36,14 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
+        //Delete images
+        $images = glob(public_path('storage/images/product/*'));
+        foreach($images as $image){
+            if(is_file($image) && basename($image) !== "noimage.jpg") {
+                unlink($image);
+            }
+        }
+
         Schema::dropIfExists('products');
     }
 }
