@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Size extends Model
+class Color extends Model
 {
     protected $fillable = [
-        'product_id', 'name'
+        'product_id', 'size_id', 'name', 'quantity'
     ];
 
     public function product()
@@ -15,8 +15,8 @@ class Size extends Model
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
-    public function colors()
+    public function size()
     {
-        return $this->hasMany(Color::class, 'size_id', 'id');
+        return $this->belongsTo(Size::class, 'size_id', 'id');
     }
 }

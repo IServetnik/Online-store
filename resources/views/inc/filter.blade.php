@@ -28,6 +28,14 @@
         <div class="form-check form-check-inline filter-div">
             <input class="form-check-input color" data-name="color" type="checkbox" value="red" id="red" name="color[]" @if (request()->has('color') && in_array('red', request()->input('color'))) {{ 'checked' }} @endif>
             <label class="form-check-label" for="red">Red</label>
+        </div>
+        <div class="form-check form-check-inline filter-div">
+            <input class="form-check-input color" data-name="color" type="checkbox" value="green" id="green" name="color[]" @if (request()->has('color') && in_array('green', request()->input('color'))) {{ 'checked' }} @endif>
+            <label class="form-check-label" for="green">Green</label>
+        </div>
+        <div class="form-check form-check-inline filter-div">
+            <input class="form-check-input color" data-name="color" type="checkbox" value="yellow" id="yellow" name="color[]" @if (request()->has('color') && in_array('yellow', request()->input('color'))) {{ 'checked' }} @endif>
+            <label class="form-check-label" for="yellow">Yellow</label>
         </div><br><br>
 
         <div class="form-group filter-div">

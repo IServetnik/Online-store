@@ -16,13 +16,13 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(CategorySeeder::class);
         $this->call(TypeSeeder::class);
-        
+
         factory(User::class, 20)->create();
         factory(Product::class, 100)->create();
         factory(Review::class, 100)->create();
 
         $this->call(SizeSeeder::class);
-        $this->call(ProductSizeSeeder::class);
+        $this->call(ColorSeeder::class);
 
         Artisan::call('command:setcorrectrating');
     }

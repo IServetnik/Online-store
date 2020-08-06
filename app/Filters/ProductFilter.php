@@ -33,7 +33,7 @@ class ProductFilter
             }
         }
 
-        return $this->builder->paginate($paginationCount);
+        return $this->builder->groupBy('id')->paginate($paginationCount);
     }
     
 
@@ -80,7 +80,9 @@ class ProductFilter
      */
     public function color($value)
     {
-        $this->builder->whereIn('color', $value);
+        $this->builder->select('products.*')->join('colors', function ($join) use ($value) {
+                                    $join->on('products.id', '=', 'colors.product_id')->whereIn('colors.name', $value);
+                                });
     }
     
     /**

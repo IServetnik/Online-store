@@ -4,7 +4,8 @@ namespace App\Observers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
-use \App\Services\SizeService;
+use App\Models\Size;
+use App\Models\Color;
 
 class ProductObserver
 {  
@@ -27,7 +28,7 @@ class ProductObserver
      */
     public function created(Product $product)
     {
-        $this->createProductSize($product);
+        $this->createSizesAndColors($product);
     }
     
     /**
@@ -55,7 +56,7 @@ class ProductObserver
      */
     public function updated(Product $product)
     {
-        $this->createProductSize($product);
+        $this->createSizesAndColors($product);
     }
     
     /**
@@ -67,12 +68,19 @@ class ProductObserver
     public function deleting(Product $product)
     {
         $reviews = $product->reviews;
-        $reviews->each(function ($review, $key) {
+        foreach($reviews as $review) {
             $review->delete();
-        });
+        }
 
         $sizes = $product->sizes;
-        $product->sizes()->detach();
+        foreach($sizes as $size) {
+            $colors = $size->colors;
+            foreach($colors as $color) {
+                $color->delete();
+            }
+
+            $size->delete();
+        }
     }
     
     /**
@@ -126,36 +134,64 @@ class ProductObserver
             } 
         } 
     }
-    
+     
     /**
-     * createProductSize
+     * createSizesAndColors
      *
      * @param  mixed $product
      * @return void
      */
-    private function createProductSize(Product $product)
+    private function createSizesAndColors(Product $product)
     {
         if(request()->has('sizes')) {
+            //Create sizes
             $sizes = $product->sizes;
 
             $data = request()->all();
-            $size_ids = array_column($data['sizes'], 'id');
-            $size_quantities = array_column($data['sizes'], 'quantity');
+            $sizeNames = array_map('strtolower', array_column($data['sizes'], 'name'));
 
             foreach($sizes as $size) {
-                $key = array_search($size->id, $size_ids);
-                if($key !== false) {
-                    if($size->pivot->quantity != $size_quantities[$key]) {
-                        $product->sizes()->sync([$size->id => ['quantity' => $size_quantities[$key]]]);
+                $sizeKey = array_search($size->name, $sizeNames);
+
+                if($sizeKey !== false) {
+                    //Update colors
+                    $colorNames = array_map('strtolower', array_column($data['sizes'][$sizeKey]['colors'], 'name'));
+
+                    foreach($size->colors as $color) {
+                        $colorKey = array_search($color->name, $colorNames);
+                        $dataColor = $data['sizes'][$sizeKey]['colors'][$colorKey];
+
+                        if($colorKey !== false) {
+                            if($color->quantity != $dataColor['quantity']) {
+                                $color->quantity = $dataColor['quantity'];
+                                $color->save();
+                            }
+                            unset($data['sizes'][$sizeKey]['colors'][$colorKey]);
+                        } else {
+                            $color->delete();
+                        }
                     }
-                    unset($data['sizes'][$key]);
+
+                    foreach($data['sizes'][$sizeKey]['colors'] as $color) {
+                        Color::create(['product_id' => $product->id, 
+                                    'size_id' => $size->id,
+                                    'name' => strtolower($color['name']),
+                                    'quantity' => $color['quantity']]);
+                    }
+                    unset($data['sizes'][$sizeKey]);
                 } else {
-                    $product->sizes()->detach($size_ids[$key]);
+                    $size->delete();
                 }
             }
 
-            foreach($data['sizes'] as $size) {
-                $product->sizes()->attach($size['id'], ['quantity' => $size['quantity']]);
+            foreach($data['sizes'] as $dataSize) {
+                $size = Size::create(['product_id' => $product->id, 'name' => strtolower($dataSize['name'])]);
+                foreach($dataSize['colors'] as $color) {
+                    Color::create(['product_id' => $product->id, 
+                                    'size_id' => $size->id,
+                                    'name' => strtolower($color['name']),
+                                    'quantity' => $color['quantity']]);
+                }
             }
         }
     }

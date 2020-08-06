@@ -24,7 +24,6 @@
                             <b>Rating: </b> {{ $product->rating }}<br>
                         @endif
                         <b>Brand: </b>{{ ucfirst($product->brand) }} <br>
-                        <b>Color: </b>{{ ucfirst($product->color) }} <br>
                     </div>
                 </div>
             </div>

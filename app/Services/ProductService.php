@@ -40,7 +40,7 @@ class ProductService
         $data = $request->all();
 
         if (!$this->checkType($data['category_name'], $data['type_name'])) throw new Exception('Incorrect type');
-        if (!$this->checkSizes($data['sizes'])) throw new Exception("Size names aren't unique");
+        if (!$this->checkSizes($data['sizes'])) throw new Exception("Size or color names are not unique");
         if (!$this->checkName($data['name'])) throw new Exception("The name has already been taken.");
         if (!$this->checkFile($data['image'])) throw new Exception("The file must be an image.");
 
@@ -62,7 +62,7 @@ class ProductService
         $data = $request->all();
 
         if (!$this->checkType($data['category_name'], $data['type_name'])) throw new Exception('Incorrect type');
-        if (!$this->checkSizes($data['sizes'])) throw new Exception("Size names aren't unique");
+        if (!$this->checkSizes($data['sizes'])) throw new Exception("Size or color names are not unique");
         if (!$this->checkName($data['name'], $name)) throw new Exception("The name has already been taken.");
         if ($data['image']) {
             if (!$this->checkFile($data['image'])) throw new Exception("The file must be an image.");
@@ -281,11 +281,17 @@ class ProductService
      */
     public function checkSizes(array $sizes)
     {
-        $size_names = array_column($sizes, 'name');
+        //if the size ids are unique
+        $sizeNames= array_map('strtolower', array_column($sizes, 'name'));
+        if(count($sizeNames) !== count(array_unique($sizeNames))) return false;
 
-        //if the size names are unique
-        $result = count($size_names) == count(array_unique($size_names)); 
-        return $result;
+        //check the color names
+        foreach($sizes as $size) {
+            $names = array_map('strtolower', array_column($size['colors'], 'name'));
+            if(count($names) !== count(array_unique($names))) return false;
+        }
+
+        return true;
     }
 
     /**

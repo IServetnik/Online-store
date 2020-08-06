@@ -37289,7 +37289,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 var processing = false;
 
-function sendAjax(btn, size_name, success_callback, error_callback) {
+function sendAjax(btn, size, success_callback, error_callback) {
   if (!processing) {
     processing = true;
     $.ajaxSetup({
@@ -37301,8 +37301,8 @@ function sendAjax(btn, size_name, success_callback, error_callback) {
       url: btn.data('route'),
       type: 'POST',
       data: {
-        name: btn.data('product-name'),
-        size_name: size_name
+        name: btn.parent().parent().data('product-name'),
+        size: size
       },
       success: function success(response) {
         processing = false;
@@ -37319,15 +37319,18 @@ function sendAjax(btn, size_name, success_callback, error_callback) {
 $(document).ready(function () {
   $('.add-to-cart').click(function (e) {
     var btn = $(this);
-    var checkboxes = $('input.size-' + btn.parent().parent().data('product-name') + ':checked');
+    var checkboxes = $('input.color_name:checked');
 
     if (checkboxes.length == 0) {
-      $('#response').text("You did not select a size").addClass("text-danger");
+      $('#response').text("You did not select colors").addClass("text-danger");
     } else {
-      var size_name = $('input.size-' + btn.parent().parent().data('product-name') + ':checked').map(function () {
-        return this.value;
+      var sizes = $('input.color_name:checked').map(function () {
+        return {
+          sizeName: this.getAttribute('data-size-name'),
+          colorName: this.value
+        };
       }).get();
-      sendAjax(btn, size_name, function (response) {
+      sendAjax(btn, sizes, function (response) {
         checkboxes.each(function (index, value) {
           $(value).prop('checked', false);
         });
@@ -37341,8 +37344,13 @@ $(document).ready(function () {
   $('.delete-from-cart').click(function (e) {
     e.preventDefault();
     var btn = $(this);
-    var size_name = btn.parent().parent().data('size');
-    sendAjax(btn, size_name, function (response) {
+    var size_name = btn.parent().parent().data('size-name');
+    var color_name = btn.parent().parent().data('color-name');
+    var size = {
+      sizeName: size_name,
+      colorName: color_name
+    };
+    sendAjax(btn, size, function (response) {
       $('#response').text("Product successfully deleted from cart").addClass("text-success");
       btn.parent().parent().remove();
       $('#total-price').text(response.totalPrice.toFixed(3));
@@ -37353,8 +37361,13 @@ $(document).ready(function () {
   $('.increase-quantity').click(function (e) {
     e.preventDefault();
     var btn = $(this);
-    var size_name = btn.parent().parent().data('size');
-    sendAjax(btn, size_name, function (response) {
+    var size_name = btn.parent().parent().data('size-name');
+    var color_name = btn.parent().parent().data('color-name');
+    var size = {
+      sizeName: size_name,
+      colorName: color_name
+    };
+    sendAjax(btn, size, function (response) {
       $('#response').text("The quantity of products in the cart increased").addClass("text-success");
       var quantity = btn.siblings('span.product-quantity');
       var quantityText = quantity.text();
@@ -37367,8 +37380,13 @@ $(document).ready(function () {
   $('.decrease-quantity').click(function (e) {
     e.preventDefault();
     var btn = $(this);
-    var size_name = btn.parent().parent().data('size');
-    sendAjax(btn, size_name, function (response) {
+    var size_name = btn.parent().parent().data('size-name');
+    var color_name = btn.parent().parent().data('color-name');
+    var size = {
+      sizeName: size_name,
+      colorName: color_name
+    };
+    sendAjax(btn, size, function (response) {
       $('#response').text("The quantity of products in the cart decreased").addClass("text-success");
 
       if (response.quantity === 0) {
@@ -37525,29 +37543,45 @@ $(document).ready(function () {
 /***/ (function(module, exports) {
 
 $(document).ready(function () {
-  $('.add-size').click(function () {
-    var name = $('.size-input').last().attr('name');
-
-    if (name) {
-      var reg = /\[(\d+)\]/;
-      var key = parseInt(name.match(reg)[1]) + 1;
-    } else {
-      var key = 0;
-    }
-
-    var size_name_select = $('.size_name_select').first().clone();
-    size_name_select.attr('name', 'sizes[' + key + '][id]');
-    $(this).before('<div class="form-check form-check-inline">\
-            ' + size_name_select.prop('outerHTML') + '\
-            <input type="text" class="form-control size-input d-inline" placeholder="Quantity" name="sizes[' + key + '][quantity]">\
-            <button class="btn btn-danger btn-sm delete-size">delete</button>\
-        </div>');
+  $(document).on("click", ".add-size", function (e) {
+    var id = $('.size-div').last().data('id');
+    id++;
+    $(this).before('<div class="form-group size-div" data-id="' + id + '">\
+                    <div class="form-inline">\
+                        <input type="text" class="form-control col-10" name="sizes[' + id + '][name]" placeholder="Size name">\
+                        <button class="btn btn-danger delete-size col-2" data-id="' + id + '">delete</button>\
+                    </div>\
+                    \
+                    <div class="form-row container-fluid mt-3 form-inline">\
+                        <div class="col-md-4 col-xl-3 col-sm-6 mb-3 color-div" data-id="' + id + '" data-color-id="0">\
+                            <input type="text" class="form-control form-control-sm" id="color" placeholder="Color name" name="sizes[' + id + '][colors][0][name]">\
+                            <input type="text" class="form-control form-control-sm" placeholder="Quantity" name="sizes[' + id + '][colors][0][quantity]">\
+                            <button class="btn btn-danger btn-sm delete-color" disabled data-id="' + id + '">delete</button>\
+                        </div>\
+                        <button type="button" class="btn btn-link btn-sm add-color">Add new color</button>\
+                    </div>\
+                </div>');
   });
-  $(document).on("click", ".delete-size", function () {
-    var parentDiv = $(this).parent();
-    console.log(parentDiv);
-    parentDiv.remove();
-    $(this).remove();
+  $(document).on("click", ".add-color", function (e) {
+    var sizeId = $(this).prev().data('id');
+    var colorId = $('.color-div[data-id="' + sizeId + '"]').last().data('color-id');
+    colorId++;
+    $(this).before('<div class="col-md-4 col-xl-3 col-sm-6 mb-3 color-div" data-id="' + sizeId + '" data-color-id="' + colorId + '">\
+                            <input type="text" class="form-control form-control-sm" id="color" placeholder="Color name" name="sizes[' + sizeId + '][colors][' + colorId + '][name]">\
+                            <input type="text" class="form-control form-control-sm" placeholder="Quantity" name="sizes[' + sizeId + '][colors][' + colorId + '][quantity]">\
+                            <button class="btn btn-danger btn-sm delete-color" data-id="' + sizeId + '">delete</button>\
+                        </div>');
+  });
+  $(document).on("click", ".delete-size", function (e) {
+    e.preventDefault();
+    var id = $(this).data('id');
+    var sizeDiv = $('.size-div[data-id="' + id + '"]');
+    sizeDiv.remove();
+  });
+  $(document).on("click", ".delete-color", function (e) {
+    e.preventDefault();
+    var colorDiv = $(this).parent();
+    colorDiv.remove();
   });
 });
 

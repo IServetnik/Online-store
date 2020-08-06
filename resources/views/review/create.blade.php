@@ -22,7 +22,7 @@
                     <textarea class="form-control" name="text" placeholder="Text" rows="3"></textarea><br>
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
 
-                    <input type="submit" class="btn btn-primary" value="Write a review">
+                    <input type="submit" class="btn btn-success" value="Write a review">
                 </form>
             </div>
         </div>

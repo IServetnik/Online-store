@@ -39,37 +39,48 @@
             <label for="brand">Brand:</label>
             <input type="text" class="form-control" id="brand" placeholder="Brand" value="{{ old('brand') }}" name="brand">
         </div>
-        <div class="form-group">
-            <label for="color">Color:</label>
-            <input type="text" class="form-control" id="color" placeholder="Color" value="{{ old('color') }}" name="color">
-        </div>
+
         <div class="form-group">
             <label>Sizes:</label><br>
 
             @if(!empty(old('sizes')))
-                @foreach (old('sizes') as $key => $old_size)
-                    <div class="form-check form-check-inline">
-                        <select class="form-control size_name_select" name="sizes[{{$key}}][id]">
-                            @foreach ($sizes as $size)
-                                <option @if (strtolower($old_size['id']) == strtolower($size->id)) {{ 'selected' }} @endif value="{{ $size->id }}">{{ ucfirst($size->name) }}</option>
-                            @endforeach
-                        </select>
-                        <input type="text" class="form-control size-input d-inline" value='{{ $old_size['quantity'] }}' placeholder="Quantity" name="sizes[{{$key}}][quantity]">
-                        <button class="btn btn-danger btn-sm delete-size" @if(min(array_keys(old('sizes'))) == $key){{'disabled'}}@endif>delete</button>
+                @foreach (old('sizes') as $oldSizeKey => $old_size)
+                <div class="form-group size-div" data-id="{{$oldSizeKey}}">
+                        <div class="form-inline">
+                            <input type="text" class="form-control col-10" name="sizes[{{$oldSizeKey}}][name]" value="{{ $old_size['name'] }}" placeholder="Size name">
+                            <button class="btn btn-danger delete-size col-2" @if($oldSizeKey == 0){{'disabled'}}@endif>delete</button>
+                        </div>
+                        <div class="form-row container-fluid mt-3 form-inline">
+                                @foreach ($old_size['colors'] as $colorKey => $color)
+                                    <div class="col-md-4 col-xl-3 col-sm-6 mb-3 color-div" data-id="{{$oldSizeKey}}" data-color-id="{{$colorKey}}">
+                                        <input type="text" class="form-control form-control-sm" placeholder="Color name" value="{{ $color['name'] }}" name="sizes[{{$oldSizeKey}}][colors][{{$colorKey}}][name]">
+                                        <input type="text" class="form-control form-control-sm" placeholder="Quantity" value="{{ $color['quantity'] }}" name="sizes[{{$oldSizeKey}}][colors][{{$colorKey}}][quantity]">
+                                        <button class="btn btn-danger btn-sm delete-color" data-id="{{$colorKey}}" @if($colorKey == 0){{'disabled'}}@endif>delete</button>
+                                    </div>
+                                @endforeach
+                            <button type="button" class="btn btn-link btn-sm add-color" data-id="{{$oldSizeKey}}">Add new color</button>
+                        </div>
                     </div>
                 @endforeach
             @else
-                <div class="form-check form-check-inline">
-                    <select class="form-control size_name_select" name="sizes[0][id]">
-                        @foreach ($sizes as $key => $size)
-                            <option value="{{ $size->id }}">{{ ucfirst($size->name) }}</option>
-                        @endforeach
-                    </select>
-                    <input type="text" class="form-control size-input d-inline" placeholder="Quantity" name="sizes[0][quantity]">
-                    <button class="btn btn-danger btn-sm delete-size" disabled>delete</button>
+                <div class="form-group size-div" data-id="0">
+                    <div class="form-inline">
+                        <input type="text" class="form-control col-10" name="sizes[0][name]" placeholder="Size name">
+                        <button class="btn btn-danger delete-size col-2" disabled data-id="0">delete</button>
+                    </div>
+
+                    <div class="form-row container-fluid mt-3 form-inline">
+                        <div class="col-md-4 col-xl-3 col-sm-6 mb-3 color-div" data-id="0" data-color-id="0">
+                            <input type="text" class="form-control form-control-sm" id="color" placeholder="Color name" name="sizes[0][colors][0][name]">
+                            <input type="text" class="form-control form-control-sm" placeholder="Quantity" name="sizes[0][colors][0][quantity]">
+                            <button class="btn btn-danger btn-sm delete-color" disabled data-id="0">delete</button>
+                        </div>
+                        <button type="button" class="btn btn-link btn-sm add-color">Add new color</button>
+                    </div>
                 </div>
             @endif
-            <button type="button" class="btn btn-link btn-sm add-size">Add new size</button>
+
+            <button type="button" class="btn btn-primary btn-sm add-size">Add new size</button>
         </div>
         <div class="form-group">
             <label for="color">Image:</label>
@@ -79,7 +90,7 @@
             @endif
         </div>
         
-        <input type="submit" class="btn btn-primary block" value="Create">
+        <input type="submit" class="btn btn-success block" value="Create">
     </form>
 
     @foreach ($errors->all() as $error)

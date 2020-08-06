@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Models\Size as Model;
+use App\Models\Color as Model;
 use Illuminate\Support\Collection;
 
-class SizeRepository
+class ColorRepository
 { 
     /**
      * getAll
@@ -14,20 +14,8 @@ class SizeRepository
      */
     public function getAll() : Collection
     {
-        $sizes = Model::all();
-        return $sizes;
-    }
-            
-    /**
-     * getByProduct
-     *
-     * @param  mixed $product_id
-     * @return Collection
-     */
-    public function getByProduct(string $product_id) : Collection
-    {
-        $sizes = Model::where(compact('product_id'))->get();
-        return $sizes;
+        $colors = Model::all();
+        return $colors;
     }
 
     /**
@@ -38,8 +26,8 @@ class SizeRepository
      */
     public function getById(string $id)
     {
-        $size = Model::where(compact('id'))->first();
-        return $size;
+        $color = Model::where(compact('id'))->first();
+        return $color;
     }
 
     /**
@@ -50,8 +38,8 @@ class SizeRepository
      */
     public function getByName(string $name) : Collection
     {
-        $size = Model::where(compact('name'))->first();
-        return $size;
+        $colors = Model::where(compact('name'))->first();
+        return $colors;
     }
     
     /**
@@ -62,7 +50,7 @@ class SizeRepository
      */
     public function getWhere(array $where) : Collection
     {
-        $sizes = Model::where($where)->get();
-        return $sizes;
+        $colors = Model::where($where)->get();
+        return $colors;
     }
 }

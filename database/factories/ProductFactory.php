@@ -14,6 +14,5 @@ $factory->define(Product::class, function (Faker $faker) {
         'category_name' => $faker->randomElement(['men', 'women', 'kids']),
         'type_name' => $faker->randomElement(['shoes', 'shirts', 'trousers', 'hats', 'socks']),
         'brand' => $faker->randomElement(['nike', 'adidas', 'gucci', 'vans', 'lacoste']),
-        'color' => $faker->randomElement(['white', 'black', 'blue', 'yellow', 'gray', 'pink']),
     ];
 });

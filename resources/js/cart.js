@@ -1,5 +1,5 @@
 var processing = false; 
-function sendAjax(btn, size_name, success_callback, error_callback) {
+function sendAjax(btn, size, success_callback, error_callback) {
     if(!processing){
         processing = true;
         $.ajaxSetup({
@@ -11,8 +11,8 @@ function sendAjax(btn, size_name, success_callback, error_callback) {
             url: btn.data('route'),
             type: 'POST',
             data: {
-                name: btn.data('product-name'),
-                size_name: size_name,
+                name: btn.parent().parent().data('product-name'),
+                size: size,
             },
             success: function (response) {
                 processing = false;
@@ -33,15 +33,16 @@ function sendAjax(btn, size_name, success_callback, error_callback) {
 $(document).ready(function() {
     $('.add-to-cart').click(function(e) {
         var btn = $(this);
-
-        var checkboxes = $('input.size-'+btn.parent().parent().data('product-name')+':checked');
+        var checkboxes = $('input.color_name:checked');
         if(checkboxes.length == 0) {
-            $('#response').text("You did not select a size").addClass("text-danger");
-        } else {
-            var size_name = $('input.size-'+btn.parent().parent().data('product-name')+':checked').map(function(){
-                                                                return this.value;
-                                                            }).get();
-            sendAjax(btn, size_name, function (response) {
+            $('#response').text("You did not select colors").addClass("text-danger");
+        } else {                         
+            var sizes = $('input.color_name:checked').map(function(){
+                return {sizeName: this.getAttribute('data-size-name'),
+                                                    colorName: this.value};
+            }).get();
+
+            sendAjax(btn, sizes, function (response) {
                 checkboxes.each(function(index, value) {
                     $(value).prop('checked', false);
                 });
@@ -59,8 +60,11 @@ $(document).ready(function() {
         e.preventDefault();
         var btn = $(this);
 
-        var size_name = btn.parent().parent().data('size');
-        sendAjax(btn, size_name, function(response) {
+        var size_name = btn.parent().parent().data('size-name');
+        var color_name = btn.parent().parent().data('color-name');
+        var size = {sizeName: size_name, colorName: color_name};
+
+        sendAjax(btn, size, function(response) {
             $('#response').text("Product successfully deleted from cart").addClass("text-success");
             btn.parent().parent().remove();
 
@@ -75,8 +79,11 @@ $(document).ready(function() {
         e.preventDefault();
         var btn = $(this);
 
-        var size_name = btn.parent().parent().data('size');
-        sendAjax(btn, size_name, function(response) {
+        var size_name = btn.parent().parent().data('size-name');
+        var color_name = btn.parent().parent().data('color-name');
+        var size = {sizeName: size_name, colorName: color_name};
+
+        sendAjax(btn, size, function(response) {
             $('#response').text("The quantity of products in the cart increased").addClass("text-success");
             var quantity = btn.siblings('span.product-quantity');
             var quantityText = quantity.text();
@@ -93,8 +100,11 @@ $(document).ready(function() {
         e.preventDefault();
         var btn = $(this);
 
-        var size_name = btn.parent().parent().data('size');
-        sendAjax(btn, size_name, function(response) {
+        var size_name = btn.parent().parent().data('size-name');
+        var color_name = btn.parent().parent().data('color-name');
+        var size = {sizeName: size_name, colorName: color_name};
+
+        sendAjax(btn, size, function(response) {
             $('#response').text("The quantity of products in the cart decreased").addClass("text-success");
 
             if(response.quantity === 0) {

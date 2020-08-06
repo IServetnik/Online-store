@@ -23,7 +23,6 @@ class CreateProductsTable extends Migration
             $table->string('category_name');
             $table->string('type_name');
             $table->string('brand');
-            $table->string('color');
             $table->string('image_name')->nullable();
             $table->timestamps();
         });

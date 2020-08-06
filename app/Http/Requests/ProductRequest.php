@@ -30,9 +30,9 @@ class ProductRequest extends FormRequest
             'category_name' => 'required|max:255',
             'type_name' => 'required|max:255',
             'brand' => 'required|max:255',
-            'color' => 'required|max:255',
-            'sizes.*.id' => 'required|max:255',
-            'sizes.*.quantity' => 'required|integer',
+            'sizes.*.name' => 'required|max:255',
+            'sizes.*.colors.*.name' => 'required|max:255',
+            'sizes.*.colors.*.quantity' => 'required|integer',
             'image' => 'required|max:4000'
         ];
     }
@@ -45,8 +45,9 @@ class ProductRequest extends FormRequest
     public function attributes()
     {
         return [
-            'sizes.*.id' => 'size',
-            'sizes.*.quantity' => 'size quantity',
+            'sizes.*.name' => 'size',
+            'sizes.*.colors.*.name' => 'color',
+            'sizes.*.colors.*.quantity' => 'color quantity',
             'image' => 'file'
         ];
     }

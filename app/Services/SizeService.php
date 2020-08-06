@@ -72,8 +72,8 @@ class SizeService
      */
     public function getById(string $id)
     {
-        $sizes = $this->repository->getById($id);
-        return $sizes;
+        $size = $this->repository->getById($id);
+        return $size;
     }
         
     /**
@@ -96,7 +96,7 @@ class SizeService
      */
     public function getWhere(array $where)
     {
-        $products = $this->repository->getWhere($where);
-        return $products;
+        $sizes = $this->repository->getWhere($where);
+        return $sizes;
     }
 }

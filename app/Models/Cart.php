@@ -9,6 +9,7 @@ class Cart
 {   
     public $product;
     public $size_name;
+    public $color_name;
     public $quantity;
 
     /**
@@ -16,14 +17,16 @@ class Cart
      *
      * @param  mixed $product
      * @param  mixed $size_name
+     * @param  mixed $color_name
      * @param  mixed $quantity
      * @return void
      */
-    public function __construct(Product $product = null, string $size_name = null, int $quantity = null)
+    public function __construct(Product $product = null, string $size_name = null, string $color_name = null, int $quantity = null)
     {
-        if ($product && $size_name && $quantity) {
+        if ($product && $size_name && $color_name && $quantity) {
             $this->product = $product;
             $this->size_name = $size_name;
+            $this->color_name = $color_name;
             $this->quantity = $quantity;
         }
     }
@@ -43,44 +46,50 @@ class Cart
      * add
      *
      * @param  mixed $product
-     * @param  mixed $size_names
+     * @param  mixed $sizes
      * @return void
      */
-    public function add(Product $product, array $size_names)
+    public function add(Product $product, array $sizes)
     {   
-        $cartItems = $this->createCartItem($product, $size_names, 0);
+        $cartItems = $this->createCartItem($product, $sizes, 0);
         foreach($cartItems as $cartItem) {
             $this->putInCart($cartItem);
         }
     
         return $cartItems;
     }
- 
+
     /**
      * delete
      *
      * @param  mixed $product
-     * @param  mixed $size_name
+     * @param  mixed $size
      * @return void
      */
-    public function delete(Product $product, string $size_name)
+    public function delete(Product $product, array $size)
     {
-        $cartItem = $this->get($product, $size_name);
+        $size_name = $size['sizeName'];
+        $color_name = $size['colorName'];
+
+        $cartItem = $this->get($product, $size_name, $color_name);
         $this->deleteFromCart($cartItem);
 
         return $cartItem;
     }
-    
+       
     /**
      * increaseQuantity
      *
      * @param  mixed $product
-     * @param  mixed $size_name
+     * @param  mixed $size
      * @return void
      */
-    public function increaseQuantity(Product $product, string $size_name)
+    public function increaseQuantity(Product $product,  array $size)
     {
-        $cartItem = $this->get($product, $size_name);
+        $size_name = $size['sizeName'];
+        $color_name = $size['colorName'];
+
+        $cartItem = $this->get($product, $size_name, $color_name);
         $cartItem->quantity++;
 
         $this->putInCart($cartItem);
@@ -92,12 +101,15 @@ class Cart
      * decreaseQuantity
      *
      * @param  mixed $product
-     * @param  mixed $size_name
+     * @param  mixed $size
      * @return void
      */
-    public function decreaseQuantity(Product $product, string $size_name)
+    public function decreaseQuantity(Product $product, array $size)
     {
-        $cartItem = $this->get($product, $size_name);
+        $size_name = $size['sizeName'];
+        $color_name = $size['colorName'];
+        
+        $cartItem = $this->get($product, $size_name, $color_name);
         $cartItem->quantity--;
 
         if($cartItem->quantity === 0) $this->deleteFromCart($cartItem);
@@ -133,7 +145,7 @@ class Cart
      */
     protected function putInCart(self $cartItem)
     {
-        session()->put("cart.{$this->name($cartItem->product, $cartItem->size_name)}", $cartItem);
+        session()->put("cart.{$this->name($cartItem->product, $cartItem->size_name, $cartItem->color_name)}", $cartItem);
 
         return true;
     }
@@ -146,20 +158,21 @@ class Cart
      */
     protected function deleteFromCart(self $cartItem)
     {
-        session()->forget("cart.{$this->name($cartItem->product, $cartItem->size_name)}");
+        session()->forget("cart.{$this->name($cartItem->product, $cartItem->size_name, $cartItem->color_name)}");
         return true;
     }
-
+  
     /**
      * has
      *
      * @param  mixed $product
      * @param  mixed $size_name
+     * @param  mixed $color_name
      * @return void
      */
-    protected function has(Product $product, string $size_name)
+    protected function has(Product $product, string $size_name, string $color_name)
     {
-        $result = session()->has("cart.".$this->name($product, $size_name));
+        $result = session()->has("cart.".$this->name($product, $size_name, $color_name));
         return $result;
     }
     
@@ -168,11 +181,12 @@ class Cart
      *
      * @param  mixed $product
      * @param  mixed $size_name
+     * @param  mixed $color_name
      * @return void
      */
-    protected function get(Product $product, string $size_name)
+    protected function get(Product $product, string $size_name, string $color_name)
     {
-        $result = session()->get("cart.".$this->name($product, $size_name));
+        $result = session()->get("cart.".$this->name($product, $size_name, $color_name));
         return $result;
     }
 
@@ -180,22 +194,25 @@ class Cart
      * createCartItem
      *
      * @param  mixed $product
-     * @param  mixed $size_names
+     * @param  mixed $sizes
      * @param  mixed $quantity
      * @return void
      */
-    protected function createCartItem(Product $product, array $size_names, int $quantity)
+    protected function createCartItem(Product $product, array $sizes, int $quantity)
     {
         $cartItems = [];
 
-        foreach($size_names as $size_name) {
-            $name = $this->name($product, $size_name);
-            if($this->has($product, $size_name)) {
-                $cartItem = $this->get($product, $size_name);
+        foreach($sizes as $size) {
+            $size_name = $size['sizeName'];
+            $color_name = $size['colorName'];
+            $name = $this->name($product, $size_name, $color_name);
+
+            if($this->has($product, $size_name, $color_name)) {
+                $cartItem = $this->get($product, $size_name, $color_name);
                 $cartItem->quantity++;
                 $cartItems[] = $cartItem;
             } else {
-                $cartItem = new self($product, $size_name, $quantity+1);
+                $cartItem = new self($product, $size_name, $color_name, $quantity+1);
                 $cartItems[] = $cartItem;
             }
         }
@@ -207,11 +224,12 @@ class Cart
      *
      * @param  mixed $product
      * @param  mixed $size_name
+     * @param  mixed $color_name
      * @return void
      */
-    protected function name(Product $product, string $size_name)
+    protected function name(Product $product, string $size_name, string $color_name)
     {
-        $name = $product->name."-".$size_name;
+        $name = $product->name."-".$size_name."-".$color_name;
         return $name;
     }
 }
